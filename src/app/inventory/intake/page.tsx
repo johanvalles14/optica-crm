@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
 import Link from 'next/link';
+import Barcode from '../../../components/Barcode';
 
 type CreatedProduct = {
   id: string;
@@ -91,7 +92,7 @@ export default function InventoryIntakePage() {
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '28px' }}>
         {/* Formulario de Alta Rápida */}
-        <section className="form-card" aria-labelledby="intake-title">
+        <section className="form-card no-print" aria-labelledby="intake-title">
           <h2 id="intake-title" style={{ fontSize: '1.5rem', margin: 0 }}>
             Datos del Lote Recibido
           </h2>
@@ -169,7 +170,7 @@ export default function InventoryIntakePage() {
         </section>
 
         {/* Muestra de etiquetas generadas */}
-        <section className="hero-card" aria-labelledby="labels-title">
+        <section className="hero-card label-sheet-card" aria-labelledby="labels-title">
           <h2 id="labels-title">Planilla de Etiquetas Generadas</h2>
           <p className="lede" style={{ fontSize: '13px' }}>
             Etiquetas con código interno para pegar directamente en las varillas de los armazones o empaques.
@@ -181,6 +182,7 @@ export default function InventoryIntakePage() {
             </p>
           ) : (
             <div
+              className="print-grid"
               style={{
                 display: 'grid',
                 gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))',
@@ -201,23 +203,25 @@ export default function InventoryIntakePage() {
                     padding: '8px',
                     textAlign: 'center',
                     background: '#fffef9',
+                    breakInside: 'avoid',
+                    pageBreakInside: 'avoid',
                   }}
                 >
                   <strong style={{ fontSize: '11px', display: 'block', color: 'var(--muted)' }}>
                     ÓPTICA CRM
                   </strong>
-                  <span style={{ fontSize: '16px', fontWeight: 'bold', display: 'block', margin: '4px 0' }}>
+                  <span style={{ fontSize: '15px', fontWeight: 'bold', display: 'block', margin: '3px 0' }}>
                     {item.internalCode}
                   </span>
-                  <div
-                    style={{
-                      height: '24px',
-                      background: 'repeating-linear-gradient(90deg, #111, #111 2px, transparent 2px, transparent 4px)',
-                      margin: '4px auto',
-                      width: '90%',
-                    }}
-                  />
-                  <small style={{ fontSize: '12px', fontWeight: 'bold', display: 'block' }}>
+                  <div style={{ margin: '4px auto', width: '100%' }}>
+                    <Barcode
+                      value={item.internalCode}
+                      width={1.2}
+                      height={28}
+                      displayValue={false}
+                    />
+                  </div>
+                  <small style={{ fontSize: '12px', fontWeight: 'bold', display: 'block', marginTop: '2px' }}>
                     ${item.retailPrice} MXN
                   </small>
                 </div>
@@ -226,6 +230,27 @@ export default function InventoryIntakePage() {
           )}
         </section>
       </div>
+
+      <style>{`
+        @media print {
+          .no-print {
+            display: none !important;
+          }
+          .label-sheet-card {
+            border: none !important;
+            box-shadow: none !important;
+            padding: 0 !important;
+            background: transparent !important;
+          }
+          .print-grid {
+            max-height: none !important;
+            overflow: visible !important;
+            border: none !important;
+            padding: 0 !important;
+            gap: 16px !important;
+          }
+        }
+      `}</style>
     </main>
   );
 }

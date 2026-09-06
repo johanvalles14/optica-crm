@@ -22,7 +22,7 @@
       "_origin": "ast",
       "id": "contracts_auth_contract_userid",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": "userid"
     },
     {
@@ -439,7 +439,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "contracts_cash_shift_contract_paymentbreakdown",
-      "community": 74,
+      "community": 29,
       "community_name": "cash/prisma-service.ts",
       "norm_label": "paymentbreakdown"
     },
@@ -473,7 +473,7 @@
       "_origin": "ast",
       "id": "contracts_cash_shift_contract_recordexpenseinput",
       "community": 29,
-      "community_name": "cash/service.ts",
+      "community_name": "cash/prisma-service.ts",
       "norm_label": "recordexpenseinput"
     },
     {
@@ -483,8 +483,8 @@
       "source_location": "L68",
       "_origin": "ast",
       "id": "contracts_cash_shift_contract_closeshiftinput",
-      "community": 29,
-      "community_name": "cash/service.ts",
+      "community": 71,
+      "community_name": "cash-shift.contract.ts",
       "norm_label": "closeshiftinput"
     },
     {
@@ -506,7 +506,7 @@
       "_origin": "ast",
       "id": "contracts_cash_shift_contract_accountsreceivablereport",
       "community": 29,
-      "community_name": "cash/service.ts",
+      "community_name": "cash/prisma-service.ts",
       "norm_label": "accountsreceivablereport"
     },
     {
@@ -604,8 +604,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "contracts_clinical_contract",
-      "community": 75,
-      "community_name": "clinical.contract.ts",
+      "community": 81,
+      "community_name": "clinical/service.ts",
       "norm_label": "clinical.contract.ts"
     },
     {
@@ -616,7 +616,7 @@
       "_origin": "ast",
       "id": "contracts_clinical_contract_consultationid",
       "community": 73,
-      "community_name": "Consultation",
+      "community_name": "PatientId",
       "norm_label": "consultationid"
     },
     {
@@ -626,8 +626,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "contracts_clinical_contract_refractionid",
-      "community": 75,
-      "community_name": "clinical.contract.ts",
+      "community": 73,
+      "community_name": "PatientId",
       "norm_label": "refractionid"
     },
     {
@@ -637,8 +637,8 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "contracts_clinical_contract_prescriptionid",
-      "community": 38,
-      "community_name": "sales.contract.ts",
+      "community": 73,
+      "community_name": "PatientId",
       "norm_label": "prescriptionid"
     },
     {
@@ -659,8 +659,8 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "contracts_clinical_contract_eye",
-      "community": 75,
-      "community_name": "clinical.contract.ts",
+      "community": 73,
+      "community_name": "PatientId",
       "norm_label": "eye"
     },
     {
@@ -704,7 +704,7 @@
       "_origin": "ast",
       "id": "contracts_clinical_contract_consultation",
       "community": 73,
-      "community_name": "Consultation",
+      "community_name": "PatientId",
       "norm_label": "consultation"
     },
     {
@@ -714,8 +714,8 @@
       "source_location": "L52",
       "_origin": "ast",
       "id": "contracts_clinical_contract_openconsultationinput",
-      "community": 81,
-      "community_name": "clinical/service.ts",
+      "community": 73,
+      "community_name": "PatientId",
       "norm_label": "openconsultationinput"
     },
     {
@@ -726,7 +726,7 @@
       "_origin": "ast",
       "id": "contracts_clinical_contract_issueprescriptioninput",
       "community": 90,
-      "community_name": "Prescription",
+      "community_name": "prescription.service.ts",
       "norm_label": "issueprescriptioninput"
     },
     {
@@ -736,8 +736,8 @@
       "source_location": "L64",
       "_origin": "ast",
       "id": "contracts_clinical_contract_abandonconsultationinput",
-      "community": 76,
-      "community_name": "clinical/prisma-service.ts",
+      "community": 78,
+      "community_name": "clinical/state-machine.ts",
       "norm_label": "abandonconsultationinput"
     },
     {
@@ -747,8 +747,8 @@
       "source_location": "L70",
       "_origin": "ast",
       "id": "contracts_clinical_contract_releaseconsultationinput",
-      "community": 76,
-      "community_name": "clinical/prisma-service.ts",
+      "community": 72,
+      "community_name": "authorize",
       "norm_label": "releaseconsultationinput"
     },
     {
@@ -758,8 +758,8 @@
       "source_location": "L77",
       "_origin": "ast",
       "id": "contracts_clinical_contract_setnonclinicalnoteinput",
-      "community": 76,
-      "community_name": "clinical/prisma-service.ts",
+      "community": 81,
+      "community_name": "clinical/service.ts",
       "norm_label": "setnonclinicalnoteinput"
     },
     {
@@ -769,8 +769,8 @@
       "source_location": "L84",
       "_origin": "ast",
       "id": "contracts_clinical_contract_updateclinicaldetailsinput",
-      "community": 76,
-      "community_name": "clinical/prisma-service.ts",
+      "community": 72,
+      "community_name": "authorize",
       "norm_label": "updateclinicaldetailsinput"
     },
     {
@@ -781,7 +781,7 @@
       "_origin": "ast",
       "id": "contracts_clinical_contract_refractionvalue",
       "community": 75,
-      "community_name": "clinical.contract.ts",
+      "community_name": "clinical/prisma-service.ts",
       "norm_label": "refractionvalue"
     },
     {
@@ -792,7 +792,7 @@
       "_origin": "ast",
       "id": "contracts_clinical_contract_refractioninput",
       "community": 75,
-      "community_name": "clinical.contract.ts",
+      "community_name": "clinical/prisma-service.ts",
       "norm_label": "refractioninput"
     },
     {
@@ -803,7 +803,7 @@
       "_origin": "ast",
       "id": "contracts_clinical_contract_refractionamendmentinput",
       "community": 75,
-      "community_name": "clinical.contract.ts",
+      "community_name": "clinical/prisma-service.ts",
       "norm_label": "refractionamendmentinput"
     },
     {
@@ -814,7 +814,7 @@
       "_origin": "ast",
       "id": "contracts_clinical_contract_refraction",
       "community": 75,
-      "community_name": "clinical.contract.ts",
+      "community_name": "clinical/prisma-service.ts",
       "norm_label": "refraction"
     },
     {
@@ -824,8 +824,8 @@
       "source_location": "L123",
       "_origin": "ast",
       "id": "contracts_clinical_contract_prescriptionrefractionsnapshot",
-      "community": 75,
-      "community_name": "clinical.contract.ts",
+      "community": 90,
+      "community_name": "prescription.service.ts",
       "norm_label": "prescriptionrefractionsnapshot"
     },
     {
@@ -836,7 +836,7 @@
       "_origin": "ast",
       "id": "contracts_clinical_contract_prescription",
       "community": 90,
-      "community_name": "Prescription",
+      "community_name": "prescription.service.ts",
       "norm_label": "prescription"
     },
     {
@@ -847,7 +847,7 @@
       "_origin": "ast",
       "id": "contracts_clinical_contract_prescriptionamendmentinput",
       "community": 90,
-      "community_name": "Prescription",
+      "community_name": "prescription.service.ts",
       "norm_label": "prescriptionamendmentinput"
     },
     {
@@ -890,8 +890,8 @@
       "source_location": "L185",
       "_origin": "ast",
       "id": "contracts_clinical_contract_receptionqueueentry",
-      "community": 76,
-      "community_name": "clinical/prisma-service.ts",
+      "community": 72,
+      "community_name": "authorize",
       "norm_label": "receptionqueueentry"
     },
     {
@@ -1231,8 +1231,8 @@
       "source_location": "L107",
       "_origin": "ast",
       "id": "contracts_inventory_contract_iinventoryservice",
-      "community": 0,
-      "community_name": "ActorContext",
+      "community": 76,
+      "community_name": "IInventoryService",
       "norm_label": "iinventoryservice"
     },
     {
@@ -1242,8 +1242,8 @@
       "source_location": "L108",
       "_origin": "ast",
       "id": "contracts_inventory_contract_iinventoryservice_quickbatchintake",
-      "community": 0,
-      "community_name": "ActorContext",
+      "community": 76,
+      "community_name": "IInventoryService",
       "norm_label": ".quickbatchintake()"
     },
     {
@@ -1253,8 +1253,8 @@
       "source_location": "L109",
       "_origin": "ast",
       "id": "contracts_inventory_contract_iinventoryservice_createproduct",
-      "community": 0,
-      "community_name": "ActorContext",
+      "community": 76,
+      "community_name": "IInventoryService",
       "norm_label": ".createproduct()"
     },
     {
@@ -1264,8 +1264,8 @@
       "source_location": "L110",
       "_origin": "ast",
       "id": "contracts_inventory_contract_iinventoryservice_recordadjustment",
-      "community": 0,
-      "community_name": "ActorContext",
+      "community": 76,
+      "community_name": "IInventoryService",
       "norm_label": ".recordadjustment()"
     },
     {
@@ -1275,8 +1275,8 @@
       "source_location": "L111",
       "_origin": "ast",
       "id": "contracts_inventory_contract_iinventoryservice_search",
-      "community": 0,
-      "community_name": "ActorContext",
+      "community": 76,
+      "community_name": "IInventoryService",
       "norm_label": ".search()"
     },
     {
@@ -1286,8 +1286,8 @@
       "source_location": "L112",
       "_origin": "ast",
       "id": "contracts_inventory_contract_iinventoryservice_findbycode",
-      "community": 0,
-      "community_name": "ActorContext",
+      "community": 76,
+      "community_name": "IInventoryService",
       "norm_label": ".findbycode()"
     },
     {
@@ -1297,8 +1297,8 @@
       "source_location": "L113",
       "_origin": "ast",
       "id": "contracts_inventory_contract_iinventoryservice_reconcilecount",
-      "community": 0,
-      "community_name": "ActorContext",
+      "community": 76,
+      "community_name": "IInventoryService",
       "norm_label": ".reconcilecount()"
     },
     {
@@ -1539,8 +1539,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "contracts_patients_contract",
-      "community": 4,
-      "community_name": "patients.contract.ts",
+      "community": 45,
+      "community_name": "BranchId",
       "norm_label": "patients.contract.ts"
     },
     {
@@ -1550,8 +1550,8 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "contracts_patients_contract_patientid",
-      "community": 4,
-      "community_name": "patients.contract.ts",
+      "community": 73,
+      "community_name": "PatientId",
       "norm_label": "patientid"
     },
     {
@@ -1561,8 +1561,8 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "contracts_patients_contract_folio",
-      "community": 4,
-      "community_name": "patients.contract.ts",
+      "community": 72,
+      "community_name": "authorize",
       "norm_label": "folio"
     },
     {
@@ -1584,7 +1584,7 @@
       "_origin": "ast",
       "id": "contracts_patients_contract_privacynoticeid",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": "privacynoticeid"
     },
     {
@@ -1594,8 +1594,8 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "contracts_patients_contract_consentid",
-      "community": 4,
-      "community_name": "patients.contract.ts",
+      "community": 45,
+      "community_name": "BranchId",
       "norm_label": "consentid"
     },
     {
@@ -1606,7 +1606,7 @@
       "_origin": "ast",
       "id": "contracts_patients_contract_sex",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": "sex"
     },
     {
@@ -1616,8 +1616,8 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "contracts_patients_contract_patientstatus",
-      "community": 4,
-      "community_name": "patients.contract.ts",
+      "community": 45,
+      "community_name": "BranchId",
       "norm_label": "patientstatus"
     },
     {
@@ -1627,8 +1627,8 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "contracts_patients_contract_emergencycontact",
-      "community": 4,
-      "community_name": "patients.contract.ts",
+      "community": 45,
+      "community_name": "BranchId",
       "norm_label": "emergencycontact"
     },
     {
@@ -1639,7 +1639,7 @@
       "_origin": "ast",
       "id": "contracts_patients_contract_patientinput",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": "patientinput"
     },
     {
@@ -1650,7 +1650,7 @@
       "_origin": "ast",
       "id": "contracts_patients_contract_patient",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": "patient"
     },
     {
@@ -1661,7 +1661,7 @@
       "_origin": "ast",
       "id": "contracts_patients_contract_patientsearchresult",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": "patientsearchresult"
     },
     {
@@ -1672,7 +1672,7 @@
       "_origin": "ast",
       "id": "contracts_patients_contract_privacynotice",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": "privacynotice"
     },
     {
@@ -1683,7 +1683,7 @@
       "_origin": "ast",
       "id": "contracts_patients_contract_consentinput",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": "consentinput"
     },
     {
@@ -1694,7 +1694,7 @@
       "_origin": "ast",
       "id": "contracts_patients_contract_consent",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": "consent"
     },
     {
@@ -1705,7 +1705,7 @@
       "_origin": "ast",
       "id": "contracts_patients_contract_patientsearchquery",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": "patientsearchquery"
     },
     {
@@ -1869,8 +1869,8 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "contracts_sales_contract_paymentmethod",
-      "community": 32,
-      "community_name": "services.ts",
+      "community": 38,
+      "community_name": "sales.contract.ts",
       "norm_label": "paymentmethod"
     },
     {
@@ -1891,8 +1891,8 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "contracts_sales_contract_saleitem",
-      "community": 45,
-      "community_name": "BranchId",
+      "community": 38,
+      "community_name": "sales.contract.ts",
       "norm_label": "saleitem"
     },
     {
@@ -2534,10 +2534,32 @@
       "norm_label": "devdependencies"
     },
     {
-      "label": "@types/node",
+      "label": "@types/jsbarcode",
       "file_type": "code",
       "source_file": "package.json",
       "source_location": "L31",
+      "_origin": "ast",
+      "id": "package_devdependencies_types_jsbarcode",
+      "community": 18,
+      "community_name": "devDependencies",
+      "norm_label": "@types/jsbarcode"
+    },
+    {
+      "label": "@types/jsbarcode",
+      "file_type": "concept",
+      "source_file": "package.json",
+      "source_location": "L31",
+      "_origin": "ast",
+      "id": "types_jsbarcode",
+      "community": 18,
+      "community_name": "devDependencies",
+      "norm_label": "@types/jsbarcode"
+    },
+    {
+      "label": "@types/node",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L32",
       "_origin": "ast",
       "id": "package_devdependencies_types_node",
       "community": 18,
@@ -2548,7 +2570,7 @@
       "label": "@types/node",
       "file_type": "concept",
       "source_file": "package.json",
-      "source_location": "L31",
+      "source_location": "L32",
       "_origin": "ast",
       "id": "types_node",
       "community": 18,
@@ -2559,7 +2581,7 @@
       "label": "@types/react",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L32",
+      "source_location": "L33",
       "_origin": "ast",
       "id": "package_devdependencies_types_react",
       "community": 18,
@@ -2570,7 +2592,7 @@
       "label": "@types/react",
       "file_type": "concept",
       "source_file": "package.json",
-      "source_location": "L32",
+      "source_location": "L33",
       "_origin": "ast",
       "id": "types_react",
       "community": 18,
@@ -2581,7 +2603,7 @@
       "label": "@types/react-dom",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L33",
+      "source_location": "L34",
       "_origin": "ast",
       "id": "package_devdependencies_types_react_dom",
       "community": 18,
@@ -2592,7 +2614,7 @@
       "label": "@types/react-dom",
       "file_type": "concept",
       "source_file": "package.json",
-      "source_location": "L33",
+      "source_location": "L34",
       "_origin": "ast",
       "id": "types_react_dom",
       "community": 18,
@@ -2603,7 +2625,7 @@
       "label": "@vitest/coverage-v8",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L34",
+      "source_location": "L35",
       "_origin": "ast",
       "id": "package_devdependencies_vitest_coverage_v8",
       "community": 18,
@@ -2614,7 +2636,7 @@
       "label": "@vitest/coverage-v8",
       "file_type": "concept",
       "source_file": "package.json",
-      "source_location": "L34",
+      "source_location": "L35",
       "_origin": "ast",
       "id": "vitest_coverage_v8",
       "community": 18,
@@ -2625,7 +2647,7 @@
       "label": "magicast",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L35",
+      "source_location": "L36",
       "_origin": "ast",
       "id": "package_devdependencies_magicast",
       "community": 18,
@@ -2636,7 +2658,7 @@
       "label": "magicast",
       "file_type": "concept",
       "source_file": "package.json",
-      "source_location": "L35",
+      "source_location": "L36",
       "_origin": "ast",
       "id": "magicast",
       "community": 18,
@@ -2647,7 +2669,7 @@
       "label": "prisma",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L36",
+      "source_location": "L37",
       "_origin": "ast",
       "id": "package_devdependencies_prisma",
       "community": 18,
@@ -2658,7 +2680,7 @@
       "label": "prisma",
       "file_type": "concept",
       "source_file": "package.json",
-      "source_location": "L36",
+      "source_location": "L37",
       "_origin": "ast",
       "id": "prisma",
       "community": 18,
@@ -2669,7 +2691,7 @@
       "label": "tsx",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L37",
+      "source_location": "L38",
       "_origin": "ast",
       "id": "package_devdependencies_tsx",
       "community": 18,
@@ -2680,7 +2702,7 @@
       "label": "tsx",
       "file_type": "concept",
       "source_file": "package.json",
-      "source_location": "L37",
+      "source_location": "L38",
       "_origin": "ast",
       "id": "tsx",
       "community": 18,
@@ -2691,29 +2713,29 @@
       "label": "typescript",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L38",
+      "source_location": "L39",
       "_origin": "ast",
       "id": "package_devdependencies_typescript",
-      "community": 18,
-      "community_name": "devDependencies",
+      "community": 102,
+      "community_name": "typescript",
       "norm_label": "typescript"
     },
     {
       "label": "typescript",
       "file_type": "concept",
       "source_file": "package.json",
-      "source_location": "L38",
+      "source_location": "L39",
       "_origin": "ast",
       "id": "typescript",
-      "community": 18,
-      "community_name": "devDependencies",
+      "community": 102,
+      "community_name": "typescript",
       "norm_label": "typescript"
     },
     {
       "label": "vite",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L39",
+      "source_location": "L40",
       "_origin": "ast",
       "id": "package_devdependencies_vite",
       "community": 18,
@@ -2724,7 +2746,7 @@
       "label": "vite",
       "file_type": "concept",
       "source_file": "package.json",
-      "source_location": "L39",
+      "source_location": "L40",
       "_origin": "ast",
       "id": "vite",
       "community": 18,
@@ -2735,7 +2757,7 @@
       "label": "vitest",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L40",
+      "source_location": "L41",
       "_origin": "ast",
       "id": "package_devdependencies_vitest",
       "community": 18,
@@ -2746,7 +2768,7 @@
       "label": "vitest",
       "file_type": "concept",
       "source_file": "package.json",
-      "source_location": "L40",
+      "source_location": "L41",
       "_origin": "ast",
       "id": "vitest",
       "community": 18,
@@ -2757,7 +2779,7 @@
       "label": "dependencies",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L42",
+      "source_location": "L43",
       "_origin": "ast",
       "id": "package_dependencies",
       "community": 41,
@@ -2768,7 +2790,7 @@
       "label": "@prisma/client",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L43",
+      "source_location": "L44",
       "_origin": "ast",
       "id": "package_dependencies_prisma_client",
       "community": 41,
@@ -2779,7 +2801,7 @@
       "label": "@prisma/client",
       "file_type": "concept",
       "source_file": "package.json",
-      "source_location": "L43",
+      "source_location": "L44",
       "_origin": "ast",
       "id": "prisma_client",
       "community": 41,
@@ -2790,7 +2812,7 @@
       "label": "@supabase/ssr",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L44",
+      "source_location": "L45",
       "_origin": "ast",
       "id": "package_dependencies_supabase_ssr",
       "community": 41,
@@ -2801,7 +2823,7 @@
       "label": "@supabase/ssr",
       "file_type": "concept",
       "source_file": "package.json",
-      "source_location": "L44",
+      "source_location": "L45",
       "_origin": "ast",
       "id": "supabase_ssr",
       "community": 41,
@@ -2809,10 +2831,32 @@
       "norm_label": "@supabase/ssr"
     },
     {
+      "label": "jsbarcode",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L46",
+      "_origin": "ast",
+      "id": "package_dependencies_jsbarcode",
+      "community": 41,
+      "community_name": "dependencies",
+      "norm_label": "jsbarcode"
+    },
+    {
+      "label": "jsbarcode",
+      "file_type": "concept",
+      "source_file": "package.json",
+      "source_location": "L46",
+      "_origin": "ast",
+      "id": "jsbarcode",
+      "community": 41,
+      "community_name": "dependencies",
+      "norm_label": "jsbarcode"
+    },
+    {
       "label": "next",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L45",
+      "source_location": "L47",
       "_origin": "ast",
       "id": "package_dependencies_next",
       "community": 41,
@@ -2823,7 +2867,7 @@
       "label": "next",
       "file_type": "concept",
       "source_file": "package.json",
-      "source_location": "L45",
+      "source_location": "L47",
       "_origin": "ast",
       "id": "next",
       "community": 41,
@@ -2834,7 +2878,7 @@
       "label": "react",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L46",
+      "source_location": "L48",
       "_origin": "ast",
       "id": "package_dependencies_react",
       "community": 41,
@@ -2845,7 +2889,7 @@
       "label": "react",
       "file_type": "concept",
       "source_file": "package.json",
-      "source_location": "L46",
+      "source_location": "L48",
       "_origin": "ast",
       "id": "react",
       "community": 41,
@@ -2856,7 +2900,7 @@
       "label": "react-dom",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L47",
+      "source_location": "L49",
       "_origin": "ast",
       "id": "package_dependencies_react_dom",
       "community": 41,
@@ -2867,7 +2911,7 @@
       "label": "react-dom",
       "file_type": "concept",
       "source_file": "package.json",
-      "source_location": "L47",
+      "source_location": "L49",
       "_origin": "ast",
       "id": "react_dom",
       "community": 41,
@@ -2878,7 +2922,7 @@
       "label": "zod",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L48",
+      "source_location": "L50",
       "_origin": "ast",
       "id": "package_dependencies_zod",
       "community": 41,
@@ -2889,7 +2933,7 @@
       "label": "zod",
       "file_type": "concept",
       "source_file": "package.json",
-      "source_location": "L48",
+      "source_location": "L50",
       "_origin": "ast",
       "id": "zod",
       "community": 41,
@@ -3453,8 +3497,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_api_health_route",
-      "community": 38,
-      "community_name": "sales.contract.ts",
+      "community": 29,
+      "community_name": "cash/prisma-service.ts",
       "norm_label": "health/route.ts"
     },
     {
@@ -3464,8 +3508,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "src_app_api_health_route_dynamic",
-      "community": 38,
-      "community_name": "sales.contract.ts",
+      "community": 29,
+      "community_name": "cash/prisma-service.ts",
       "norm_label": "dynamic"
     },
     {
@@ -3475,8 +3519,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "src_app_api_health_route_get",
-      "community": 38,
-      "community_name": "sales.contract.ts",
+      "community": 29,
+      "community_name": "cash/prisma-service.ts",
       "norm_label": "get()"
     },
     {
@@ -3783,8 +3827,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_api_patients_id_route",
-      "community": 38,
-      "community_name": "sales.contract.ts",
+      "community": 32,
+      "community_name": "services.ts",
       "norm_label": "patients/[id]/route.ts"
     },
     {
@@ -3794,8 +3838,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "src_app_api_patients_id_route_get",
-      "community": 38,
-      "community_name": "sales.contract.ts",
+      "community": 32,
+      "community_name": "services.ts",
       "norm_label": "get()"
     },
     {
@@ -3937,8 +3981,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_api_sales_orders_route",
-      "community": 32,
-      "community_name": "services.ts",
+      "community": 38,
+      "community_name": "sales.contract.ts",
       "norm_label": "sales/orders/route.ts"
     },
     {
@@ -3948,8 +3992,8 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "src_app_api_sales_orders_route_get",
-      "community": 32,
-      "community_name": "services.ts",
+      "community": 38,
+      "community_name": "sales.contract.ts",
       "norm_label": "get()"
     },
     {
@@ -4319,7 +4363,7 @@
       "label": "CreatedProduct",
       "file_type": "code",
       "source_file": "src/app/inventory/intake/page.tsx",
-      "source_location": "L7",
+      "source_location": "L8",
       "_origin": "ast",
       "id": "src_app_inventory_intake_page_createdproduct",
       "community": 57,
@@ -4330,7 +4374,7 @@
       "label": "InventoryIntakePage()",
       "file_type": "code",
       "source_file": "src/app/inventory/intake/page.tsx",
-      "source_location": "L15",
+      "source_location": "L16",
       "_origin": "ast",
       "id": "src_app_inventory_intake_page_inventoryintakepage",
       "community": 57,
@@ -4877,6 +4921,39 @@
       "norm_label": "pospage()"
     },
     {
+      "label": "Barcode.tsx",
+      "file_type": "code",
+      "source_file": "src/components/Barcode.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_barcode",
+      "community": 57,
+      "community_name": "intake/page.tsx",
+      "norm_label": "barcode.tsx"
+    },
+    {
+      "label": "BarcodeProps",
+      "file_type": "code",
+      "source_file": "src/components/Barcode.tsx",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "src_components_barcode_barcodeprops",
+      "community": 57,
+      "community_name": "intake/page.tsx",
+      "norm_label": "barcodeprops"
+    },
+    {
+      "label": "Barcode()",
+      "file_type": "code",
+      "source_file": "src/components/Barcode.tsx",
+      "source_location": "L21",
+      "_origin": "ast",
+      "id": "src_components_barcode_barcode",
+      "community": 57,
+      "community_name": "intake/page.tsx",
+      "norm_label": "barcode()"
+    },
+    {
       "label": "RoleNav.tsx",
       "file_type": "code",
       "source_file": "src/components/layout/RoleNav.tsx",
@@ -4916,8 +4993,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_lib_prisma",
-      "community": 38,
-      "community_name": "sales.contract.ts",
+      "community": 29,
+      "community_name": "cash/prisma-service.ts",
       "norm_label": "prisma.ts"
     },
     {
@@ -4927,8 +5004,8 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "src_lib_prisma_globalforprisma",
-      "community": 38,
-      "community_name": "sales.contract.ts",
+      "community": 29,
+      "community_name": "cash/prisma-service.ts",
       "norm_label": "globalforprisma"
     },
     {
@@ -4938,8 +5015,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "src_lib_prisma_prisma",
-      "community": 38,
-      "community_name": "sales.contract.ts",
+      "community": 29,
+      "community_name": "cash/prisma-service.ts",
       "norm_label": "prisma"
     },
     {
@@ -5741,7 +5818,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_modules_cash_prisma_service",
-      "community": 74,
+      "community": 29,
       "community_name": "cash/prisma-service.ts",
       "norm_label": "cash/prisma-service.ts"
     },
@@ -5752,7 +5829,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "src_modules_cash_prisma_service_isuuid",
-      "community": 74,
+      "community": 29,
       "community_name": "cash/prisma-service.ts",
       "norm_label": "isuuid()"
     },
@@ -5763,7 +5840,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "src_modules_cash_prisma_service_shiftrecord",
-      "community": 74,
+      "community": 29,
       "community_name": "cash/prisma-service.ts",
       "norm_label": "shiftrecord"
     },
@@ -5774,7 +5851,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "src_modules_cash_prisma_service_paymentreader",
-      "community": 74,
+      "community": 29,
       "community_name": "cash/prisma-service.ts",
       "norm_label": "paymentreader"
     },
@@ -5786,7 +5863,7 @@
       "_origin": "ast",
       "id": "src_modules_cash_prisma_service_mapshift",
       "community": 74,
-      "community_name": "cash/prisma-service.ts",
+      "community_name": "PrismaCashService",
       "norm_label": "mapshift()"
     },
     {
@@ -5796,7 +5873,7 @@
       "source_location": "L51",
       "_origin": "ast",
       "id": "src_modules_cash_prisma_service_mapexpense",
-      "community": 74,
+      "community": 29,
       "community_name": "cash/prisma-service.ts",
       "norm_label": "mapexpense()"
     },
@@ -5808,7 +5885,7 @@
       "_origin": "ast",
       "id": "src_modules_cash_prisma_service_prismacashservice",
       "community": 74,
-      "community_name": "cash/prisma-service.ts",
+      "community_name": "PrismaCashService",
       "norm_label": "prismacashservice"
     },
     {
@@ -5819,7 +5896,7 @@
       "_origin": "ast",
       "id": "src_modules_cash_prisma_service_prismacashservice_branch",
       "community": 74,
-      "community_name": "cash/prisma-service.ts",
+      "community_name": "PrismaCashService",
       "norm_label": ".branch()"
     },
     {
@@ -5830,7 +5907,7 @@
       "_origin": "ast",
       "id": "src_modules_cash_prisma_service_prismacashservice_openshift",
       "community": 74,
-      "community_name": "cash/prisma-service.ts",
+      "community_name": "PrismaCashService",
       "norm_label": ".openshift()"
     },
     {
@@ -5841,7 +5918,7 @@
       "_origin": "ast",
       "id": "src_modules_cash_prisma_service_prismacashservice_getcurrentshift",
       "community": 74,
-      "community_name": "cash/prisma-service.ts",
+      "community_name": "PrismaCashService",
       "norm_label": ".getcurrentshift()"
     },
     {
@@ -5851,7 +5928,7 @@
       "source_location": "L81",
       "_origin": "ast",
       "id": "src_modules_cash_prisma_service_prismacashservice_recordexpense",
-      "community": 74,
+      "community": 29,
       "community_name": "cash/prisma-service.ts",
       "norm_label": ".recordexpense()"
     },
@@ -5863,7 +5940,7 @@
       "_origin": "ast",
       "id": "src_modules_cash_prisma_service_prismacashservice_breakdown",
       "community": 74,
-      "community_name": "cash/prisma-service.ts",
+      "community_name": "PrismaCashService",
       "norm_label": ".breakdown()"
     },
     {
@@ -5874,7 +5951,7 @@
       "_origin": "ast",
       "id": "src_modules_cash_prisma_service_prismacashservice_closeshift",
       "community": 74,
-      "community_name": "cash/prisma-service.ts",
+      "community_name": "PrismaCashService",
       "norm_label": ".closeshift()"
     },
     {
@@ -5885,7 +5962,7 @@
       "_origin": "ast",
       "id": "src_modules_cash_prisma_service_prismacashservice_getshift",
       "community": 74,
-      "community_name": "cash/prisma-service.ts",
+      "community_name": "PrismaCashService",
       "norm_label": ".getshift()"
     },
     {
@@ -5896,7 +5973,7 @@
       "_origin": "ast",
       "id": "src_modules_cash_prisma_service_prismacashservice_listshifts",
       "community": 74,
-      "community_name": "cash/prisma-service.ts",
+      "community_name": "PrismaCashService",
       "norm_label": ".listshifts()"
     },
     {
@@ -5907,7 +5984,7 @@
       "_origin": "ast",
       "id": "src_modules_cash_prisma_service_prismacashservice_getaccountsreceivable",
       "community": 74,
-      "community_name": "cash/prisma-service.ts",
+      "community_name": "PrismaCashService",
       "norm_label": ".getaccountsreceivable()"
     },
     {
@@ -6005,8 +6082,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_modules_cash_service",
-      "community": 29,
-      "community_name": "cash/service.ts",
+      "community": 5,
+      "community_name": "actors.ts",
       "norm_label": "cash/service.ts"
     },
     {
@@ -6016,8 +6093,8 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "src_modules_cash_service_shifts",
-      "community": 29,
-      "community_name": "cash/service.ts",
+      "community": 5,
+      "community_name": "actors.ts",
       "norm_label": "shifts"
     },
     {
@@ -6027,8 +6104,8 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "src_modules_cash_service_expenses",
-      "community": 29,
-      "community_name": "cash/service.ts",
+      "community": 5,
+      "community_name": "actors.ts",
       "norm_label": "expenses"
     },
     {
@@ -6038,8 +6115,8 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "src_modules_cash_service_copyshift",
-      "community": 29,
-      "community_name": "cash/service.ts",
+      "community": 71,
+      "community_name": "cash-shift.contract.ts",
       "norm_label": "copyshift()"
     },
     {
@@ -6049,8 +6126,8 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "src_modules_cash_service_paymentbreakdown",
-      "community": 29,
-      "community_name": "cash/service.ts",
+      "community": 71,
+      "community_name": "cash-shift.contract.ts",
       "norm_label": "paymentbreakdown()"
     },
     {
@@ -6060,8 +6137,8 @@
       "source_location": "L41",
       "_origin": "ast",
       "id": "src_modules_cash_service_cashservice",
-      "community": 29,
-      "community_name": "cash/service.ts",
+      "community": 5,
+      "community_name": "actors.ts",
       "norm_label": "cashservice"
     },
     {
@@ -6082,8 +6159,8 @@
       "source_location": "L68",
       "_origin": "ast",
       "id": "src_modules_cash_service_cashservice_getcurrentshift",
-      "community": 29,
-      "community_name": "cash/service.ts",
+      "community": 71,
+      "community_name": "cash-shift.contract.ts",
       "norm_label": ".getcurrentshift()"
     },
     {
@@ -6094,7 +6171,7 @@
       "_origin": "ast",
       "id": "src_modules_cash_service_cashservice_recordexpense",
       "community": 29,
-      "community_name": "cash/service.ts",
+      "community_name": "cash/prisma-service.ts",
       "norm_label": ".recordexpense()"
     },
     {
@@ -6104,8 +6181,8 @@
       "source_location": "L89",
       "_origin": "ast",
       "id": "src_modules_cash_service_cashservice_closeshift",
-      "community": 29,
-      "community_name": "cash/service.ts",
+      "community": 71,
+      "community_name": "cash-shift.contract.ts",
       "norm_label": ".closeshift()"
     },
     {
@@ -6115,8 +6192,8 @@
       "source_location": "L113",
       "_origin": "ast",
       "id": "src_modules_cash_service_cashservice_getshift",
-      "community": 29,
-      "community_name": "cash/service.ts",
+      "community": 71,
+      "community_name": "cash-shift.contract.ts",
       "norm_label": ".getshift()"
     },
     {
@@ -6126,8 +6203,8 @@
       "source_location": "L119",
       "_origin": "ast",
       "id": "src_modules_cash_service_cashservice_listshifts",
-      "community": 29,
-      "community_name": "cash/service.ts",
+      "community": 71,
+      "community_name": "cash-shift.contract.ts",
       "norm_label": ".listshifts()"
     },
     {
@@ -6138,7 +6215,7 @@
       "_origin": "ast",
       "id": "src_modules_cash_service_cashservice_getaccountsreceivable",
       "community": 29,
-      "community_name": "cash/service.ts",
+      "community_name": "cash/prisma-service.ts",
       "norm_label": ".getaccountsreceivable()"
     },
     {
@@ -6214,8 +6291,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_modules_clinical_prescription_service",
-      "community": 75,
-      "community_name": "clinical.contract.ts",
+      "community": 90,
+      "community_name": "prescription.service.ts",
       "norm_label": "prescription.service.ts"
     },
     {
@@ -6225,8 +6302,8 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "src_modules_clinical_prescription_service_statemachine",
-      "community": 75,
-      "community_name": "clinical.contract.ts",
+      "community": 90,
+      "community_name": "prescription.service.ts",
       "norm_label": "statemachine"
     },
     {
@@ -6237,7 +6314,7 @@
       "_origin": "ast",
       "id": "src_modules_clinical_prescription_service_tosnapshot",
       "community": 90,
-      "community_name": "Prescription",
+      "community_name": "prescription.service.ts",
       "norm_label": "tosnapshot()"
     },
     {
@@ -6248,7 +6325,7 @@
       "_origin": "ast",
       "id": "src_modules_clinical_prescription_service_prescriptionservice",
       "community": 90,
-      "community_name": "Prescription",
+      "community_name": "prescription.service.ts",
       "norm_label": "prescriptionservice"
     },
     {
@@ -6259,7 +6336,7 @@
       "_origin": "ast",
       "id": "src_modules_clinical_prescription_service_prescriptionservice_issueprescription",
       "community": 90,
-      "community_name": "Prescription",
+      "community_name": "prescription.service.ts",
       "norm_label": ".issueprescription()"
     },
     {
@@ -6270,7 +6347,7 @@
       "_origin": "ast",
       "id": "src_modules_clinical_prescription_service_prescriptionservice_issueprescriptionwithconsultation",
       "community": 90,
-      "community_name": "Prescription",
+      "community_name": "prescription.service.ts",
       "norm_label": ".issueprescriptionwithconsultation()"
     },
     {
@@ -6281,7 +6358,7 @@
       "_origin": "ast",
       "id": "src_modules_clinical_prescription_service_prescriptionservice_amendprescription",
       "community": 90,
-      "community_name": "Prescription",
+      "community_name": "prescription.service.ts",
       "norm_label": ".amendprescription()"
     },
     {
@@ -6291,7 +6368,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_modules_clinical_prisma_service",
-      "community": 76,
+      "community": 75,
       "community_name": "clinical/prisma-service.ts",
       "norm_label": "clinical/prisma-service.ts"
     },
@@ -6302,7 +6379,7 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "src_modules_clinical_prisma_service_notelabels",
-      "community": 76,
+      "community": 75,
       "community_name": "clinical/prisma-service.ts",
       "norm_label": "notelabels"
     },
@@ -6313,8 +6390,8 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "src_modules_clinical_prisma_service_tojson",
-      "community": 76,
-      "community_name": "clinical/prisma-service.ts",
+      "community": 90,
+      "community_name": "prescription.service.ts",
       "norm_label": "tojson()"
     },
     {
@@ -6335,8 +6412,8 @@
       "source_location": "L47",
       "_origin": "ast",
       "id": "src_modules_clinical_prisma_service_mapconsultation",
-      "community": 76,
-      "community_name": "clinical/prisma-service.ts",
+      "community": 72,
+      "community_name": "authorize",
       "norm_label": "mapconsultation()"
     },
     {
@@ -6346,7 +6423,7 @@
       "source_location": "L79",
       "_origin": "ast",
       "id": "src_modules_clinical_prisma_service_maprefraction",
-      "community": 76,
+      "community": 75,
       "community_name": "clinical/prisma-service.ts",
       "norm_label": "maprefraction()"
     },
@@ -6357,8 +6434,8 @@
       "source_location": "L115",
       "_origin": "ast",
       "id": "src_modules_clinical_prisma_service_mapprescription",
-      "community": 76,
-      "community_name": "clinical/prisma-service.ts",
+      "community": 72,
+      "community_name": "authorize",
       "norm_label": "mapprescription()"
     },
     {
@@ -6368,8 +6445,8 @@
       "source_location": "L155",
       "_origin": "ast",
       "id": "src_modules_clinical_prisma_service_prismaclinicalservice",
-      "community": 76,
-      "community_name": "clinical/prisma-service.ts",
+      "community": 72,
+      "community_name": "authorize",
       "norm_label": "prismaclinicalservice"
     },
     {
@@ -6379,7 +6456,7 @@
       "source_location": "L159",
       "_origin": "ast",
       "id": "src_modules_clinical_prisma_service_prismaclinicalservice_consultation",
-      "community": 76,
+      "community": 75,
       "community_name": "clinical/prisma-service.ts",
       "norm_label": ".consultation()"
     },
@@ -6390,7 +6467,7 @@
       "source_location": "L163",
       "_origin": "ast",
       "id": "src_modules_clinical_prisma_service_prismaclinicalservice_assertconsent",
-      "community": 76,
+      "community": 75,
       "community_name": "clinical/prisma-service.ts",
       "norm_label": ".assertconsent()"
     },
@@ -6401,8 +6478,8 @@
       "source_location": "L170",
       "_origin": "ast",
       "id": "src_modules_clinical_prisma_service_prismaclinicalservice_resolvebranch",
-      "community": 76,
-      "community_name": "clinical/prisma-service.ts",
+      "community": 72,
+      "community_name": "authorize",
       "norm_label": ".resolvebranch()"
     },
     {
@@ -6412,8 +6489,8 @@
       "source_location": "L177",
       "_origin": "ast",
       "id": "src_modules_clinical_prisma_service_prismaclinicalservice_open",
-      "community": 76,
-      "community_name": "clinical/prisma-service.ts",
+      "community": 72,
+      "community_name": "authorize",
       "norm_label": ".open()"
     },
     {
@@ -6423,8 +6500,8 @@
       "source_location": "L190",
       "_origin": "ast",
       "id": "src_modules_clinical_prisma_service_prismaclinicalservice_getfullconsultation",
-      "community": 76,
-      "community_name": "clinical/prisma-service.ts",
+      "community": 72,
+      "community_name": "authorize",
       "norm_label": ".getfullconsultation()"
     },
     {
@@ -6489,8 +6566,8 @@
       "source_location": "L268",
       "_origin": "ast",
       "id": "src_modules_clinical_prisma_service_prismaclinicalservice_listreceptionqueue",
-      "community": 76,
-      "community_name": "clinical/prisma-service.ts",
+      "community": 72,
+      "community_name": "authorize",
       "norm_label": ".listreceptionqueue()"
     },
     {
@@ -6500,7 +6577,7 @@
       "source_location": "L310",
       "_origin": "ast",
       "id": "src_modules_clinical_prisma_service_prismaclinicalservice_addrefraction",
-      "community": 76,
+      "community": 75,
       "community_name": "clinical/prisma-service.ts",
       "norm_label": ".addrefraction()"
     },
@@ -6511,7 +6588,7 @@
       "source_location": "L337",
       "_origin": "ast",
       "id": "src_modules_clinical_prisma_service_prismaclinicalservice_amendrefraction",
-      "community": 76,
+      "community": 75,
       "community_name": "clinical/prisma-service.ts",
       "norm_label": ".amendrefraction()"
     },
@@ -6522,8 +6599,8 @@
       "source_location": "L370",
       "_origin": "ast",
       "id": "src_modules_clinical_prisma_service_prismaclinicalservice_setnonclinicalnote",
-      "community": 76,
-      "community_name": "clinical/prisma-service.ts",
+      "community": 81,
+      "community_name": "clinical/service.ts",
       "norm_label": ".setnonclinicalnote()"
     },
     {
@@ -6533,8 +6610,8 @@
       "source_location": "L384",
       "_origin": "ast",
       "id": "src_modules_clinical_prisma_service_prismaclinicalservice_updateclinicaldetails",
-      "community": 76,
-      "community_name": "clinical/prisma-service.ts",
+      "community": 72,
+      "community_name": "authorize",
       "norm_label": ".updateclinicaldetails()"
     },
     {
@@ -6544,8 +6621,8 @@
       "source_location": "L428",
       "_origin": "ast",
       "id": "src_modules_clinical_prisma_service_prismaclinicalservice_abandon",
-      "community": 76,
-      "community_name": "clinical/prisma-service.ts",
+      "community": 78,
+      "community_name": "clinical/state-machine.ts",
       "norm_label": ".abandon()"
     },
     {
@@ -6555,8 +6632,8 @@
       "source_location": "L441",
       "_origin": "ast",
       "id": "src_modules_clinical_prisma_service_prismaclinicalservice_releaseconsultation",
-      "community": 76,
-      "community_name": "clinical/prisma-service.ts",
+      "community": 72,
+      "community_name": "authorize",
       "norm_label": ".releaseconsultation()"
     },
     {
@@ -6566,8 +6643,8 @@
       "source_location": "L451",
       "_origin": "ast",
       "id": "src_modules_clinical_prisma_service_prismaclinicalservice_issueprescription",
-      "community": 76,
-      "community_name": "clinical/prisma-service.ts",
+      "community": 90,
+      "community_name": "prescription.service.ts",
       "norm_label": ".issueprescription()"
     },
     {
@@ -6578,7 +6655,7 @@
       "_origin": "ast",
       "id": "src_modules_clinical_prisma_service_prismaclinicalservice_amendprescription",
       "community": 90,
-      "community_name": "Prescription",
+      "community_name": "prescription.service.ts",
       "norm_label": ".amendprescription()"
     },
     {
@@ -6589,7 +6666,7 @@
       "_origin": "ast",
       "id": "src_modules_clinical_refraction_service",
       "community": 75,
-      "community_name": "clinical.contract.ts",
+      "community_name": "clinical/prisma-service.ts",
       "norm_label": "refraction.service.ts"
     },
     {
@@ -6600,7 +6677,7 @@
       "_origin": "ast",
       "id": "src_modules_clinical_refraction_service_refractionservice",
       "community": 75,
-      "community_name": "clinical.contract.ts",
+      "community_name": "clinical/prisma-service.ts",
       "norm_label": "refractionservice"
     },
     {
@@ -6611,7 +6688,7 @@
       "_origin": "ast",
       "id": "src_modules_clinical_refraction_service_refractionservice_addrefraction",
       "community": 75,
-      "community_name": "clinical.contract.ts",
+      "community_name": "clinical/prisma-service.ts",
       "norm_label": ".addrefraction()"
     },
     {
@@ -6622,7 +6699,7 @@
       "_origin": "ast",
       "id": "src_modules_clinical_refraction_service_refractionservice_amendrefraction",
       "community": 75,
-      "community_name": "clinical.contract.ts",
+      "community_name": "clinical/prisma-service.ts",
       "norm_label": ".amendrefraction()"
     },
     {
@@ -6632,8 +6709,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_modules_clinical_repository",
-      "community": 75,
-      "community_name": "clinical.contract.ts",
+      "community": 73,
+      "community_name": "PatientId",
       "norm_label": "clinical/repository.ts"
     },
     {
@@ -6644,7 +6721,7 @@
       "_origin": "ast",
       "id": "src_modules_clinical_repository_clinicalrepository",
       "community": 73,
-      "community_name": "Consultation",
+      "community_name": "PatientId",
       "norm_label": "clinicalrepository"
     },
     {
@@ -6655,7 +6732,7 @@
       "_origin": "ast",
       "id": "src_modules_clinical_repository_clinicalrepository_constructor",
       "community": 73,
-      "community_name": "Consultation",
+      "community_name": "PatientId",
       "norm_label": ".constructor()"
     },
     {
@@ -6666,7 +6743,7 @@
       "_origin": "ast",
       "id": "src_modules_clinical_repository_clinicalrepository_seed",
       "community": 73,
-      "community_name": "Consultation",
+      "community_name": "PatientId",
       "norm_label": ".seed()"
     },
     {
@@ -6677,7 +6754,7 @@
       "_origin": "ast",
       "id": "src_modules_clinical_repository_clinicalrepository_generateprescriptionfolio",
       "community": 73,
-      "community_name": "Consultation",
+      "community_name": "PatientId",
       "norm_label": ".generateprescriptionfolio()"
     },
     {
@@ -6688,7 +6765,7 @@
       "_origin": "ast",
       "id": "src_modules_clinical_repository_clinicalrepository_getconsultation",
       "community": 73,
-      "community_name": "Consultation",
+      "community_name": "PatientId",
       "norm_label": ".getconsultation()"
     },
     {
@@ -6699,7 +6776,7 @@
       "_origin": "ast",
       "id": "src_modules_clinical_repository_clinicalrepository_listconsultationsbypatientid",
       "community": 73,
-      "community_name": "Consultation",
+      "community_name": "PatientId",
       "norm_label": ".listconsultationsbypatientid()"
     },
     {
@@ -6710,7 +6787,7 @@
       "_origin": "ast",
       "id": "src_modules_clinical_repository_clinicalrepository_listclosedconsultations",
       "community": 73,
-      "community_name": "Consultation",
+      "community_name": "PatientId",
       "norm_label": ".listclosedconsultations()"
     },
     {
@@ -6721,7 +6798,7 @@
       "_origin": "ast",
       "id": "src_modules_clinical_repository_clinicalrepository_hasinprogressconsultation",
       "community": 73,
-      "community_name": "Consultation",
+      "community_name": "PatientId",
       "norm_label": ".hasinprogressconsultation()"
     },
     {
@@ -6731,8 +6808,8 @@
       "source_location": "L175",
       "_origin": "ast",
       "id": "src_modules_clinical_repository_clinicalrepository_createconsultation",
-      "community": 4,
-      "community_name": "patients.contract.ts",
+      "community": 73,
+      "community_name": "PatientId",
       "norm_label": ".createconsultation()"
     },
     {
@@ -6743,7 +6820,7 @@
       "_origin": "ast",
       "id": "src_modules_clinical_repository_clinicalrepository_updateconsultation",
       "community": 73,
-      "community_name": "Consultation",
+      "community_name": "PatientId",
       "norm_label": ".updateconsultation()"
     },
     {
@@ -6754,7 +6831,7 @@
       "_origin": "ast",
       "id": "src_modules_clinical_repository_clinicalrepository_setconsultation",
       "community": 73,
-      "community_name": "Consultation",
+      "community_name": "PatientId",
       "norm_label": ".setconsultation()"
     },
     {
@@ -6764,8 +6841,8 @@
       "source_location": "L217",
       "_origin": "ast",
       "id": "src_modules_clinical_repository_clinicalrepository_getrefraction",
-      "community": 75,
-      "community_name": "clinical.contract.ts",
+      "community": 73,
+      "community_name": "PatientId",
       "norm_label": ".getrefraction()"
     },
     {
@@ -6775,8 +6852,8 @@
       "source_location": "L221",
       "_origin": "ast",
       "id": "src_modules_clinical_repository_clinicalrepository_getrefractionsbyconsultation",
-      "community": 75,
-      "community_name": "clinical.contract.ts",
+      "community": 73,
+      "community_name": "PatientId",
       "norm_label": ".getrefractionsbyconsultation()"
     },
     {
@@ -6786,8 +6863,8 @@
       "source_location": "L227",
       "_origin": "ast",
       "id": "src_modules_clinical_repository_clinicalrepository_getlatestrefractionsbyeye",
-      "community": 75,
-      "community_name": "clinical.contract.ts",
+      "community": 73,
+      "community_name": "PatientId",
       "norm_label": ".getlatestrefractionsbyeye()"
     },
     {
@@ -6798,7 +6875,7 @@
       "_origin": "ast",
       "id": "src_modules_clinical_repository_clinicalrepository_hasvalidrefractionforbotheyes",
       "community": 73,
-      "community_name": "Consultation",
+      "community_name": "PatientId",
       "norm_label": ".hasvalidrefractionforbotheyes()"
     },
     {
@@ -6809,7 +6886,7 @@
       "_origin": "ast",
       "id": "src_modules_clinical_repository_clinicalrepository_createrefraction",
       "community": 73,
-      "community_name": "Consultation",
+      "community_name": "PatientId",
       "norm_label": ".createrefraction()"
     },
     {
@@ -6820,7 +6897,7 @@
       "_origin": "ast",
       "id": "src_modules_clinical_repository_clinicalrepository_createprescription",
       "community": 73,
-      "community_name": "Consultation",
+      "community_name": "PatientId",
       "norm_label": ".createprescription()"
     },
     {
@@ -6830,8 +6907,8 @@
       "source_location": "L272",
       "_origin": "ast",
       "id": "src_modules_clinical_repository_clinicalrepository_getprescription",
-      "community": 90,
-      "community_name": "Prescription",
+      "community": 73,
+      "community_name": "PatientId",
       "norm_label": ".getprescription()"
     },
     {
@@ -6842,7 +6919,7 @@
       "_origin": "ast",
       "id": "src_modules_clinical_repository_clinicalrepository_getprescriptionsbyconsultation",
       "community": 73,
-      "community_name": "Consultation",
+      "community_name": "PatientId",
       "norm_label": ".getprescriptionsbyconsultation()"
     },
     {
@@ -6853,7 +6930,7 @@
       "_origin": "ast",
       "id": "src_modules_clinical_repository_clinicalrepository_getbaseprescriptionbyconsultation",
       "community": 73,
-      "community_name": "Consultation",
+      "community_name": "PatientId",
       "norm_label": ".getbaseprescriptionbyconsultation()"
     },
     {
@@ -6864,7 +6941,7 @@
       "_origin": "ast",
       "id": "src_modules_clinical_repository_clinicalrepository_buildfullconsultation",
       "community": 73,
-      "community_name": "Consultation",
+      "community_name": "PatientId",
       "norm_label": ".buildfullconsultation()"
     },
     {
@@ -6929,8 +7006,8 @@
       "source_location": "L45",
       "_origin": "ast",
       "id": "src_modules_clinical_service_clinicalservice_open",
-      "community": 72,
-      "community_name": "authorize",
+      "community": 73,
+      "community_name": "PatientId",
       "norm_label": ".open()"
     },
     {
@@ -6940,8 +7017,8 @@
       "source_location": "L78",
       "_origin": "ast",
       "id": "src_modules_clinical_service_clinicalservice_abandon",
-      "community": 72,
-      "community_name": "authorize",
+      "community": 78,
+      "community_name": "clinical/state-machine.ts",
       "norm_label": ".abandon()"
     },
     {
@@ -6973,8 +7050,8 @@
       "source_location": "L192",
       "_origin": "ast",
       "id": "src_modules_clinical_service_clinicalservice_setnonclinicalnote",
-      "community": 72,
-      "community_name": "authorize",
+      "community": 78,
+      "community_name": "clinical/state-machine.ts",
       "norm_label": ".setnonclinicalnote()"
     },
     {
@@ -6996,7 +7073,7 @@
       "_origin": "ast",
       "id": "src_modules_clinical_service_clinicalservice_addrefraction",
       "community": 75,
-      "community_name": "clinical.contract.ts",
+      "community_name": "clinical/prisma-service.ts",
       "norm_label": ".addrefraction()"
     },
     {
@@ -7007,7 +7084,7 @@
       "_origin": "ast",
       "id": "src_modules_clinical_service_clinicalservice_amendrefraction",
       "community": 75,
-      "community_name": "clinical.contract.ts",
+      "community_name": "clinical/prisma-service.ts",
       "norm_label": ".amendrefraction()"
     },
     {
@@ -7018,7 +7095,7 @@
       "_origin": "ast",
       "id": "src_modules_clinical_service_clinicalservice_issueprescription",
       "community": 90,
-      "community_name": "Prescription",
+      "community_name": "prescription.service.ts",
       "norm_label": ".issueprescription()"
     },
     {
@@ -7029,7 +7106,7 @@
       "_origin": "ast",
       "id": "src_modules_clinical_service_clinicalservice_amendprescription",
       "community": 90,
-      "community_name": "Prescription",
+      "community_name": "prescription.service.ts",
       "norm_label": ".amendprescription()"
     },
     {
@@ -7116,8 +7193,8 @@
       "source_location": "L424",
       "_origin": "ast",
       "id": "src_modules_clinical_service_clinicalservice_getaudittrail",
-      "community": 73,
-      "community_name": "Consultation",
+      "community": 72,
+      "community_name": "authorize",
       "norm_label": ".getaudittrail()"
     },
     {
@@ -7227,7 +7304,7 @@
       "_origin": "ast",
       "id": "src_modules_clinical_validators",
       "community": 75,
-      "community_name": "clinical.contract.ts",
+      "community_name": "clinical/prisma-service.ts",
       "norm_label": "clinical/validators.ts"
     },
     {
@@ -7238,7 +7315,7 @@
       "_origin": "ast",
       "id": "src_modules_clinical_validators_isquarterstep",
       "community": 75,
-      "community_name": "clinical.contract.ts",
+      "community_name": "clinical/prisma-service.ts",
       "norm_label": "isquarterstep()"
     },
     {
@@ -7249,7 +7326,7 @@
       "_origin": "ast",
       "id": "src_modules_clinical_validators_isvalidvisualacuity",
       "community": 75,
-      "community_name": "clinical.contract.ts",
+      "community_name": "clinical/prisma-service.ts",
       "norm_label": "isvalidvisualacuity()"
     },
     {
@@ -7260,7 +7337,7 @@
       "_origin": "ast",
       "id": "src_modules_clinical_validators_validaterefraction",
       "community": 75,
-      "community_name": "clinical.contract.ts",
+      "community_name": "clinical/prisma-service.ts",
       "norm_label": "validaterefraction()"
     },
     {
@@ -8150,8 +8227,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_modules_patients_consent_service",
-      "community": 75,
-      "community_name": "clinical.contract.ts",
+      "community": 90,
+      "community_name": "prescription.service.ts",
       "norm_label": "consent.service.ts"
     },
     {
@@ -8161,8 +8238,8 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "src_modules_patients_consent_service_hasvalidconsentoptions",
-      "community": 75,
-      "community_name": "clinical.contract.ts",
+      "community": 90,
+      "community_name": "prescription.service.ts",
       "norm_label": "hasvalidconsentoptions"
     },
     {
@@ -8172,8 +8249,8 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "src_modules_patients_consent_service_hasvalidconsent",
-      "community": 75,
-      "community_name": "clinical.contract.ts",
+      "community": 90,
+      "community_name": "prescription.service.ts",
       "norm_label": "hasvalidconsent()"
     },
     {
@@ -8183,8 +8260,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_modules_patients_folio_generator",
-      "community": 4,
-      "community_name": "patients.contract.ts",
+      "community": 73,
+      "community_name": "PatientId",
       "norm_label": "folio-generator.ts"
     },
     {
@@ -8194,8 +8271,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_modules_patients_folio_generator_generatefolio",
-      "community": 4,
-      "community_name": "patients.contract.ts",
+      "community": 73,
+      "community_name": "PatientId",
       "norm_label": "generatefolio()"
     },
     {
@@ -8206,7 +8283,7 @@
       "_origin": "ast",
       "id": "src_modules_patients_prisma_repository",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": "prisma-repository.ts"
     },
     {
@@ -8217,7 +8294,7 @@
       "_origin": "ast",
       "id": "src_modules_patients_prisma_repository_storedpatient",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": "storedpatient"
     },
     {
@@ -8228,7 +8305,7 @@
       "_origin": "ast",
       "id": "src_modules_patients_prisma_repository_mappatient",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": "mappatient()"
     },
     {
@@ -8239,7 +8316,7 @@
       "_origin": "ast",
       "id": "src_modules_patients_prisma_repository_searchresult",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": "searchresult()"
     },
     {
@@ -8250,7 +8327,7 @@
       "_origin": "ast",
       "id": "src_modules_patients_prisma_repository_prismapatientrepository",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": "prismapatientrepository"
     },
     {
@@ -8261,7 +8338,7 @@
       "_origin": "ast",
       "id": "src_modules_patients_prisma_repository_prismapatientrepository_createpatient",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": ".createpatient()"
     },
     {
@@ -8272,7 +8349,7 @@
       "_origin": "ast",
       "id": "src_modules_patients_prisma_repository_prismapatientrepository_updatepatient",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": ".updatepatient()"
     },
     {
@@ -8283,7 +8360,7 @@
       "_origin": "ast",
       "id": "src_modules_patients_prisma_repository_prismapatientrepository_searchpatients",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": ".searchpatients()"
     },
     {
@@ -8294,7 +8371,7 @@
       "_origin": "ast",
       "id": "src_modules_patients_prisma_repository_prismapatientrepository_getpatient",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": ".getpatient()"
     },
     {
@@ -8305,7 +8382,7 @@
       "_origin": "ast",
       "id": "src_modules_patients_prisma_repository_prismapatientrepository_getpatientbyfolio",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": ".getpatientbyfolio()"
     },
     {
@@ -8316,7 +8393,7 @@
       "_origin": "ast",
       "id": "src_modules_patients_prisma_repository_prismapatientrepository_recordconsent",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": ".recordconsent()"
     },
     {
@@ -8327,7 +8404,7 @@
       "_origin": "ast",
       "id": "src_modules_patients_prisma_repository_prismapatientrepository_getcurrentprivacynotice",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": ".getcurrentprivacynotice()"
     },
     {
@@ -8338,7 +8415,7 @@
       "_origin": "ast",
       "id": "src_modules_patients_prisma_repository_prismapatientrepository_hasvalidconsent",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": ".hasvalidconsent()"
     },
     {
@@ -8348,8 +8425,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_modules_patients_repository",
-      "community": 4,
-      "community_name": "patients.contract.ts",
+      "community": 73,
+      "community_name": "PatientId",
       "norm_label": "patients/repository.ts"
     },
     {
@@ -8371,7 +8448,7 @@
       "_origin": "ast",
       "id": "src_modules_patients_repository_maskphone",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": "maskphone()"
     },
     {
@@ -8382,7 +8459,7 @@
       "_origin": "ast",
       "id": "src_modules_patients_repository_buildfullname",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": "buildfullname()"
     },
     {
@@ -8393,7 +8470,7 @@
       "_origin": "ast",
       "id": "src_modules_patients_repository_patientrepository",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": "patientrepository"
     },
     {
@@ -8404,7 +8481,7 @@
       "_origin": "ast",
       "id": "src_modules_patients_repository_patientrepository_constructor",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": ".constructor()"
     },
     {
@@ -8415,7 +8492,7 @@
       "_origin": "ast",
       "id": "src_modules_patients_repository_patientrepository_seed",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": ".seed()"
     },
     {
@@ -8426,7 +8503,7 @@
       "_origin": "ast",
       "id": "src_modules_patients_repository_patientrepository_addconsent",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": ".addconsent()"
     },
     {
@@ -8437,7 +8514,7 @@
       "_origin": "ast",
       "id": "src_modules_patients_repository_patientrepository_getcurrentprivacynotice",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": ".getcurrentprivacynotice()"
     },
     {
@@ -8448,7 +8525,7 @@
       "_origin": "ast",
       "id": "src_modules_patients_repository_patientrepository_getprivacynotice",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": ".getprivacynotice()"
     },
     {
@@ -8458,8 +8535,8 @@
       "source_location": "L401",
       "_origin": "ast",
       "id": "src_modules_patients_repository_patientrepository_findbranch",
-      "community": 45,
-      "community_name": "BranchId",
+      "community": 4,
+      "community_name": "UserId",
       "norm_label": ".findbranch()"
     },
     {
@@ -8470,7 +8547,7 @@
       "_origin": "ast",
       "id": "src_modules_patients_repository_patientrepository_getpatient",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": ".getpatient()"
     },
     {
@@ -8481,7 +8558,7 @@
       "_origin": "ast",
       "id": "src_modules_patients_repository_patientrepository_getpatientbyfolio",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": ".getpatientbyfolio()"
     },
     {
@@ -8492,7 +8569,7 @@
       "_origin": "ast",
       "id": "src_modules_patients_repository_patientrepository_createpatient",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": ".createpatient()"
     },
     {
@@ -8503,7 +8580,7 @@
       "_origin": "ast",
       "id": "src_modules_patients_repository_patientrepository_updatepatient",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": ".updatepatient()"
     },
     {
@@ -8514,7 +8591,7 @@
       "_origin": "ast",
       "id": "src_modules_patients_repository_patientrepository_searchpatients",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": ".searchpatients()"
     },
     {
@@ -8525,7 +8602,7 @@
       "_origin": "ast",
       "id": "src_modules_patients_repository_patientrepository_recordconsent",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": ".recordconsent()"
     },
     {
@@ -8536,7 +8613,7 @@
       "_origin": "ast",
       "id": "src_modules_patients_repository_patientrepository_getvalidconsent",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": ".getvalidconsent()"
     },
     {
@@ -8547,7 +8624,7 @@
       "_origin": "ast",
       "id": "src_modules_patients_repository_patientrepository_listpatients",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": ".listpatients()"
     },
     {
@@ -8557,8 +8634,8 @@
       "source_location": "L563",
       "_origin": "ast",
       "id": "src_modules_patients_repository_patientrepository_reserveprescriptionsequence",
-      "community": 45,
-      "community_name": "BranchId",
+      "community": 4,
+      "community_name": "UserId",
       "norm_label": ".reserveprescriptionsequence()"
     },
     {
@@ -8569,7 +8646,7 @@
       "_origin": "ast",
       "id": "src_modules_patients_service",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": "patients/service.ts"
     },
     {
@@ -8580,7 +8657,7 @@
       "_origin": "ast",
       "id": "src_modules_patients_service_tosafepatient",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": "tosafepatient()"
     },
     {
@@ -8591,7 +8668,7 @@
       "_origin": "ast",
       "id": "src_modules_patients_service_searchpatients",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": "searchpatients()"
     },
     {
@@ -8602,7 +8679,7 @@
       "_origin": "ast",
       "id": "src_modules_patients_service_findbyfolio",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": "findbyfolio()"
     },
     {
@@ -8613,7 +8690,7 @@
       "_origin": "ast",
       "id": "src_modules_patients_service_patientservice",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": "patientservice"
     },
     {
@@ -8624,7 +8701,7 @@
       "_origin": "ast",
       "id": "src_modules_patients_service_patientservice_create",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": ".create()"
     },
     {
@@ -8635,7 +8712,7 @@
       "_origin": "ast",
       "id": "src_modules_patients_service_patientservice_update",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": ".update()"
     },
     {
@@ -8646,7 +8723,7 @@
       "_origin": "ast",
       "id": "src_modules_patients_service_patientservice_search",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": ".search()"
     },
     {
@@ -8657,7 +8734,7 @@
       "_origin": "ast",
       "id": "src_modules_patients_service_patientservice_findbyfolio",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": ".findbyfolio()"
     },
     {
@@ -8668,7 +8745,7 @@
       "_origin": "ast",
       "id": "src_modules_patients_service_patientservice_findbyid",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": ".findbyid()"
     },
     {
@@ -8679,7 +8756,7 @@
       "_origin": "ast",
       "id": "src_modules_patients_service_patientservice_getsummary",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": ".getsummary()"
     },
     {
@@ -8690,7 +8767,7 @@
       "_origin": "ast",
       "id": "src_modules_patients_service_patientservice_hasvalidconsent",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": ".hasvalidconsent()"
     },
     {
@@ -8701,7 +8778,7 @@
       "_origin": "ast",
       "id": "src_modules_patients_service_patientservice_recordconsent",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": ".recordconsent()"
     },
     {
@@ -8712,7 +8789,7 @@
       "_origin": "ast",
       "id": "src_modules_patients_service_createpatientid",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": "createpatientid()"
     },
     {
@@ -8723,7 +8800,7 @@
       "_origin": "ast",
       "id": "src_modules_patients_validators",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": "patients/validators.ts"
     },
     {
@@ -8734,7 +8811,7 @@
       "_origin": "ast",
       "id": "src_modules_patients_validators_validsexes",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": "validsexes"
     },
     {
@@ -8744,8 +8821,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "src_modules_patients_validators_validatepatientinput",
-      "community": 4,
-      "community_name": "patients.contract.ts",
+      "community": 32,
+      "community_name": "services.ts",
       "norm_label": "validatepatientinput()"
     },
     {
@@ -9305,8 +9382,8 @@
       "source_location": "L43",
       "_origin": "ast",
       "id": "tests_fixtures_actors_labtechnician",
-      "community": 61,
-      "community_name": "laboratory/service.ts",
+      "community": 5,
+      "community_name": "actors.ts",
       "norm_label": "labtechnician()"
     },
     {
@@ -9350,7 +9427,7 @@
       "_origin": "ast",
       "id": "tests_fixtures_privacy_notice",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": "privacy-notice.ts"
     },
     {
@@ -9361,7 +9438,7 @@
       "_origin": "ast",
       "id": "tests_fixtures_privacy_notice_privacynoticev1",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": "privacynoticev1"
     },
     {
@@ -9372,7 +9449,7 @@
       "_origin": "ast",
       "id": "tests_fixtures_privacy_notice_privacynoticev2",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": "privacynoticev2"
     },
     {
@@ -9537,7 +9614,7 @@
       "_origin": "ast",
       "id": "tests_fixtures_synthetic_patients",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": "synthetic-patients.ts"
     },
     {
@@ -9548,7 +9625,7 @@
       "_origin": "ast",
       "id": "tests_fixtures_synthetic_patients_firstnames",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": "firstnames"
     },
     {
@@ -9559,7 +9636,7 @@
       "_origin": "ast",
       "id": "tests_fixtures_synthetic_patients_lastnames",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": "lastnames"
     },
     {
@@ -9570,7 +9647,7 @@
       "_origin": "ast",
       "id": "tests_fixtures_synthetic_patients_pad",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": "pad()"
     },
     {
@@ -9581,7 +9658,7 @@
       "_origin": "ast",
       "id": "tests_fixtures_synthetic_patients_generatepatients",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": "generatepatients()"
     },
     {
@@ -9592,7 +9669,7 @@
       "_origin": "ast",
       "id": "tests_fixtures_synthetic_patients_generatefolios",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": "generatefolios()"
     },
     {
@@ -9701,8 +9778,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_integration_auth_session_audit_test",
-      "community": 5,
-      "community_name": "actors.ts",
+      "community": 2,
+      "community_name": "auth.contract.ts",
       "norm_label": "session-audit.test.ts"
     },
     {
@@ -9778,8 +9855,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_integration_clinical_reception_handoff_test",
-      "community": 5,
-      "community_name": "actors.ts",
+      "community": 32,
+      "community_name": "services.ts",
       "norm_label": "reception-handoff.test.ts"
     },
     {
@@ -9899,8 +9976,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_unit_cash_expenses_test",
-      "community": 29,
-      "community_name": "cash/service.ts",
+      "community": 5,
+      "community_name": "actors.ts",
       "norm_label": "expenses.test.ts"
     },
     {
@@ -9910,8 +9987,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_unit_cash_open_shift_test",
-      "community": 29,
-      "community_name": "cash/service.ts",
+      "community": 5,
+      "community_name": "actors.ts",
       "norm_label": "open-shift.test.ts"
     },
     {
@@ -9970,6 +10047,17 @@
       "norm_label": "adjustments.test.ts"
     },
     {
+      "label": "barcode.test.ts",
+      "file_type": "code",
+      "source_file": "tests/unit/inventory/barcode.test.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "tests_unit_inventory_barcode_test",
+      "community": 45,
+      "community_name": "BranchId",
+      "norm_label": "barcode.test.ts"
+    },
+    {
       "label": "batch-intake.test.ts",
       "file_type": "code",
       "source_file": "tests/unit/inventory/batch-intake.test.ts",
@@ -9998,8 +10086,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_unit_laboratory_lab_order_test",
-      "community": 61,
-      "community_name": "laboratory/service.ts",
+      "community": 5,
+      "community_name": "actors.ts",
       "norm_label": "lab-order.test.ts"
     },
     {
@@ -10009,8 +10097,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_unit_laboratory_quality_control_test",
-      "community": 61,
-      "community_name": "laboratory/service.ts",
+      "community": 5,
+      "community_name": "actors.ts",
       "norm_label": "quality-control.test.ts"
     },
     {
@@ -10031,8 +10119,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_unit_laboratory_tray_slip_test",
-      "community": 61,
-      "community_name": "laboratory/service.ts",
+      "community": 5,
+      "community_name": "actors.ts",
       "norm_label": "tray-slip.test.ts"
     },
     {
@@ -10042,8 +10130,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_unit_patients_consent_test",
-      "community": 75,
-      "community_name": "clinical.contract.ts",
+      "community": 90,
+      "community_name": "prescription.service.ts",
       "norm_label": "consent.test.ts"
     },
     {
@@ -10053,8 +10141,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_unit_patients_folio_test",
-      "community": 4,
-      "community_name": "patients.contract.ts",
+      "community": 73,
+      "community_name": "PatientId",
       "norm_label": "folio.test.ts"
     },
     {
@@ -10065,7 +10153,7 @@
       "_origin": "ast",
       "id": "tests_unit_patients_search_test",
       "community": 4,
-      "community_name": "patients.contract.ts",
+      "community_name": "UserId",
       "norm_label": "search.test.ts"
     },
     {
@@ -29180,7 +29268,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L42",
+      "source_location": "L43",
       "weight": 1.0,
       "_origin": "ast",
       "source": "package",
@@ -29477,7 +29565,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L35",
+      "source_location": "L36",
       "weight": 1.0,
       "_origin": "ast",
       "source": "package_devdependencies",
@@ -29488,7 +29576,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L36",
+      "source_location": "L37",
       "weight": 1.0,
       "_origin": "ast",
       "source": "package_devdependencies",
@@ -29499,7 +29587,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L37",
+      "source_location": "L38",
       "weight": 1.0,
       "_origin": "ast",
       "source": "package_devdependencies",
@@ -29514,7 +29602,7 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "package_devdependencies",
-      "target": "package_devdependencies_types_node",
+      "target": "package_devdependencies_types_jsbarcode",
       "confidence_score": 1.0
     },
     {
@@ -29525,7 +29613,7 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "package_devdependencies",
-      "target": "package_devdependencies_types_react",
+      "target": "package_devdependencies_types_node",
       "confidence_score": 1.0
     },
     {
@@ -29536,18 +29624,18 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "package_devdependencies",
-      "target": "package_devdependencies_types_react_dom",
+      "target": "package_devdependencies_types_react",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L38",
+      "source_location": "L34",
       "weight": 1.0,
       "_origin": "ast",
       "source": "package_devdependencies",
-      "target": "package_devdependencies_typescript",
+      "target": "package_devdependencies_types_react_dom",
       "confidence_score": 1.0
     },
     {
@@ -29558,7 +29646,7 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "package_devdependencies",
-      "target": "package_devdependencies_vite",
+      "target": "package_devdependencies_typescript",
       "confidence_score": 1.0
     },
     {
@@ -29569,6 +29657,17 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "package_devdependencies",
+      "target": "package_devdependencies_vite",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L41",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "package_devdependencies",
       "target": "package_devdependencies_vitest",
       "confidence_score": 1.0
     },
@@ -29576,7 +29675,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L34",
+      "source_location": "L35",
       "weight": 1.0,
       "_origin": "ast",
       "source": "package_devdependencies",
@@ -29591,6 +29690,18 @@
       "weight": 1.0,
       "context": "import",
       "_origin": "ast",
+      "source": "package_devdependencies_types_jsbarcode",
+      "target": "types_jsbarcode",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L32",
+      "weight": 1.0,
+      "context": "import",
+      "_origin": "ast",
       "source": "package_devdependencies_types_node",
       "target": "types_node",
       "confidence_score": 1.0
@@ -29599,7 +29710,7 @@
       "relation": "imports",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L32",
+      "source_location": "L33",
       "weight": 1.0,
       "context": "import",
       "_origin": "ast",
@@ -29611,7 +29722,7 @@
       "relation": "imports",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L33",
+      "source_location": "L34",
       "weight": 1.0,
       "context": "import",
       "_origin": "ast",
@@ -29623,7 +29734,7 @@
       "relation": "imports",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L34",
+      "source_location": "L35",
       "weight": 1.0,
       "context": "import",
       "_origin": "ast",
@@ -29635,7 +29746,7 @@
       "relation": "imports",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L35",
+      "source_location": "L36",
       "weight": 1.0,
       "context": "import",
       "_origin": "ast",
@@ -29647,7 +29758,7 @@
       "relation": "imports",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L36",
+      "source_location": "L37",
       "weight": 1.0,
       "context": "import",
       "_origin": "ast",
@@ -29659,7 +29770,7 @@
       "relation": "imports",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L37",
+      "source_location": "L38",
       "weight": 1.0,
       "context": "import",
       "_origin": "ast",
@@ -29671,7 +29782,7 @@
       "relation": "imports",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L38",
+      "source_location": "L39",
       "weight": 1.0,
       "context": "import",
       "_origin": "ast",
@@ -29683,7 +29794,7 @@
       "relation": "imports",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L39",
+      "source_location": "L40",
       "weight": 1.0,
       "context": "import",
       "_origin": "ast",
@@ -29695,7 +29806,7 @@
       "relation": "imports",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L40",
+      "source_location": "L41",
       "weight": 1.0,
       "context": "import",
       "_origin": "ast",
@@ -29707,33 +29818,11 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L45",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "package_dependencies",
-      "target": "package_dependencies_next",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "package.json",
-      "source_location": "L43",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "package_dependencies",
-      "target": "package_dependencies_prisma_client",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "package.json",
       "source_location": "L46",
       "weight": 1.0,
       "_origin": "ast",
       "source": "package_dependencies",
-      "target": "package_dependencies_react",
+      "target": "package_dependencies_jsbarcode",
       "confidence_score": 1.0
     },
     {
@@ -29744,7 +29833,7 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "package_dependencies",
-      "target": "package_dependencies_react_dom",
+      "target": "package_dependencies_next",
       "confidence_score": 1.0
     },
     {
@@ -29755,7 +29844,7 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "package_dependencies",
-      "target": "package_dependencies_supabase_ssr",
+      "target": "package_dependencies_prisma_client",
       "confidence_score": 1.0
     },
     {
@@ -29766,6 +29855,39 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "package_dependencies",
+      "target": "package_dependencies_react",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L49",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "package_dependencies",
+      "target": "package_dependencies_react_dom",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L45",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "package_dependencies",
+      "target": "package_dependencies_supabase_ssr",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L50",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "package_dependencies",
       "target": "package_dependencies_zod",
       "confidence_score": 1.0
     },
@@ -29773,7 +29895,7 @@
       "relation": "imports",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L43",
+      "source_location": "L44",
       "weight": 1.0,
       "context": "import",
       "_origin": "ast",
@@ -29785,7 +29907,7 @@
       "relation": "imports",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L44",
+      "source_location": "L45",
       "weight": 1.0,
       "context": "import",
       "_origin": "ast",
@@ -29797,7 +29919,19 @@
       "relation": "imports",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L45",
+      "source_location": "L46",
+      "weight": 1.0,
+      "context": "import",
+      "_origin": "ast",
+      "source": "package_dependencies_jsbarcode",
+      "target": "jsbarcode",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L47",
       "weight": 1.0,
       "context": "import",
       "_origin": "ast",
@@ -29809,7 +29943,7 @@
       "relation": "imports",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L46",
+      "source_location": "L48",
       "weight": 1.0,
       "context": "import",
       "_origin": "ast",
@@ -29821,7 +29955,7 @@
       "relation": "imports",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L47",
+      "source_location": "L49",
       "weight": 1.0,
       "context": "import",
       "_origin": "ast",
@@ -29833,7 +29967,7 @@
       "relation": "imports",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L48",
+      "source_location": "L50",
       "weight": 1.0,
       "context": "import",
       "_origin": "ast",
@@ -34139,7 +34273,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/app/inventory/intake/page.tsx",
-      "source_location": "L7",
+      "source_location": "L8",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_app_inventory_intake_page",
@@ -34150,11 +34284,35 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/app/inventory/intake/page.tsx",
-      "source_location": "L15",
+      "source_location": "L16",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_app_inventory_intake_page",
       "target": "src_app_inventory_intake_page_inventoryintakepage",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/inventory/intake/page.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_inventory_intake_page",
+      "target": "src_components_barcode",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/inventory/intake/page.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_inventory_intake_page",
+      "target": "src_components_barcode_barcode",
       "confidence_score": 1.0
     },
     {
@@ -34753,6 +34911,28 @@
       "_origin": "ast",
       "source": "src_app_sales_pos_page_poscontent",
       "target": "src_app_sales_pos_page_refractiontext",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/Barcode.tsx",
+      "source_location": "L21",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_barcode",
+      "target": "src_components_barcode_barcode",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/Barcode.tsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_barcode",
+      "target": "src_components_barcode_barcodeprops",
       "confidence_score": 1.0
     },
     {
@@ -41954,6 +42134,18 @@
       "confidence_score": 1.0
     },
     {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/unit/inventory/barcode.test.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_unit_inventory_barcode_test",
+      "target": "src_modules_inventory_code_generator",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -42024,6 +42216,18 @@
       "_origin": "ast",
       "source": "src_modules_inventory_service_inventoryservice_quickbatchintake",
       "target": "src_modules_inventory_code_generator_generateproductcode"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/unit/inventory/barcode.test.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_unit_inventory_barcode_test",
+      "target": "src_modules_inventory_code_generator_generateproductcode",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -52341,5 +52545,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "3e18bae037c946409cddb7612c9d6f1d264e5fb2"
+  "built_at_commit": "c33c574ac0b7a941074ec6b0f90b468546d7481b"
 }
