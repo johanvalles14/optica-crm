@@ -69,6 +69,10 @@ model User {
   auditLogs              AuditLog[]     @relation("AuditActor")
   inventoryMovements     InventoryMovement[] @relation("MovementActor")
   receivedPayments       Payment[]      @relation("PaymentReceivedBy")
+  assignedLabOrders      LabOrder[]     @relation("LabTechnician")
+  approvedLabOrders      LabOrder[]     @relation("QualityApprover")
+  cashShifts             CashShift[]    @relation("CashierShift")
+  cashExpenses           CashExpense[]  @relation("ExpenseActor")
 
   @@index([role])
   @@map("users")
@@ -82,12 +86,16 @@ model Branch {
   nextPrescriptionSequence Int            @default(1)
   nextProductSequence      Int            @default(1)
   nextSaleSequence         Int            @default(1)
+  nextLabSequence          Int            @default(1)
   patients                 Patient[]
   consultations            Consultation[]
   prescriptions            Prescription[]
   products                 Product[]
   inventoryMovements       InventoryMovement[]
   saleOrders               SaleOrder[]
+  labOrders                LabOrder[]
+  cashShifts               CashShift[]
+  invoices                 Invoice[]
 
   @@map("branches")
 }
@@ -401,6 +409,8 @@ model SaleOrder {
   prescription         Prescription?   @relation(fields: [prescriptionId], references: [id])
   items                SaleOrderItem[]
   payments             Payment[]
+  labOrders            LabOrder[]
+  invoice              Invoice?
 
   @@index([branchId, status])
   @@index([patientId])
@@ -439,4 +449,149 @@ model Payment {
   @@index([saleOrderId])
   @@index([receivedBy, paidAt])
   @@map("payments")
+}
+
+enum LabDestination {
+  internal_workshop
+  external_lab
+}
+
+enum LabOrderStatus {
+  queued
+  in_process
+  quality_control
+  completed
+  rework_needed
+  cancelled
+}
+
+enum FrameMountingType {
+  full_rim
+  semi_rimless_groove
+  rimless_drill
+}
+
+model LabOrder {
+  id                   String            @id @default(uuid()) @db.Uuid
+  folio                String            @unique @db.VarChar(16)
+  saleOrderId          String            @db.Uuid
+  saleOrderFolio       String            @db.VarChar(16)
+  branchId             String            @db.Uuid
+  patientName          String            @db.VarChar(160)
+  destination          LabDestination    @default(internal_workshop)
+  externalLabName      String?           @db.VarChar(100)
+  externalGuideNumber  String?           @db.VarChar(64)
+  expectedReturnDate   DateTime?         @db.Date
+  status               LabOrderStatus    @default(queued)
+  frameCode            String            @db.VarChar(32)
+  frameDescription     String?           @db.VarChar(255)
+  frameMountingType    FrameMountingType @default(full_rim)
+  lensMaterial         String            @db.VarChar(80)
+  treatments           Json
+  rightEye             Json
+  leftEye              Json
+  observations         String?           @db.VarChar(500)
+  assignedTechnicianId String?           @db.Uuid
+  qualityApprovedAt    DateTime?         @db.Timestamptz(3)
+  qualityApprovedBy    String?           @db.Uuid
+  reworkReason         String?           @db.VarChar(500)
+  version              Int               @default(1)
+  createdAt            DateTime          @default(now()) @db.Timestamptz(3)
+  updatedAt            DateTime          @updatedAt @db.Timestamptz(3)
+  saleOrder            SaleOrder         @relation(fields: [saleOrderId], references: [id])
+  branch               Branch            @relation(fields: [branchId], references: [id])
+  technician           User?             @relation("LabTechnician", fields: [assignedTechnicianId], references: [id])
+  qualityApprover      User?             @relation("QualityApprover", fields: [qualityApprovedBy], references: [id])
+
+  @@index([branchId, status])
+  @@index([saleOrderId])
+  @@index([folio])
+  @@map("lab_orders")
+}
+
+enum ShiftStatus {
+  open
+  closed
+}
+
+model CashShift {
+  id              String        @id @default(uuid()) @db.Uuid
+  branchId        String        @db.Uuid
+  cashierId       String        @db.Uuid
+  status          ShiftStatus   @default(open)
+  openedAt        DateTime      @default(now()) @db.Timestamptz(3)
+  closedAt        DateTime?     @db.Timestamptz(3)
+  initialFloat    Decimal       @db.Decimal(10, 2)
+  expensesTotal   Decimal       @default(0.00) @db.Decimal(10, 2)
+  expectedCash    Decimal?      @db.Decimal(10, 2)
+  declaredCash    Decimal?      @db.Decimal(10, 2)
+  cashDifference  Decimal?      @db.Decimal(10, 2)
+  cardTotal       Decimal?      @db.Decimal(10, 2)
+  transferTotal   Decimal?      @db.Decimal(10, 2)
+  totalCollected  Decimal?      @db.Decimal(10, 2)
+  notes           String?       @db.VarChar(500)
+  version         Int           @default(1)
+  createdAt       DateTime      @default(now()) @db.Timestamptz(3)
+  updatedAt       DateTime      @updatedAt @db.Timestamptz(3)
+  branch          Branch        @relation(fields: [branchId], references: [id])
+  cashier         User          @relation("CashierShift", fields: [cashierId], references: [id])
+  expenses        CashExpense[]
+
+  @@index([branchId, status])
+  @@index([cashierId, openedAt])
+  @@map("cash_shifts")
+}
+
+model CashExpense {
+  id            String    @id @default(uuid()) @db.Uuid
+  shiftId       String    @db.Uuid
+  amount        Decimal   @db.Decimal(10, 2)
+  description   String    @db.VarChar(255)
+  receiptNumber String?   @db.VarChar(64)
+  actorId       String    @db.Uuid
+  occurredAt    DateTime  @default(now()) @db.Timestamptz(3)
+  shift         CashShift @relation(fields: [shiftId], references: [id])
+  actor         User      @relation("ExpenseActor", fields: [actorId], references: [id])
+
+  @@index([shiftId, occurredAt])
+  @@map("cash_expenses")
+}
+
+enum InvoiceStatus {
+  issued
+  cancelled
+}
+
+model Invoice {
+  id                 String        @id @default(uuid()) @db.Uuid
+  saleOrderId        String        @unique @db.Uuid
+  saleOrderFolio     String        @db.VarChar(16)
+  branchId           String        @db.Uuid
+  uuid               String        @unique @db.VarChar(36)
+  folio              String        @unique @db.VarChar(16)
+  rfc                String        @db.VarChar(13)
+  legalName          String        @db.VarChar(255)
+  zipCode            String        @db.VarChar(10)
+  taxSystem          String        @db.VarChar(10)
+  cfdiUse            String        @db.VarChar(10)
+  paymentFormSat     String        @db.VarChar(10)
+  subtotal           Decimal       @db.Decimal(10, 2)
+  tax                Decimal       @db.Decimal(10, 2)
+  total              Decimal       @db.Decimal(10, 2)
+  status             InvoiceStatus @default(issued)
+  issuedAt           DateTime      @default(now()) @db.Timestamptz(3)
+  cancelledAt        DateTime?     @db.Timestamptz(3)
+  cancellationMotive String?       @db.VarChar(10)
+  xmlContent         String?       @db.Text
+  pdfUrl             String?       @db.VarChar(255)
+  version            Int           @default(1)
+  createdAt          DateTime      @default(now()) @db.Timestamptz(3)
+  updatedAt          DateTime      @updatedAt @db.Timestamptz(3)
+  saleOrder          SaleOrder     @relation(fields: [saleOrderId], references: [id])
+  branch             Branch        @relation(fields: [branchId], references: [id])
+
+  @@index([branchId, status])
+  @@index([rfc])
+  @@index([saleOrderFolio])
+  @@map("invoices")
 }

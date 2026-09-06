@@ -4,6 +4,11 @@ services:
     restart: unless-stopped
     environment:
       NODE_ENV: production
+      AUTH_MODE: ${AUTH_MODE:-supabase}
+      SUPABASE_URL: ${SUPABASE_URL:?Define SUPABASE_URL for authentication}
+      SUPABASE_PUBLISHABLE_KEY: ${SUPABASE_PUBLISHABLE_KEY:?Define SUPABASE_PUBLISHABLE_KEY for authentication}
+      NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL:-${SUPABASE_URL}}
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY:-${SUPABASE_PUBLISHABLE_KEY}}
       DATABASE_URL: ${DATABASE_URL:?Define DATABASE_URL for the managed PostgreSQL instance}
     ports:
       - "3000:3000"

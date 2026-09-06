@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { actorFromRequest } from '../../../../lib/request-context';
-import { salesService } from '../../../../lib/services';
+import { salesService, prismaSalesService } from '../../../../lib/services';
 import { salesRepository } from '../../../../modules/sales/repository';
 import type { CreateSaleOrderInput } from '../../../../../contracts/sales.contract';
 
@@ -8,7 +8,7 @@ export async function GET(request: Request) {
   try {
     const url = new URL(request.url);
     const branchId = url.searchParams.get('branchId') ?? 'branch-001';
-    const orders = salesRepository.listOrders(branchId);
+    const orders = process.env.DATABASE_URL ? await prismaSalesService.listOrders(branchId) : salesRepository.listOrders(branchId);
     return NextResponse.json({ orders });
   } catch (error) {
     return NextResponse.json(
@@ -23,7 +23,8 @@ export async function POST(request: Request) {
     const actor = actorFromRequest(request);
     const body = (await request.json()) as CreateSaleOrderInput;
 
-    const order = await salesService.createOrder(
+    const service = process.env.DATABASE_URL ? prismaSalesService : salesService;
+    const order = await service.createOrder(
       {
         branchId: body.branchId ?? 'branch-001',
         patientId: body.patientId,

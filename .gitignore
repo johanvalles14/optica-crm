@@ -12,6 +12,7 @@ dist/
 # Coverage
 coverage/
 backups/
+data/
 
 # Logs
 *.log

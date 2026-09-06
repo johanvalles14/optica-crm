@@ -39,3 +39,10 @@ export const inventoryManager = (requestId = 'req-inv-001'): ActorContext => ({
   requestId,
   source: '127.0.0.1',
 });
+
+export const labTechnician = (requestId = 'req-lab-001'): ActorContext => ({
+  actorId: 'user-lab-001',
+  role: 'laboratory:technician',
+  requestId,
+  source: '127.0.0.1',
+});

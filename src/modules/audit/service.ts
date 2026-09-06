@@ -1,4 +1,6 @@
 import { randomUUID } from 'node:crypto';
+import type { Prisma } from '@prisma/client';
+import { prisma } from '../../lib/prisma';
 import type { AuditEntry, AuditRecordInput } from './types';
 
 const sensitiveMetadataKeys = new Set([
@@ -21,6 +23,10 @@ function sanitizeMetadata(
     }
   }
   return safe;
+}
+
+function isUuid(value: string): boolean {
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value);
 }
 
 class AuditStore {
@@ -71,15 +77,66 @@ export class AuditService {
       metadata: sanitizeMetadata(input.metadata),
       occurredAt: new Date(),
     };
-    store.insert(entry);
+    if (isUuid(input.actorId) && process.env.DATABASE_URL) {
+      await prisma.auditLog.create({
+        data: {
+          id: entry.id,
+          actorId: input.actorId,
+          action: input.action,
+          entity: input.entity,
+          entityId: input.entityId,
+          requestId: input.requestId,
+          reason: input.reason,
+          metadata: { ...entry.metadata, actorRole: entry.role } as Prisma.InputJsonValue,
+          occurredAt: entry.occurredAt,
+        },
+      });
+    } else {
+      // Fixtures use symbolic IDs; keep them available to the unit-test store.
+      store.insert(entry);
+    }
     return entry;
   }
 
   async findByEntity(entity: string, entityId: string): Promise<AuditEntry[]> {
-    return store.findByEntity(entity, entityId);
+    const persisted = process.env.DATABASE_URL
+      ? await prisma.auditLog.findMany({ where: { entity, entityId }, orderBy: { occurredAt: 'asc' } })
+      : [];
+    return [
+      ...store.findByEntity(entity, entityId),
+      ...persisted.map((entry) => ({
+        id: entry.id,
+        actorId: entry.actorId,
+        role: ((entry.metadata as { actorRole?: AuditEntry['role'] } | null)?.actorRole ?? 'admin') as AuditEntry['role'],
+        action: entry.action,
+        entity: entry.entity,
+        entityId: entry.entityId,
+        requestId: entry.requestId,
+        reason: entry.reason ?? undefined,
+        metadata: (entry.metadata as Record<string, unknown> | null) ?? {},
+        occurredAt: entry.occurredAt,
+      })),
+    ];
   }
 
   async findByRequestId(requestId: string): Promise<AuditEntry[]> {
-    return store.findByRequestId(requestId);
+    const persisted = process.env.DATABASE_URL
+      ? await prisma.auditLog.findMany({ where: { requestId }, orderBy: { occurredAt: 'asc' } })
+      : [];
+    return [
+      ...store.findByRequestId(requestId),
+      ...persisted.map((entry) => ({
+        id: entry.id,
+        actorId: entry.actorId,
+        role: ((entry.metadata as { actorRole?: AuditEntry['role'] } | null)?.actorRole ?? 'admin') as AuditEntry['role'],
+        action: entry.action,
+        entity: entry.entity,
+        entityId: entry.entityId,
+        requestId: entry.requestId,
+        reason: entry.reason ?? undefined,
+        metadata: (entry.metadata as Record<string, unknown> | null) ?? {},
+        occurredAt: entry.occurredAt,
+      })),
+    ];
   }
 }

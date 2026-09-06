@@ -1,11 +1,13 @@
 import { NextResponse } from 'next/server';
 import { actorFromRequest } from '../../../lib/request-context';
-import { clinicalService } from '../../../lib/services';
+import { clinicalService, prismaClinicalService } from '../../../lib/services';
+import { isUuid } from '../../../modules/clinical/prisma-service';
 
 export async function POST(request: Request) {
   try {
     const body = await request.json() as { patientId?: string; branchId?: string };
-    const consultation = await clinicalService.open({
+    const service = isUuid(String(body.patientId ?? '')) ? prismaClinicalService : clinicalService;
+    const consultation = await service.open({
       patientId: String(body.patientId ?? ''),
       branchId: String(body.branchId ?? 'branch-001'),
     }, actorFromRequest(request));

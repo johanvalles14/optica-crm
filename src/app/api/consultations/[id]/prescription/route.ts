@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { actorFromRequest } from '../../../../../lib/request-context';
-import { clinicalService } from '../../../../../lib/services';
+import { clinicalService, prismaClinicalService } from '../../../../../lib/services';
+import { isUuid } from '../../../../../modules/clinical/prisma-service';
 import type { LensUsage } from '../../../../../../contracts/clinical.contract';
 
 type RouteContext = { params: Promise<{ id: string }> };
@@ -9,13 +10,14 @@ export async function POST(request: Request, context: RouteContext) {
   try {
     const { id } = await context.params;
     const actor = actorFromRequest(request);
+    const service = isUuid(id) ? prismaClinicalService : clinicalService;
     const body = (await request.json()) as Record<string, unknown>;
 
     if (!body.usage) {
       return NextResponse.json({ error: 'usage es obligatorio' }, { status: 400 });
     }
 
-    const prescription = await clinicalService.issuePrescription(
+    const prescription = await service.issuePrescription(
       {
         consultationId: id,
         usage: body.usage as LensUsage,
@@ -37,6 +39,7 @@ export async function PATCH(request: Request, context: RouteContext) {
   try {
     await context.params;
     const actor = actorFromRequest(request);
+    const service = isUuid((await context.params).id) ? prismaClinicalService : clinicalService;
     const body = (await request.json()) as Record<string, unknown>;
 
     if (!body.prescriptionId || !body.amendmentReason || !body.usage) {
@@ -46,7 +49,7 @@ export async function PATCH(request: Request, context: RouteContext) {
       );
     }
 
-    const prescription = await clinicalService.amendPrescription(
+    const prescription = await service.amendPrescription(
       {
         prescriptionId: String(body.prescriptionId),
         amendmentReason: String(body.amendmentReason),

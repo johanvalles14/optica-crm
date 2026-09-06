@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { actorFromRequest } from '../../../../lib/request-context';
-import { inventoryService } from '../../../../lib/services';
+import { inventoryService, prismaInventoryService } from '../../../../lib/services';
 import type { ProductCategory } from '../../../../../contracts/inventory.contract';
 
 export async function POST(request: Request) {
@@ -16,7 +16,8 @@ export async function POST(request: Request) {
       branchId?: string;
     };
 
-    const products = await inventoryService.quickBatchIntake(
+    const service = process.env.DATABASE_URL ? prismaInventoryService : inventoryService;
+    const products = await service.quickBatchIntake(
       {
         category: body.category,
         brand: body.brand,

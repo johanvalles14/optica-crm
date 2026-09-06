@@ -11,6 +11,7 @@ type Order = {
   paidAmount: number;
   balanceDue: number;
   status: string;
+  notes?: string;
   createdAt: string;
   promisedDeliveryDate?: string;
   items: Array<{ description: string; quantity: number }>;
@@ -26,6 +27,15 @@ export default function SalesOrdersPage() {
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [paymentMethod, setPaymentMethod] = useState<'cash' | 'card_debit' | 'card_credit' | 'transfer'>('cash');
   const [processing, setProcessing] = useState(false);
+
+  // Facturación CFDI 4.0 Express
+  const [requireInvoice, setRequireInvoice] = useState(false);
+  const [rfc, setRfc] = useState('');
+  const [legalName, setLegalName] = useState('');
+  const [zipCode, setZipCode] = useState('');
+  const [taxSystem, setTaxSystem] = useState('605');
+  const [cfdiUse, setCfdiUse] = useState('D07');
+  const [generatedInvoice, setGeneratedInvoice] = useState<{ uuid: string; folio: string; id: string } | null>(null);
 
   async function loadOrders() {
     setLoading(true);
@@ -72,8 +82,43 @@ export default function SalesOrdersPage() {
         }
       }
 
-      setMessage(`✓ Orden ${order.folio} liquidada y entregada con éxito.`);
+      // 2. Si solicitó factura fiscal, timbrar de inmediato vía PAC
+      if (requireInvoice) {
+        const invRes = await fetch('/api/billing/invoices', {
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json',
+            'x-demo-role': role,
+          },
+          body: JSON.stringify({
+            saleOrderId: order.id,
+            taxProfile: {
+              rfc,
+              legalName,
+              zipCode,
+              taxSystem,
+              cfdiUse,
+            },
+          }),
+        });
+
+        const invData = await invRes.json();
+        if (!invRes.ok) {
+          throw new Error(invData.error || 'Entrega registrada, pero falló el timbrado de la factura');
+        }
+
+        setGeneratedInvoice({
+          id: invData.invoice.id,
+          uuid: invData.invoice.uuid,
+          folio: invData.invoice.folio,
+        });
+        setMessage(`✓ Orden ${order.folio} liquidada y Factura CFDI 4.0 timbrada exitosamente (Folio fiscal: ${invData.invoice.uuid}).`);
+      } else {
+        setMessage(`✓ Orden ${order.folio} liquidada y entregada con éxito.`);
+      }
+
       setSelectedOrder(null);
+      setRequireInvoice(false);
       loadOrders();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error al entregar orden');
@@ -125,7 +170,77 @@ export default function SalesOrdersPage() {
             </div>
           )}
 
-          <div className="actions">
+          {/* Checkbox de Factura Fiscal CFDI 4.0 */}
+          <div style={{ marginTop: '16px', background: '#faf8f2', padding: '16px', border: '1px solid var(--line)' }}>
+            <label style={{ display: 'flex', gap: '10px', alignItems: 'center', cursor: 'pointer', fontWeight: 'bold' }}>
+              <input
+                type="checkbox"
+                checked={requireInvoice}
+                onChange={(e) => setRequireInvoice(e.target.checked)}
+                style={{ width: '18px', height: '18px' }}
+              />
+              <span>¿El paciente solicita Factura Fiscal CFDI 4.0 (SAT)?</span>
+            </label>
+
+            {requireInvoice && (
+              <div style={{ display: 'grid', gap: '10px', marginTop: '14px' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                  <label>
+                    RFC Receptor:
+                    <input
+                      value={rfc}
+                      onChange={(e) => setRfc(e.target.value.toUpperCase())}
+                      placeholder="13 caracteres (ej. VAPJ850906HR7)"
+                      required={requireInvoice}
+                    />
+                  </label>
+                  <label>
+                    Código Postal Fiscal:
+                    <input
+                      value={zipCode}
+                      onChange={(e) => setZipCode(e.target.value)}
+                      placeholder="5 dígitos (ej. 27000)"
+                      required={requireInvoice}
+                    />
+                  </label>
+                </div>
+
+                <label>
+                  Nombre o Razón Social (exacto en mayúsculas):
+                  <input
+                    value={legalName}
+                    onChange={(e) => setLegalName(e.target.value.toUpperCase())}
+                    placeholder="Sin régimen societario (ej. JUAN PEREZ LOPEZ)"
+                    required={requireInvoice}
+                  />
+                </label>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                  <label>
+                    Régimen Fiscal SAT:
+                    <select value={taxSystem} onChange={(e) => setTaxSystem(e.target.value)}>
+                      <option value="605">605 - Sueldos y Salarios</option>
+                      <option value="612">612 - Personas Físicas con Actividades Empresariales</option>
+                      <option value="626">626 - RESICO (Simplificado de Confianza)</option>
+                      <option value="601">601 - General Personas Morales</option>
+                      <option value="616">616 - Sin obligaciones fiscales</option>
+                    </select>
+                  </label>
+
+                  <label>
+                    Uso de CFDI:
+                    <select value={cfdiUse} onChange={(e) => setCfdiUse(e.target.value)}>
+                      <option value="D07">D07 - Lentes ópticos graduados (Deducción Personal)</option>
+                      <option value="G03">G03 - Gastos en general</option>
+                      <option value="S01">S01 - Sin efectos fiscales</option>
+                    </select>
+                  </label>
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="actions" style={{ marginTop: '16px' }}>
             <button
               className="button primary"
               onClick={() => handleLiquidateAndDeliver(selectedOrder)}
@@ -151,6 +266,11 @@ export default function SalesOrdersPage() {
             <div>
               <span className="status-pill" style={{ marginRight: '10px' }}>{o.folio}</span>
               <strong>{o.patientName || 'Público General'}</strong>
+              {o.notes && (o.notes.includes('REPETICIÓN') || o.notes.includes('MERMA')) && (
+                <span className="status-pill" style={{ background: '#f8d7da', color: '#721c24', fontWeight: 'bold', marginLeft: '8px' }}>
+                  ⚠️ Repetición / Merma en Taller
+                </span>
+              )}
               <div style={{ fontSize: '13px', color: 'var(--muted)', marginTop: '4px' }}>
                 Total: <strong>${o.total} MXN</strong> · Pagado: <strong>${o.paidAmount} MXN</strong> · Saldo:{' '}
                 <strong style={{ color: o.balanceDue > 0 ? 'var(--accent)' : '#186a3b' }}>${o.balanceDue} MXN</strong>
@@ -158,6 +278,11 @@ export default function SalesOrdersPage() {
               <small style={{ display: 'block', marginTop: '4px' }}>
                 Items: {o.items?.map((it) => it.description).join(' + ')}
               </small>
+              {o.notes && (
+                <small style={{ display: 'block', color: 'var(--accent)', marginTop: '2px', fontWeight: 'bold' }}>
+                  {o.notes}
+                </small>
+              )}
             </div>
 
             <div style={{ textAlign: 'right', display: 'grid', gap: '8px' }}>

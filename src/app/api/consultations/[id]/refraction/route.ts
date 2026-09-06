@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { actorFromRequest } from '../../../../../lib/request-context';
-import { clinicalService } from '../../../../../lib/services';
+import { clinicalService, prismaClinicalService } from '../../../../../lib/services';
+import { isUuid } from '../../../../../modules/clinical/prisma-service';
 import type { Eye } from '../../../../../../contracts/clinical.contract';
 
 type RouteContext = { params: Promise<{ id: string }> };
@@ -9,9 +10,10 @@ export async function POST(request: Request, context: RouteContext) {
   try {
     const { id } = await context.params;
     const actor = actorFromRequest(request);
+    const service = isUuid(id) ? prismaClinicalService : clinicalService;
     const body = (await request.json()) as Record<string, unknown>;
 
-    const refraction = await clinicalService.addRefraction(
+    const refraction = await service.addRefraction(
       {
         consultationId: id,
         eye: body.eye as Eye,
@@ -38,6 +40,7 @@ export async function PATCH(request: Request, context: RouteContext) {
   try {
     const { id } = await context.params;
     const actor = actorFromRequest(request);
+    const service = isUuid(id) ? prismaClinicalService : clinicalService;
     const body = (await request.json()) as Record<string, unknown>;
 
     if (!body.amendedFromId || !body.amendmentReason) {
@@ -47,7 +50,7 @@ export async function PATCH(request: Request, context: RouteContext) {
       );
     }
 
-    const refraction = await clinicalService.amendRefraction(
+    const refraction = await service.amendRefraction(
       {
         consultationId: id,
         amendedFromId: String(body.amendedFromId),

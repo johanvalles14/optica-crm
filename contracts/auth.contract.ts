@@ -12,6 +12,7 @@ export type Role =
   | 'clinical:assistant'
   | 'frontdesk:receptionist'
   | 'inventory:manager'
+  | 'laboratory:technician'
   | 'admin';
 
 export interface UserIdentity {

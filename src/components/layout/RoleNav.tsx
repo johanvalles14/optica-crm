@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 export const ROLES = [
   { id: 'clinical:optometrist', label: 'Optometrista (Gabinete)' },
   { id: 'frontdesk:receptionist', label: 'Secretaría (Mostrador)' },
+  { id: 'laboratory:technician', label: 'Técnico de Taller / Montador' },
   { id: 'inventory:manager', label: 'Encargado de Inventario' },
   { id: 'clinical:assistant', label: 'Asistente' },
   { id: 'admin', label: 'Administrador' },
@@ -34,7 +35,7 @@ export function RoleNav() {
           <Link href="/" className="logo">
             ÓPTICA <span>CRM</span>
           </Link>
-          <span className="spec-tag">SPEC-001 & SPEC-002</span>
+          <span className="spec-tag">SPEC-001..005</span>
         </div>
 
         <ul className="nav-links">
@@ -75,6 +76,30 @@ export function RoleNav() {
               className={pathname === '/sales/orders' ? 'active' : ''}
             >
               Pedidos
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/billing/invoices"
+              className={pathname?.startsWith('/billing') ? 'active' : ''}
+            >
+              Facturas
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/cash/shift"
+              className={pathname?.startsWith('/cash') ? 'active' : ''}
+            >
+              Caja
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/laboratory/kanban"
+              className={pathname?.startsWith('/laboratory') ? 'active' : ''}
+            >
+              Taller
             </Link>
           </li>
           <li>

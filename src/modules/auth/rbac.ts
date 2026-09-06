@@ -22,7 +22,15 @@ export type RbacAction =
   | 'createOrder'
   | 'recordPayment'
   | 'deliver'
-  | 'cancel';
+  | 'cancel'
+  | 'approveQuality'
+  | 'reportRework'
+  | 'openShift'
+  | 'recordExpense'
+  | 'closeShift'
+  | 'issueInvoice'
+  | 'cancelInvoice'
+  | 'readInvoice';
 
 export type RbacResource =
   | 'Patient'
@@ -33,7 +41,10 @@ export type RbacResource =
   | 'SafeSummary'
   | 'Product'
   | 'InventoryMovement'
-  | 'SaleOrder';
+  | 'SaleOrder'
+  | 'LabOrder'
+  | 'CashShift'
+  | 'Invoice';
 
 const grants: Record<Role, Record<RbacResource, RbacAction[]>> = {
   'clinical:optometrist': {
@@ -46,6 +57,9 @@ const grants: Record<Role, Record<RbacResource, RbacAction[]>> = {
     Product: ['search', 'read'],
     InventoryMovement: [],
     SaleOrder: ['createOrder', 'read'],
+    LabOrder: ['read'],
+    CashShift: [],
+    Invoice: ['readInvoice'],
   },
   'clinical:assistant': {
     Patient: ['create', 'update', 'search'],
@@ -57,6 +71,9 @@ const grants: Record<Role, Record<RbacResource, RbacAction[]>> = {
     Product: ['search', 'read'],
     InventoryMovement: [],
     SaleOrder: [],
+    LabOrder: ['read'],
+    CashShift: [],
+    Invoice: [],
   },
   'frontdesk:receptionist': {
     Patient: ['search'],
@@ -68,6 +85,9 @@ const grants: Record<Role, Record<RbacResource, RbacAction[]>> = {
     Product: ['search', 'read'],
     InventoryMovement: [],
     SaleOrder: ['createOrder', 'read', 'recordPayment', 'deliver'],
+    LabOrder: ['read', 'create'],
+    CashShift: ['openShift', 'recordExpense', 'closeShift', 'read'],
+    Invoice: ['issueInvoice', 'readInvoice'],
   },
   'inventory:manager': {
     Patient: ['search'],
@@ -79,6 +99,23 @@ const grants: Record<Role, Record<RbacResource, RbacAction[]>> = {
     Product: ['create', 'update', 'search', 'read', 'quickBatchIntake'],
     InventoryMovement: ['adjust', 'read', 'reconcile'],
     SaleOrder: ['read'],
+    LabOrder: ['read'],
+    CashShift: [],
+    Invoice: [],
+  },
+  'laboratory:technician': {
+    Patient: [],
+    Consultation: [],
+    Refraction: [],
+    Prescription: [],
+    FullConsultation: [],
+    SafeSummary: [],
+    Product: ['read', 'search'],
+    InventoryMovement: ['adjust', 'read'],
+    SaleOrder: ['read'],
+    LabOrder: ['read', 'create', 'update', 'approveQuality', 'reportRework'],
+    CashShift: [],
+    Invoice: [],
   },
   admin: {
     Patient: ['search'],
@@ -90,6 +127,9 @@ const grants: Record<Role, Record<RbacResource, RbacAction[]>> = {
     Product: ['create', 'update', 'search', 'read', 'quickBatchIntake'],
     InventoryMovement: ['adjust', 'read', 'reconcile'],
     SaleOrder: ['createOrder', 'read', 'recordPayment', 'deliver', 'cancel'],
+    LabOrder: ['read', 'create', 'update', 'approveQuality', 'reportRework', 'cancel'],
+    CashShift: ['openShift', 'recordExpense', 'closeShift', 'read'],
+    Invoice: ['issueInvoice', 'readInvoice', 'cancelInvoice'],
   },
 };
 

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { actorFromRequest } from '../../../../../../lib/request-context';
-import { salesService } from '../../../../../../lib/services';
+import { salesService, prismaSalesService } from '../../../../../../lib/services';
 import type { PaymentMethod } from '../../../../../../../contracts/sales.contract';
 
 type RouteContext = { params: Promise<{ id: string }> };
@@ -16,7 +16,8 @@ export async function POST(request: Request, context: RouteContext) {
       expectedVersion?: number;
     };
 
-    const order = await salesService.recordPayment(
+    const service = process.env.DATABASE_URL ? prismaSalesService : salesService;
+    const order = await service.recordPayment(
       {
         orderId: id,
         amount: Number(body.amount),

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { actorFromRequest } from '../../../../lib/request-context';
-import { inventoryService } from '../../../../lib/services';
+import { inventoryService, prismaInventoryService } from '../../../../lib/services';
 import type { MovementReason } from '../../../../../contracts/inventory.contract';
 
 export async function POST(request: Request) {
@@ -13,7 +13,8 @@ export async function POST(request: Request) {
       notes: string;
     };
 
-    const movement = await inventoryService.recordAdjustment(
+    const service = process.env.DATABASE_URL ? prismaInventoryService : inventoryService;
+    const movement = await service.recordAdjustment(
       {
         productId: String(body.productId),
         quantity: Number(body.quantity),

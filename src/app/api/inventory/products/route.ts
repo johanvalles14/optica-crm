@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { actorFromRequest } from '../../../../lib/request-context';
-import { inventoryService } from '../../../../lib/services';
+import { inventoryService, prismaInventoryService } from '../../../../lib/services';
 import type { ProductCategory } from '../../../../../contracts/inventory.contract';
 
 export async function GET(request: Request) {
@@ -12,7 +12,8 @@ export async function GET(request: Request) {
     const branchId = url.searchParams.get('branchId') ?? 'branch-001';
     const onlyInStock = url.searchParams.get('onlyInStock') === 'true';
 
-    const products = await inventoryService.search(
+    const service = process.env.DATABASE_URL ? prismaInventoryService : inventoryService;
+    const products = await service.search(
       {
         term,
         category,
@@ -36,7 +37,8 @@ export async function POST(request: Request) {
     const actor = actorFromRequest(request);
     const body = (await request.json()) as Record<string, unknown>;
 
-    const product = await inventoryService.createProduct(
+    const service = process.env.DATABASE_URL ? prismaInventoryService : inventoryService;
+    const product = await service.createProduct(
       {
         category: body.category as ProductCategory,
         brand: body.brand ? String(body.brand) : undefined,

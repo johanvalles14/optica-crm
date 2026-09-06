@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { actorFromRequest } from '../../../../../lib/request-context';
-import { clinicalService } from '../../../../../lib/services';
+import { clinicalService, prismaClinicalService } from '../../../../../lib/services';
+import { isUuid } from '../../../../../modules/clinical/prisma-service';
 import type { NonClinicalNoteKey } from '../../../../../../contracts/clinical.contract';
 
 type RouteContext = { params: Promise<{ id: string }> };
@@ -9,9 +10,10 @@ export async function PATCH(request: Request, context: RouteContext) {
   try {
     const { id } = await context.params;
     const actor = actorFromRequest(request);
+    const service = isUuid(id) ? prismaClinicalService : clinicalService;
     const body = (await request.json()) as { noteKey?: NonClinicalNoteKey | null; expectedVersion?: number };
 
-    const consultation = await clinicalService.setNonClinicalNote(
+    const consultation = await service.setNonClinicalNote(
       {
         consultationId: id,
         noteKey: body.noteKey ?? null,

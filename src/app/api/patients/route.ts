@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { actorFromRequest } from '../../../lib/request-context';
 import { prismaPatientRepository } from '../../../lib/services';
+import { AuditService } from '../../../modules/audit/service';
 import { validatePatientInput } from '../../../modules/patients/validators';
 
 export async function PATCH(request: Request) {
@@ -34,8 +35,17 @@ export async function POST(request: Request) {
       phone: String(body.phone ?? ''),
     };
     validatePatientInput(input);
-    const patient = await prismaPatientRepository.createPatient(input, actorFromRequest(request).actorId);
-    return NextResponse.json({ folio: patient.folio, version: patient.version }, { status: 201 });
+    const actor = actorFromRequest(request);
+    const patient = await prismaPatientRepository.createPatient(input, actor.actorId);
+    await new AuditService().record({
+      actorId: actor.actorId,
+      role: actor.role,
+      action: 'create',
+      entity: 'Patient',
+      entityId: patient.id,
+      requestId: actor.requestId,
+    });
+    return NextResponse.json({ patientId: patient.id, folio: patient.folio, version: patient.version }, { status: 201 });
   } catch {
     return NextResponse.json({ error: 'No se pudo crear el expediente' }, { status: 400 });
   }

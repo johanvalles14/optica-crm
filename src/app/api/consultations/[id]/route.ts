@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { actorFromRequest } from '../../../../lib/request-context';
-import { clinicalService } from '../../../../lib/services';
+import { clinicalService, prismaClinicalService } from '../../../../lib/services';
+import { isUuid } from '../../../../modules/clinical/prisma-service';
 
 type RouteContext = { params: Promise<{ id: string }> };
 
@@ -8,10 +9,11 @@ export async function GET(request: Request, context: RouteContext) {
   try {
     const { id } = await context.params;
     const actor = actorFromRequest(request);
+    const service = isUuid(id) ? prismaClinicalService : clinicalService;
     const url = new URL(request.url);
     if (url.searchParams.get('view') === 'full') {
       try {
-        const full = await clinicalService.getFullConsultation(id, actor);
+        const full = await service.getFullConsultation(id, actor);
         return NextResponse.json(full);
       } catch (err) {
         const message = err instanceof Error ? err.message : '';
@@ -21,7 +23,7 @@ export async function GET(request: Request, context: RouteContext) {
         return NextResponse.json({ error: 'Consulta no encontrada' }, { status: 404 });
       }
     }
-    return NextResponse.json(await clinicalService.getSafeSummary(id, actor));
+    return NextResponse.json(await service.getSafeSummary(id, actor));
   } catch {
     return NextResponse.json({ error: 'No se pudo consultar el resumen' }, { status: 404 });
   }
@@ -32,15 +34,16 @@ export async function PATCH(request: Request, context: RouteContext) {
     const { id } = await context.params;
     const body = await request.json() as { action?: string; reason?: string; expectedVersion?: number };
     const actor = actorFromRequest(request);
+    const service = isUuid(id) ? prismaClinicalService : clinicalService;
     if (body.action === 'release') {
-      return NextResponse.json(await clinicalService.releaseConsultation({
+      return NextResponse.json(await service.releaseConsultation({
         consultationId: id,
         reason: String(body.reason ?? ''),
         expectedVersion: Number(body.expectedVersion),
       }, actor));
     }
     if (body.action === 'abandon') {
-      return NextResponse.json(await clinicalService.abandon({
+      return NextResponse.json(await service.abandon({
         consultationId: id,
         reason: String(body.reason ?? ''),
         expectedVersion: Number(body.expectedVersion),

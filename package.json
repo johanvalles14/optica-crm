@@ -19,7 +19,7 @@
     "test": "vitest run",
     "test:unit": "vitest run tests/unit",
     "test:integration": "vitest run tests/integration",
-    "test:e2e": "echo 'e2e: Playwright not installed yet (see ADR-001)'",
+    "test:e2e": "powershell -ExecutionPolicy Bypass -File ops/smoke-local.ps1",
     "typecheck": "tsc --noEmit",
     "lint": "echo 'lint: no linter configured yet'",
     "db:validate": "prisma validate",
@@ -41,6 +41,7 @@
   },
   "dependencies": {
     "@prisma/client": "6.19.3",
+    "@supabase/ssr": "^0.12.6",
     "next": "^15.5.25",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",

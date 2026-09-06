@@ -173,4 +173,12 @@ export class PrismaPatientRepository {
     const record = await prisma.privacyNotice.findFirstOrThrow({ orderBy: { effectiveDate: 'desc' } });
     return record;
   }
+
+  async hasValidConsent(patientId: PatientId, noticeId: string): Promise<boolean> {
+    const consent = await prisma.consent.findFirst({
+      where: { patientId, noticeId, revokedAt: null },
+      select: { id: true },
+    });
+    return consent !== null;
+  }
 }
