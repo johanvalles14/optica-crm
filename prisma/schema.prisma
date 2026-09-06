@@ -179,6 +179,8 @@ model Consultation {
   closedBy           String?            @db.Uuid
   abandonmentReason  String?
   nonClinicalNoteKey String?            @db.VarChar(64)
+  diagnosis          String?
+  clinicalNotes      String?
   version            Int                @default(1)
   createdAt          DateTime           @default(now()) @db.Timestamptz(3)
   updatedAt          DateTime           @updatedAt @db.Timestamptz(3)

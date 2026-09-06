@@ -29,11 +29,11 @@ type LabOrder = {
 };
 
 const COLUMNS = [
-  { id: 'queued', label: '1. En Cola', color: '#e0e0e0' },
-  { id: 'in_process', label: '2. En Biselado / Maquila', color: '#d0e1fd' },
-  { id: 'quality_control', label: '3. Control de Calidad', color: '#fef3cd' },
-  { id: 'completed', label: '4. Terminado / Aprobado', color: '#d1e7dd' },
-  { id: 'rework_needed', label: '⚠️ Repetición / Merma', color: '#f8d7da' },
+  { id: 'queued', label: '1. En Cola', color: '#f1f5f9' },
+  { id: 'in_process', label: '2. En Biselado / Maquila', color: '#eff6ff' },
+  { id: 'quality_control', label: '3. Control de Calidad', color: '#fffbeb' },
+  { id: 'completed', label: '4. Terminado / Aprobado', color: '#ecfdf5' },
+  { id: 'rework_needed', label: '⚠️ Repetición / Merma', color: '#fef2f2' },
 ];
 
 export default function LabKanbanPage() {
@@ -268,23 +268,25 @@ export default function LabKanbanPage() {
             <div
               key={col.id}
               style={{
-                background: '#faf8f2',
+                background: 'var(--card-subtle)',
                 border: '1px solid var(--line)',
-                borderRadius: '6px',
-                padding: '12px',
+                borderRadius: 'var(--radius-lg)',
+                padding: '14px',
                 minHeight: '400px',
               }}
             >
               <div
                 style={{
                   background: col.color,
-                  padding: '8px 12px',
-                  borderRadius: '4px',
+                  border: '1px solid var(--line)',
+                  padding: '10px 12px',
+                  borderRadius: 'var(--radius-md)',
                   fontWeight: 'bold',
                   fontSize: '13px',
                   marginBottom: '12px',
                   display: 'flex',
                   justifyContent: 'space-between',
+                  alignItems: 'center',
                 }}
               >
                 <span>{col.label}</span>

@@ -22,6 +22,12 @@ class SalesRepository {
     return Array.from(this.orders.values()).filter((o) => o.branchId === branchId);
   }
 
+  hasActiveOrderForPrescription(prescriptionId: string): boolean {
+    return Array.from(this.orders.values()).some(
+      (order) => order.prescriptionId === prescriptionId && order.status !== 'cancelled'
+    );
+  }
+
   savePayment(payment: PaymentRecord): PaymentRecord {
     this.payments.set(payment.id, payment);
     return payment;

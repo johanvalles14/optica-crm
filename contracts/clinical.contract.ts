@@ -4,7 +4,7 @@
  */
 
 import type { ActorContext, UserId } from './auth.contract';
-import type { BranchId, Folio, PatientId } from './patients.contract';
+import type { BranchId, Folio, Patient, PatientId } from './patients.contract';
 
 export type ConsultationId = string;
 export type RefractionId = string;
@@ -42,6 +42,10 @@ export interface Consultation {
   abandonmentReason?: string;
   /** Nota no clínica seleccionada del catálogo cerrado. */
   nonClinicalNoteKey?: NonClinicalNoteKey;
+  /** Impresión diagnóstica capturada durante la consulta. */
+  diagnosis?: string;
+  /** Hallazgos y notas clínicas de apoyo para la receta y cotización. */
+  clinicalNotes?: string;
   version: number;
 }
 
@@ -74,6 +78,13 @@ export interface SetNonClinicalNoteInput {
   consultationId: ConsultationId;
   /** `null` remueve la nota asignada. */
   noteKey: NonClinicalNoteKey | null;
+  expectedVersion: number;
+}
+
+export interface UpdateClinicalDetailsInput {
+  consultationId: ConsultationId;
+  diagnosis?: string;
+  clinicalNotes?: string;
   expectedVersion: number;
 }
 
@@ -165,8 +176,17 @@ export interface ConsultationSummary {
 
 export interface FullConsultation {
   consultation: Consultation;
+  patient: Patient;
   refractions: Refraction[];
   prescription?: Prescription;
+}
+
+/** Consulta cerrada que recepción puede convertir en cotización. */
+export interface ReceptionQueueEntry {
+  consultation: Consultation;
+  patient: Patient;
+  refractions: Refraction[];
+  prescription: Prescription;
 }
 
 export interface IClinicalService {
@@ -189,6 +209,10 @@ export interface IClinicalService {
   ): Promise<Consultation>;
   setNonClinicalNote(
     input: SetNonClinicalNoteInput,
+    actor: ActorContext
+  ): Promise<Consultation>;
+  updateClinicalDetails(
+    input: UpdateClinicalDetailsInput,
     actor: ActorContext
   ): Promise<Consultation>;
   addRefraction(input: RefractionInput, actor: ActorContext): Promise<Refraction>;
@@ -224,4 +248,5 @@ export interface IClinicalService {
     consultationId: ConsultationId,
     actor: ActorContext
   ): Promise<FullConsultation>;
+  listReceptionQueue(actor: ActorContext): Promise<ReceptionQueueEntry[]>;
 }

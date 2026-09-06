@@ -50,10 +50,13 @@ describe('RF-106, RF-107 — Control de Anticipos, Saldos y Liquidación', () =>
           unitPrice: 200,
         },
       ],
-      // Sin pago inicial
+      initialPayment: {
+        amount: 50,
+        method: 'cash',
+      },
     }, actorRec);
 
-    expect(order.balanceDue).toBe(200);
+    expect(order.balanceDue).toBe(150);
     const ready = await service.markReadyForDelivery(order.id, order.version, actorRec);
 
     // Intento de entrega sin liquidar
@@ -73,13 +76,17 @@ describe('RF-106, RF-107 — Control de Anticipos, Saldos y Liquidación', () =>
           unitPrice: 150,
         },
       ],
+      initialPayment: {
+        amount: 50,
+        method: 'cash',
+      },
     }, actorRec);
 
     const ready = await service.markReadyForDelivery(order.id, order.version, actorRec);
 
     const delivered = await service.deliverAndClose(
       ready.id,
-      { amount: 150, method: 'card_debit' },
+      { amount: 100, method: 'card_debit' },
       ready.version,
       actorRec
     );

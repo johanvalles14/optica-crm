@@ -30,9 +30,15 @@ export async function POST(request: Request) {
       branchId: String(body.branchId ?? ''),
       firstName: String(body.firstName ?? ''),
       lastName: String(body.lastName ?? ''),
+      middleName: body.middleName ? String(body.middleName) : undefined,
       birthDate: new Date(String(body.birthDate ?? '')),
       sex: body.sex as 'male' | 'female' | 'other' | 'not_specified',
       phone: String(body.phone ?? ''),
+      email: body.email ? String(body.email) : undefined,
+      address: body.address ? String(body.address) : undefined,
+      allergies: body.allergies ? String(body.allergies) : undefined,
+      conditions: body.conditions ? String(body.conditions) : undefined,
+      emergencyContact: body.emergencyContact as { name: string; phone: string } | undefined,
     };
     validatePatientInput(input);
     const actor = actorFromRequest(request);

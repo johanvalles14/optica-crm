@@ -24,6 +24,49 @@ let saleSequence = 1;
 export class SalesService implements ISalesService {
   private audit = new AuditService();
 
+  private consumeInventory(
+    items: Array<Pick<SaleItem, 'productId' | 'quantity'>>,
+    branchId: string,
+    actor: ActorContext,
+    note: string
+  ): void {
+    const quantities = new Map<string, number>();
+    for (const item of items) {
+      if (item.productId) {
+        quantities.set(item.productId, (quantities.get(item.productId) ?? 0) + item.quantity);
+      }
+    }
+
+    const products = new Map<string, NonNullable<ReturnType<typeof inventoryRepository.getProduct>>>();
+    for (const [productId, quantity] of quantities) {
+      const product = inventoryRepository.getProduct(productId);
+      if (!product) throw new Error('Producto no encontrado');
+      if (product.stock < quantity) throw new Error('Stock insuficiente');
+      products.set(productId, product);
+    }
+
+    for (const [productId, quantity] of quantities) {
+      const product = products.get(productId)!;
+      const previousStock = product.stock;
+      product.stock -= quantity;
+      inventoryRepository.saveProduct(product);
+      inventoryRepository.saveMovement({
+        id: randomUUID(),
+        productId: product.id,
+        internalCode: product.internalCode,
+        branchId,
+        movementType: 'out',
+        quantityChange: -quantity,
+        previousStock,
+        newStock: product.stock,
+        reason: 'sale',
+        notes: note,
+        actorId: actor.actorId,
+        occurredAt: new Date(),
+      });
+    }
+  }
+
   async createOrder(
     input: CreateSaleOrderInput,
     actor: ActorContext
@@ -35,11 +78,20 @@ export class SalesService implements ISalesService {
     if (!input.items || input.items.length === 0) {
       throw new Error('La orden de venta debe contener al menos un producto o servicio');
     }
+    if (input.prescriptionId && salesRepository.hasActiveOrderForPrescription(input.prescriptionId)) {
+      throw new Error('La prescripción ya tiene una cotización u orden activa');
+    }
 
     let subtotal = 0;
     const items: SaleItem[] = [];
 
     for (const raw of input.items) {
+      if (raw.quantity <= 0 || raw.unitPrice < 0) {
+        throw new Error('Cantidad y precio inválidos');
+      }
+      if (raw.productId && !inventoryRepository.getProduct(raw.productId)) {
+        throw new Error('Producto no encontrado');
+      }
       const totalPrice = raw.unitPrice * raw.quantity;
       subtotal += totalPrice;
 
@@ -49,29 +101,6 @@ export class SalesService implements ISalesService {
         totalPrice,
       });
 
-      // Descontar inventario si tiene productId asociado
-      if (raw.productId) {
-        const prod = inventoryRepository.getProduct(raw.productId);
-        if (prod && prod.stock >= raw.quantity) {
-          prod.stock -= raw.quantity;
-          inventoryRepository.saveProduct(prod);
-
-          inventoryRepository.saveMovement({
-            id: randomUUID(),
-            productId: prod.id,
-            internalCode: prod.internalCode,
-            branchId: input.branchId,
-            movementType: 'out',
-            quantityChange: -raw.quantity,
-            previousStock: prod.stock + raw.quantity,
-            newStock: prod.stock,
-            reason: 'sale',
-            notes: `Venta directa mostrador`,
-            actorId: actor.actorId,
-            occurredAt: new Date(),
-          });
-        }
-      }
     }
 
     const discount = input.discount ?? 0;
@@ -80,9 +109,14 @@ export class SalesService implements ISalesService {
     const folio = `VTA-${(saleSequence++).toString().padStart(4, '0')}`;
     const now = new Date();
     const payments: PaymentRecord[] = [];
-    let paidAmount = 0;
+    const paidAmount = input.initialPayment?.amount ?? 0;
+    if (paidAmount < 0) throw new Error('El anticipo no puede ser negativo');
 
-    if (input.initialPayment && input.initialPayment.amount > 0) {
+    if (paidAmount > 0) {
+      this.consumeInventory(items, input.branchId, actor, 'Venta confirmada en mostrador');
+    }
+
+    if (input.initialPayment && paidAmount > 0) {
       const pRecord: PaymentRecord = {
         id: randomUUID(),
         amount: input.initialPayment.amount,
@@ -93,7 +127,6 @@ export class SalesService implements ISalesService {
       };
       payments.push(pRecord);
       salesRepository.savePayment(pRecord);
-      paidAmount = input.initialPayment.amount;
     }
 
     const balanceDue = Math.max(0, total - paidAmount);
@@ -149,6 +182,16 @@ export class SalesService implements ISalesService {
     if (stateMachine.isFinal(order.status)) {
       throw new Error('No se pueden registrar pagos en órdenes finalizadas o canceladas');
     }
+    if (order.version !== input.expectedVersion) {
+      throw new Error('Stale version: expectedVersion does not match');
+    }
+    if (input.amount <= 0) throw new Error('El pago debe ser mayor a cero');
+
+    const confirmsOrder =
+      (order.status === 'quote' || order.status === 'pending_deposit') && input.amount > 0;
+    if (confirmsOrder) {
+      this.consumeInventory(order.items, order.branchId, actor, `Confirmación de cotización ${order.folio}`);
+    }
 
     const pRecord: PaymentRecord = {
       id: randomUUID(),
@@ -165,8 +208,8 @@ export class SalesService implements ISalesService {
     order.paidAmount += input.amount;
     order.balanceDue = Math.max(0, order.total - order.paidAmount);
 
-    if (order.status === 'pending_deposit' && order.paidAmount > 0) {
-      order.status = stateMachine.transition('pending_deposit', 'receive_deposit');
+    if (confirmsOrder) {
+      order.status = stateMachine.transition(order.status, 'receive_deposit');
     }
 
     order.version += 1;
@@ -194,10 +237,9 @@ export class SalesService implements ISalesService {
     if (!order) throw new Error('Orden no encontrada');
 
     if (order.status === 'quote' || order.status === 'pending_deposit') {
-      order.status = 'ready_for_delivery';
-    } else {
-      order.status = stateMachine.transition(order.status, 'mark_ready');
+      throw new Error('La cotización requiere un anticipo antes de enviarse a preparación');
     }
+    order.status = stateMachine.transition(order.status, 'mark_ready');
 
     order.version = expectedVersion + 1;
     salesRepository.saveOrder(order);
@@ -237,6 +279,9 @@ export class SalesService implements ISalesService {
       );
     }
 
+    if (order.status === 'confirmed_in_process') {
+      order.status = stateMachine.transition(order.status, 'mark_ready');
+    }
     order.status = stateMachine.transition(order.status, 'deliver');
     order.deliveredAt = new Date();
     order.version = expectedVersion + 1;
@@ -272,8 +317,9 @@ export class SalesService implements ISalesService {
       throw new Error('La orden ya se encuentra en estado final');
     }
 
-    // Revertir inventario de los productos de la orden
-    for (const item of order.items) {
+    // Una cotización no compromete inventario; solo se revierte una orden confirmada.
+    const inventoryWasCommitted = order.status !== 'quote' && order.status !== 'pending_deposit';
+    for (const item of inventoryWasCommitted ? order.items : []) {
       if (item.productId) {
         const prod = inventoryRepository.getProduct(item.productId);
         if (prod) {

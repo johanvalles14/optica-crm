@@ -15,6 +15,7 @@ export type RbacAction =
   | 'getSafeSummary'
   | 'listConsultations'
   | 'setNonClinicalNote'
+  | 'updateClinicalDetails'
   | 'takeOwnership'
   | 'quickBatchIntake'
   | 'adjust'
@@ -49,7 +50,7 @@ export type RbacResource =
 const grants: Record<Role, Record<RbacResource, RbacAction[]>> = {
   'clinical:optometrist': {
     Patient: ['create', 'update', 'search'],
-    Consultation: ['open', 'abandon', 'setNonClinicalNote', 'takeOwnership'],
+    Consultation: ['open', 'abandon', 'setNonClinicalNote', 'updateClinicalDetails', 'takeOwnership'],
     Refraction: ['addRefraction', 'amendRefraction'],
     Prescription: ['issuePrescription', 'amendPrescription'],
     FullConsultation: ['read'],
@@ -79,7 +80,7 @@ const grants: Record<Role, Record<RbacResource, RbacAction[]>> = {
     Patient: ['search'],
     Consultation: ['getSafeSummary'],
     Refraction: [],
-    Prescription: [],
+    Prescription: ['read'],
     FullConsultation: [],
     SafeSummary: ['getSafeSummary', 'listConsultations'],
     Product: ['search', 'read'],

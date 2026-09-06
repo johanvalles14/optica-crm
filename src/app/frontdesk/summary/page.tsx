@@ -1,168 +1,214 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import type { FormEvent } from 'react';
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
 
-type SafeSummary = {
-  consultationId: string;
-  patientName: string;
-  folio: string;
-  consultationDate: string;
-  usage?: string;
-  status: string;
-  nonClinicalNote?: string;
-  nonClinicalNoteKey?: string;
+type Refraction = {
+  eye: 'OD' | 'OI';
+  sphere?: number;
+  cylinder?: number;
+  axis?: number;
+  addition?: number;
+  visualAcuity?: string;
+  pupillaryDistance?: number;
 };
 
-const NON_CLINICAL_NOTES = [
-  { key: 'follow_up', label: 'Paciente solicita cita de seguimiento' },
-  { key: 'external_rx', label: 'Paciente trae receta externa' },
-  { key: 'contact_later', label: 'Requiere contacto posterior' },
-  { key: 'prefer_phone', label: 'Preferencia de contacto por teléfono' },
-  { key: 'prefer_email', label: 'Preferencia de contacto por correo' },
-] as const;
+type ReceptionQueueItem = {
+  consultation: {
+    id: string;
+    status: string;
+    openedAt: string;
+    closedAt?: string;
+    diagnosis?: string;
+    clinicalNotes?: string;
+  };
+  patient: {
+    id: string;
+    folio: string;
+    firstName: string;
+    middleName?: string;
+    lastName: string;
+    phone: string;
+    email?: string;
+    address?: string;
+    allergies?: string;
+    conditions?: string;
+    emergencyContact?: { name: string; phone: string };
+  };
+  refractions: Refraction[];
+  prescription: {
+    id: string;
+    folio: string;
+    usage: string;
+    observations?: string;
+    rightEyeSnapshot: Refraction;
+    leftEyeSnapshot: Refraction;
+  };
+};
+
+function fullName(patient: ReceptionQueueItem['patient']): string {
+  return [patient.firstName, patient.middleName, patient.lastName].filter(Boolean).join(' ');
+}
+
+function lensUsageLabel(usage: string): string {
+  return {
+    lejos: 'Visión lejana',
+    cerca: 'Visión cercana',
+    bifocal: 'Bifocal',
+    progresivo: 'Progresivo',
+    contacto: 'Lentes de contacto',
+  }[usage] || usage;
+}
+
+function refractionText(refraction: Refraction): string {
+  return [
+    `ESF ${refraction.sphere ?? '—'}`,
+    `CIL ${refraction.cylinder ?? '—'}`,
+    `EJE ${refraction.axis ?? '—'}`,
+    `ADD ${refraction.addition ?? '—'}`,
+    `DP ${refraction.pupillaryDistance ?? '—'}`,
+  ].join(' · ');
+}
 
 export default function FrontdeskSummaryPage() {
-  const [query, setQuery] = useState('PT000002');
-  const [summary, setSummary] = useState<SafeSummary | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState('');
+  const [queue, setQueue] = useState<ReceptionQueueItem[]>([]);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [refreshedAt, setRefreshedAt] = useState<string | null>(null);
 
-  async function loadSummary(searchFolio: string) {
-    if (!searchFolio.trim()) return;
-    setLoading(true);
-    setError('');
-    setMessage('');
+  async function loadQueue(showLoading = false) {
+    if (showLoading) setLoading(true);
     try {
       const role = localStorage.getItem('demo-role') || 'frontdesk:receptionist';
-      const res = await fetch(`/api/frontdesk/summary?folio=${encodeURIComponent(searchFolio.trim())}`, {
-        headers: { 'x-demo-role': role },
+      const response = await fetch('/api/frontdesk/queue', {
+        headers: { 'x-demo-role': role, 'x-actor-id': 'user-rec-001' },
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'No se encontró resumen');
-      if (!data.summary) {
-        setSummary(null);
-        setError('No hay consultas registradas para este folio.');
-      } else {
-        setSummary(data.summary);
-      }
+      const data = await response.json() as { queue?: ReceptionQueueItem[]; refreshedAt?: string; error?: string };
+      if (!response.ok) throw new Error(data.error || 'No se pudo actualizar la cola');
+      setQueue(data.queue ?? []);
+      setRefreshedAt(data.refreshedAt ?? new Date().toISOString());
+      setSelectedId((current) => current && data.queue?.some((item) => item.consultation.id === current) ? current : null);
+      setError('');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error al consultar resumen');
-      setSummary(null);
+      setError(err instanceof Error ? err.message : 'No se pudo actualizar la cola');
     } finally {
       setLoading(false);
     }
   }
 
   useEffect(() => {
-    loadSummary(query);
+    loadQueue(true);
+    const timer = window.setInterval(() => loadQueue(), 5000);
+    return () => window.clearInterval(timer);
   }, []);
 
-  async function handleSearch(e: FormEvent) {
-    e.preventDefault();
-    loadSummary(query);
-  }
-
-  async function updateNonClinicalNote(newKey: string) {
-    if (!summary) return;
-    try {
-      const role = localStorage.getItem('demo-role') || 'frontdesk:receptionist';
-      const res = await fetch(`/api/consultations/${summary.consultationId}/non-clinical-note`, {
-        method: 'PATCH',
-        headers: {
-          'content-type': 'application/json',
-          'x-demo-role': role,
-        },
-        body: JSON.stringify({
-          noteKey: newKey || null,
-          expectedVersion: 1,
-        }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'No se pudo actualizar la nota');
-      setMessage('Nota no clínica actualizada exitosamente.');
-      loadSummary(query);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error al actualizar');
-    }
-  }
+  const selected = queue.find((item) => item.consultation.id === selectedId) ?? null;
 
   return (
-    <main className="shell narrow">
-      <p className="eyebrow">MOSTRADOR / RESUMEN SEGURO</p>
-      <h1>Atención en Mostrador</h1>
-      <p className="lede">
-        Consulta el estado de atención y notas operativas sin exponer datos clínicos sensibles ni graduaciones.
-      </p>
+    <main className="shell tablet-shell">
+      <header className="topbar tablet-topbar">
+        <div>
+          <p className="eyebrow">RECEPCIÓN / ENTREGA CLÍNICA</p>
+          <h1>Listos para cotizar</h1>
+          <p className="lede">
+            Las recetas emitidas en gabinete aparecen aquí automáticamente. La información clínica está visible temporalmente para preparar la cotización correcta.
+          </p>
+        </div>
+        <div className="actions">
+          <span className="status-pill">{queue.length} pendiente{queue.length === 1 ? '' : 's'}</span>
+          <button className="button secondary" type="button" onClick={() => loadQueue(true)} disabled={loading}>
+            {loading ? 'Actualizando...' : 'Actualizar ahora'}
+          </button>
+        </div>
+      </header>
 
-      <form className="search-row" onSubmit={handleSearch}>
-        <input
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Folio del paciente (ej. PT000002)"
-          aria-label="Folio del paciente"
-          required
-        />
-        <button className="button primary" type="submit" disabled={loading}>
-          {loading ? 'Buscando...' : 'Consultar'}
-        </button>
-      </form>
+      <section className="queue-banner" aria-live="polite">
+        <strong>Sincronización automática activa</strong>
+        <span>{refreshedAt ? `Última actualización: ${new Date(refreshedAt).toLocaleTimeString('es-MX')}` : 'Conectando con gabinete...'}</span>
+      </section>
 
       {error && <p className="error" role="alert">{error}</p>}
-      {message && <p className="form-message" role="status">{message}</p>}
 
-      {summary && (
-        <section className="form-card" aria-labelledby="summary-title">
-          <h2 id="summary-title" style={{ fontSize: '1.5rem', margin: 0 }}>
-            Resumen de Atención
-          </h2>
+      <section className="handoff-list" aria-label="Cola de pacientes listos para cotizar">
+        {queue.map((item) => {
+          const isSelected = selectedId === item.consultation.id;
+          return (
+            <article className={`handoff-row${isSelected ? ' is-selected' : ''}`} key={item.consultation.id}>
+              <div>
+                <span className="status-pill">{item.patient.folio}</span>
+                <span className="status-pill handoff-rx">{item.prescription.folio}</span>
+                <h2>{fullName(item.patient)}</h2>
+                <p>{lensUsageLabel(item.prescription.usage)} · {item.patient.phone} · Cerrada {item.consultation.closedAt ? new Date(item.consultation.closedAt).toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' }) : 'recién'}</p>
+                <p className="handoff-diagnosis"><strong>Diagnóstico:</strong> {item.consultation.diagnosis || 'Sin diagnóstico registrado'}</p>
+              </div>
+              <div className="handoff-actions">
+                <button className="button secondary" type="button" onClick={() => setSelectedId(isSelected ? null : item.consultation.id)}>
+                  {isSelected ? 'Ocultar expediente' : 'Ver expediente'}
+                </button>
+                <Link
+                  className="button primary"
+                  href={`/sales/pos?consultationId=${encodeURIComponent(item.consultation.id)}&patientId=${encodeURIComponent(item.patient.id)}&prescriptionId=${encodeURIComponent(item.prescription.id)}`}
+                >
+                  Abrir cotización
+                </Link>
+              </div>
+            </article>
+          );
+        })}
+        {!loading && queue.length === 0 && !error && (
+          <p className="empty">No hay pacientes pendientes. Cuando el optometrista emita una receta, aparecerá aquí sin recargar la página.</p>
+        )}
+      </section>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
+      {selected && (
+        <section className="workspace-panel reception-detail" aria-labelledby="reception-detail-title">
+          <div className="workspace-heading">
             <div>
-              <strong style={{ display: 'block', fontSize: '12px', color: 'var(--muted)' }}>PACIENTE</strong>
-              <span style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>{summary.patientName}</span>
+              <p className="eyebrow">EXPEDIENTE ENTREGADO</p>
+              <h2 id="reception-detail-title">{fullName(selected.patient)}</h2>
+              <p>Receta {selected.prescription.folio} · {lensUsageLabel(selected.prescription.usage)}</p>
             </div>
-            <div>
-              <strong style={{ display: 'block', fontSize: '12px', color: 'var(--muted)' }}>FOLIO</strong>
-              <span className="status-pill">{summary.folio}</span>
-            </div>
-            <div>
-              <strong style={{ display: 'block', fontSize: '12px', color: 'var(--muted)' }}>ESTADO CONSULTA</strong>
-              <span className="status-pill" style={{ textTransform: 'capitalize' }}>
-                {summary.status === 'in_progress' ? 'En progreso' : summary.status === 'closed' ? 'Cerrada' : summary.status}
-              </span>
-            </div>
-            <div>
-              <strong style={{ display: 'block', fontSize: '12px', color: 'var(--muted)' }}>TIPO DE LENTE</strong>
-              <span style={{ textTransform: 'capitalize' }}>{summary.usage || 'Pendiente de prescripción'}</span>
-            </div>
-          </div>
-
-          <hr style={{ border: '0', borderTop: '1px solid var(--line)', margin: '16px 0' }} />
-
-          <div>
-            <label htmlFor="note-select">
-              Nota operativa (catálogo cerrado para mostrador):
-            </label>
-            <select
-              id="note-select"
-              value={summary.nonClinicalNoteKey || ''}
-              onChange={(e) => updateNonClinicalNote(e.target.value)}
-              style={{ marginTop: '8px' }}
+            <Link
+              className="button primary"
+              href={`/sales/pos?consultationId=${encodeURIComponent(selected.consultation.id)}&patientId=${encodeURIComponent(selected.patient.id)}&prescriptionId=${encodeURIComponent(selected.prescription.id)}`}
             >
-              <option value="">-- Sin nota asignada --</option>
-              {NON_CLINICAL_NOTES.map((n) => (
-                <option key={n.key} value={n.key}>
-                  {n.label}
-                </option>
-              ))}
-            </select>
+              Cotizar con estos datos
+            </Link>
           </div>
 
-          <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '8px' }}>
-            Nota: Este resumen cumple con la minimización de datos (P2 de la Constitución). No contiene esferas, cilindros, ejes ni diagnósticos.
-          </p>
+          <div className="reception-data-grid">
+            <div>
+              <h3>Contacto y expediente</h3>
+              <p><strong>Folio:</strong> {selected.patient.folio}</p>
+              <p><strong>Teléfono:</strong> {selected.patient.phone}</p>
+              <p><strong>Correo:</strong> {selected.patient.email || 'Sin registro'}</p>
+              <p><strong>Domicilio:</strong> {selected.patient.address || 'Sin registro'}</p>
+              <p><strong>Antecedentes:</strong> {selected.patient.conditions || 'Sin registro'}</p>
+              <p><strong>Alergias:</strong> {selected.patient.allergies || 'Sin registro'}</p>
+              <p><strong>Contacto de emergencia:</strong> {selected.patient.emergencyContact ? `${selected.patient.emergencyContact.name} · ${selected.patient.emergencyContact.phone}` : 'Sin registro'}</p>
+            </div>
+            <div>
+              <h3>Clínico y recomendación</h3>
+              <p><strong>Diagnóstico:</strong> {selected.consultation.diagnosis || 'Sin diagnóstico registrado'}</p>
+              <p><strong>Notas clínicas:</strong> {selected.consultation.clinicalNotes || 'Sin notas clínicas registradas'}</p>
+              <p><strong>Uso recomendado:</strong> {lensUsageLabel(selected.prescription.usage)}</p>
+              <p><strong>Observaciones de receta:</strong> {selected.prescription.observations || 'Sin observaciones adicionales'}</p>
+            </div>
+          </div>
+
+          <div className="rx-grid" aria-label="Graduación de receta">
+            <div>
+              <h3>OD</h3>
+              <p>{refractionText(selected.prescription.rightEyeSnapshot)}</p>
+              <p>AV {selected.prescription.rightEyeSnapshot.visualAcuity || '—'}</p>
+            </div>
+            <div>
+              <h3>OI</h3>
+              <p>{refractionText(selected.prescription.leftEyeSnapshot)}</p>
+              <p>AV {selected.prescription.leftEyeSnapshot.visualAcuity || '—'}</p>
+            </div>
+          </div>
         </section>
       )}
     </main>

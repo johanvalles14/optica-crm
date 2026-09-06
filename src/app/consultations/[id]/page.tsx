@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, use } from 'react';
+import { useEffect, useState, use } from 'react';
 import Link from 'next/link';
 import type { FormEvent } from 'react';
 
@@ -14,7 +14,6 @@ type Refraction = {
   visualAcuity?: string;
   pupillaryDistance?: number;
   isAmendment: boolean;
-  amendmentReason?: string;
   createdAt: string;
 };
 
@@ -25,18 +24,31 @@ type FullConsultation = {
     status: 'in_progress' | 'closed' | 'abandoned';
     version: number;
     openedAt: string;
-    openedBy: string;
+    diagnosis?: string;
+    clinicalNotes?: string;
   };
-  patientFolio: string;
-  patientName: string;
+  patient: {
+    folio: string;
+    firstName: string;
+    middleName?: string;
+    lastName: string;
+    phone: string;
+    email?: string;
+    allergies?: string;
+    conditions?: string;
+  };
   refractions: Refraction[];
-  prescriptions: Array<{
+  prescription?: {
     id: string;
     folio: string;
     usage: string;
-    version: number;
-  }>;
+    observations?: string;
+  };
 };
+
+function patientName(patient: FullConsultation['patient']): string {
+  return [patient.firstName, patient.middleName, patient.lastName].filter(Boolean).join(' ');
+}
 
 export default function ConsultationDetailPage({
   params,
@@ -45,13 +57,13 @@ export default function ConsultationDetailPage({
 }) {
   const resolvedParams = use(params);
   const consultationId = resolvedParams.id;
-
   const [data, setData] = useState<FullConsultation | null>(null);
   const [loading, setLoading] = useState(true);
+  const [savingClinicalDetails, setSavingClinicalDetails] = useState(false);
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
-
-  // Form states for adding refraction
+  const [diagnosis, setDiagnosis] = useState('');
+  const [clinicalNotes, setClinicalNotes] = useState('');
   const [eye, setEye] = useState<'OD' | 'OI'>('OD');
   const [sphere, setSphere] = useState('0.00');
   const [cylinder, setCylinder] = useState('0.00');
@@ -59,8 +71,6 @@ export default function ConsultationDetailPage({
   const [addition, setAddition] = useState('');
   const [visualAcuity, setVisualAcuity] = useState('20/20');
   const [pupillaryDistance, setPupillaryDistance] = useState('62');
-
-  // Abandon reason
   const [abandonReason, setAbandonReason] = useState('');
   const [showAbandon, setShowAbandon] = useState(false);
 
@@ -69,15 +79,17 @@ export default function ConsultationDetailPage({
     setError('');
     try {
       const role = localStorage.getItem('demo-role') || 'clinical:optometrist';
-      const res = await fetch(`/api/consultations/${consultationId}?view=full`, {
+      const response = await fetch(`/api/consultations/${consultationId}?view=full`, {
         headers: {
           'x-demo-role': role,
           'x-actor-id': 'user-opt-001',
         },
       });
-      const result = await res.json();
-      if (!res.ok) throw new Error(result.error || 'No se pudo cargar la consulta');
+      const result = await response.json() as FullConsultation & { error?: string };
+      if (!response.ok) throw new Error(result.error || 'No se pudo cargar la consulta');
       setData(result);
+      setDiagnosis(result.consultation.diagnosis || '');
+      setClinicalNotes(result.consultation.clinicalNotes || '');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error al cargar consulta');
     } finally {
@@ -89,13 +101,46 @@ export default function ConsultationDetailPage({
     loadConsultation();
   }, [consultationId]);
 
-  async function handleAddRefraction(e: FormEvent) {
-    e.preventDefault();
+  async function saveClinicalDetails(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!data) return;
+    setSavingClinicalDetails(true);
     setMessage('');
     setError('');
     try {
       const role = localStorage.getItem('demo-role') || 'clinical:optometrist';
-      const res = await fetch(`/api/consultations/${consultationId}/refraction`, {
+      const response = await fetch(`/api/consultations/${consultationId}`, {
+        method: 'PATCH',
+        headers: {
+          'content-type': 'application/json',
+          'x-demo-role': role,
+          'x-actor-id': 'user-opt-001',
+        },
+        body: JSON.stringify({
+          action: 'clinical_details',
+          diagnosis,
+          clinicalNotes,
+          expectedVersion: data.consultation.version,
+        }),
+      });
+      const result = await response.json() as { error?: string };
+      if (!response.ok) throw new Error(result.error || 'No se pudo guardar la información clínica');
+      setMessage('Diagnóstico y notas clínicas guardados.');
+      await loadConsultation();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'No se pudo guardar la información clínica');
+    } finally {
+      setSavingClinicalDetails(false);
+    }
+  }
+
+  async function handleAddRefraction(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setMessage('');
+    setError('');
+    try {
+      const role = localStorage.getItem('demo-role') || 'clinical:optometrist';
+      const response = await fetch(`/api/consultations/${consultationId}/refraction`, {
         method: 'POST',
         headers: {
           'content-type': 'application/json',
@@ -113,27 +158,26 @@ export default function ConsultationDetailPage({
           expectedVersion: data?.consultation.version ?? 1,
         }),
       });
-
-      const resData = await res.json();
-      if (!res.ok) throw new Error(resData.error || 'No se pudo registrar la refracción');
+      const result = await response.json() as { error?: string };
+      if (!response.ok) throw new Error(result.error || 'No se pudo registrar la refracción');
       setMessage(`Refracción para ${eye} guardada correctamente.`);
-      loadConsultation();
+      await loadConsultation();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error al guardar');
+      setError(err instanceof Error ? err.message : 'No se pudo guardar la refracción');
     }
   }
 
-  async function handleAbandon(e: FormEvent) {
-    e.preventDefault();
+  async function handleAbandon(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
     if (!abandonReason.trim()) return;
     try {
       const role = localStorage.getItem('demo-role') || 'clinical:optometrist';
-      const res = await fetch(`/api/consultations/${consultationId}`, {
+      const response = await fetch(`/api/consultations/${consultationId}`, {
         method: 'PATCH',
         headers: {
           'content-type': 'application/json',
           'x-demo-role': role,
-          'x-actor-id': data?.consultation.openedBy || 'user-opt-001',
+          'x-actor-id': 'user-opt-001',
         },
         body: JSON.stringify({
           action: 'abandon',
@@ -141,68 +185,55 @@ export default function ConsultationDetailPage({
           expectedVersion: data?.consultation.version ?? 1,
         }),
       });
-      const resData = await res.json();
-      if (!res.ok) throw new Error(resData.error || 'No se pudo abandonar la consulta');
+      const result = await response.json() as { error?: string };
+      if (!response.ok) throw new Error(result.error || 'No se pudo abandonar la consulta');
       setMessage('Consulta finalizada como abandonada.');
       setShowAbandon(false);
-      loadConsultation();
+      await loadConsultation();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error al abandonar');
+      setError(err instanceof Error ? err.message : 'No se pudo abandonar la consulta');
     }
   }
 
   if (loading) {
-    return (
-      <main className="shell narrow">
-        <p>Cargando datos de consulta...</p>
-      </main>
-    );
+    return <main className="shell narrow"><p>Cargando datos de consulta...</p></main>;
   }
 
   if (error && !data) {
     return (
       <main className="shell narrow">
         <p className="eyebrow">GABINETE / ERROR</p>
-        <h1>Acceso a Consulta</h1>
+        <h1>Acceso a consulta</h1>
         <p className="error" role="alert">{error}</p>
-        <p className="lede">
-          Recuerda que para acceder al expediente clínico completo debes tener rol de <strong>Optometrista</strong>.
-        </p>
-        <Link href="/" className="button secondary">Volver al inicio</Link>
+        <Link href="/consultations" className="button secondary">Volver al gabinete</Link>
       </main>
     );
   }
 
-  const odRefraction = data?.refractions.filter((r) => r.eye === 'OD' && !r.isAmendment).pop();
-  const oiRefraction = data?.refractions.filter((r) => r.eye === 'OI' && !r.isAmendment).pop();
+  const odRefraction = data?.refractions.filter((refraction) => refraction.eye === 'OD' && !refraction.isAmendment).pop();
+  const oiRefraction = data?.refractions.filter((refraction) => refraction.eye === 'OI' && !refraction.isAmendment).pop();
+  const eyeReadings: Array<{ eye: 'OD' | 'OI'; refraction?: Refraction }> = [
+    { eye: 'OD', refraction: odRefraction },
+    { eye: 'OI', refraction: oiRefraction },
+  ];
   const canPrescribe = Boolean(odRefraction && oiRefraction && data?.consultation.status === 'in_progress');
 
   return (
-    <main className="shell">
-      <header className="topbar">
+    <main className="shell tablet-shell">
+      <header className="topbar tablet-topbar">
         <div>
           <p className="eyebrow">GABINETE / CONSULTA CLÍNICA</p>
-          <h1>Consulta Optométrica</h1>
+          <h1>Consulta optométrica</h1>
           <p className="lede">
-            Paciente: <strong>{data?.patientName}</strong> · Folio: <code>{data?.patientFolio}</code> · Estado:{' '}
+            Paciente: <strong>{data ? patientName(data.patient) : ''}</strong> · Folio: <code>{data?.patient.folio}</code> · Estado:{' '}
             <span className="status-pill">{data?.consultation.status}</span>
           </p>
         </div>
         <div className="actions">
-          {canPrescribe && (
-            <Link
-              href={`/consultations/${consultationId}/prescription`}
-              className="button primary"
-            >
-              Emitir Prescripción
-            </Link>
-          )}
+          {canPrescribe && <Link href={`/consultations/${consultationId}/prescription`} className="button primary">Emitir y enviar receta</Link>}
           {data?.consultation.status === 'in_progress' && (
-            <button
-              className="button secondary"
-              onClick={() => setShowAbandon(!showAbandon)}
-            >
-              Abandonar Consulta
+            <button className="button secondary" type="button" onClick={() => setShowAbandon(!showAbandon)}>
+              Abandonar consulta
             </button>
           )}
         </div>
@@ -212,163 +243,131 @@ export default function ConsultationDetailPage({
       {message && <p className="form-message" role="status">{message}</p>}
 
       {showAbandon && (
-        <form className="form-card" onSubmit={handleAbandon} style={{ marginBottom: '24px' }}>
-          <h3>Motivo de abandono de consulta</h3>
-          <p className="lede">Indica la causa por la que no se emitió prescripción (ej. paciente se retira, midriasis requerida):</p>
-          <input
-            value={abandonReason}
-            onChange={(e) => setAbandonReason(e.target.value)}
-            placeholder="Motivo obligatorio..."
-            required
-          />
+        <form className="form-card" onSubmit={handleAbandon}>
+          <h2>Motivo de abandono</h2>
+          <input value={abandonReason} onChange={(event) => setAbandonReason(event.target.value)} placeholder="Motivo obligatorio" required />
           <div className="actions">
-            <button className="button primary" type="submit">Confirmar Abandono</button>
+            <button className="button primary" type="submit">Confirmar abandono</button>
             <button className="button secondary" type="button" onClick={() => setShowAbandon(false)}>Cancelar</button>
           </div>
         </form>
       )}
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px' }}>
-        {/* Panel de Refracción Vigente */}
-        <section className="hero-card" aria-labelledby="refraction-title">
-          <h2 id="refraction-title">Refracción Registrada</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginTop: '16px' }}>
-            <div style={{ background: '#faf8f2', padding: '16px', border: '1px solid var(--line)' }}>
-              <strong>OJO DERECHO (OD)</strong>
-              {odRefraction ? (
-                <ul style={{ listStyle: 'none', padding: 0, margin: '8px 0', fontSize: '14px', lineHeight: '1.8' }}>
-                  <li>Esfera: <b>{odRefraction.sphere ?? '0.00'} D</b></li>
-                  <li>Cilindro: <b>{odRefraction.cylinder ?? '0.00'} D</b></li>
-                  <li>Eje: <b>{odRefraction.axis ? `${odRefraction.axis}°` : '—'}</b></li>
-                  <li>Adición: <b>{odRefraction.addition ? `+${odRefraction.addition}` : '—'}</b></li>
-                  <li>AV: <b>{odRefraction.visualAcuity || '—'}</b></li>
-                  <li>DP: <b>{odRefraction.pupillaryDistance ? `${odRefraction.pupillaryDistance} mm` : '—'}</b></li>
-                </ul>
-              ) : (
-                <p className="empty">Sin refracción OD</p>
-              )}
+      <div className="clinical-layout">
+        <section className="workspace-panel clinical-dossier" aria-labelledby="clinical-details-title">
+          <div className="workspace-heading">
+            <div>
+              <h2 id="clinical-details-title">Expediente y diagnóstico</h2>
+              <p>Estos datos viajarán completos a recepción al emitir la receta.</p>
             </div>
-
-            <div style={{ background: '#faf8f2', padding: '16px', border: '1px solid var(--line)' }}>
-              <strong>OJO IZQUIERDO (OI)</strong>
-              {oiRefraction ? (
-                <ul style={{ listStyle: 'none', padding: 0, margin: '8px 0', fontSize: '14px', lineHeight: '1.8' }}>
-                  <li>Esfera: <b>{oiRefraction.sphere ?? '0.00'} D</b></li>
-                  <li>Cilindro: <b>{oiRefraction.cylinder ?? '0.00'} D</b></li>
-                  <li>Eje: <b>{oiRefraction.axis ? `${oiRefraction.axis}°` : '—'}</b></li>
-                  <li>Adición: <b>{oiRefraction.addition ? `+${oiRefraction.addition}` : '—'}</b></li>
-                  <li>AV: <b>{oiRefraction.visualAcuity || '—'}</b></li>
-                  <li>DP: <b>{oiRefraction.pupillaryDistance ? `${oiRefraction.pupillaryDistance} mm` : '—'}</b></li>
-                </ul>
-              ) : (
-                <p className="empty">Sin refracción OI</p>
-              )}
-            </div>
+            <span className="status-pill">Versión {data?.consultation.version}</span>
           </div>
 
-          {data?.prescriptions && data.prescriptions.length > 0 && (
-            <div style={{ marginTop: '24px' }}>
-              <h3>Prescripción Emitida</h3>
-              <p>Folio: <strong>{data.prescriptions[0].folio}</strong> · Uso: <strong>{data.prescriptions[0].usage}</strong></p>
+          <dl className="patient-facts">
+            <div><dt>Teléfono</dt><dd>{data?.patient.phone || 'Sin registro'}</dd></div>
+            <div><dt>Correo</dt><dd>{data?.patient.email || 'Sin registro'}</dd></div>
+            <div><dt>Antecedentes</dt><dd>{data?.patient.conditions || 'Sin registro'}</dd></div>
+            <div><dt>Alergias</dt><dd>{data?.patient.allergies || 'Sin registro'}</dd></div>
+          </dl>
+
+          {data?.consultation.status === 'in_progress' ? (
+            <form className="clinical-form" onSubmit={saveClinicalDetails}>
+              <label>
+                Diagnóstico o impresión clínica
+                <textarea value={diagnosis} onChange={(event) => setDiagnosis(event.target.value)} rows={3} placeholder="Ej. Miopía con astigmatismo leve" />
+              </label>
+              <label>
+                Hallazgos y notas clínicas
+                <textarea value={clinicalNotes} onChange={(event) => setClinicalNotes(event.target.value)} rows={4} placeholder="Hallazgos relevantes, recomendaciones o seguimiento" />
+              </label>
+              <button className="button secondary" type="submit" disabled={savingClinicalDetails}>
+                {savingClinicalDetails ? 'Guardando...' : 'Guardar expediente'}
+              </button>
+            </form>
+          ) : (
+            <div className="clinical-readonly">
+              <p><strong>Diagnóstico:</strong> {data?.consultation.diagnosis || 'Sin diagnóstico registrado'}</p>
+              <p><strong>Notas:</strong> {data?.consultation.clinicalNotes || 'Sin notas clínicas registradas'}</p>
             </div>
           )}
         </section>
 
-        {/* Formulario de captura táctil */}
-        {data?.consultation.status === 'in_progress' && (
-          <section className="form-card" aria-labelledby="form-title">
-            <h2 id="form-title" style={{ fontSize: '1.5rem', margin: 0 }}>Captura de Refracción</h2>
-            <form onSubmit={handleAddRefraction}>
+        <section className="workspace-panel" aria-labelledby="refraction-title">
+          <div className="workspace-heading">
+            <div>
+              <h2 id="refraction-title">Refracción vigente</h2>
+              <p>La receta se habilita cuando OD y OI estén registrados.</p>
+            </div>
+          </div>
+          <div className="eye-grid">
+            {eyeReadings.map(({ eye: eyeName, refraction }) => (
+              <div className="eye-reading" key={eyeName}>
+                <strong>Ojo {eyeName === 'OD' ? 'derecho' : 'izquierdo'} ({eyeName})</strong>
+                {refraction ? (
+                  <ul>
+                    <li>Esfera: <b>{refraction.sphere ?? '0.00'} D</b></li>
+                    <li>Cilindro: <b>{refraction.cylinder ?? '0.00'} D</b></li>
+                    <li>Eje: <b>{refraction.axis ? `${refraction.axis}°` : '—'}</b></li>
+                    <li>Adición: <b>{refraction.addition ? `+${refraction.addition}` : '—'}</b></li>
+                    <li>AV: <b>{refraction.visualAcuity || '—'}</b></li>
+                    <li>DP: <b>{refraction.pupillaryDistance ? `${refraction.pupillaryDistance} mm` : '—'}</b></li>
+                  </ul>
+                ) : <p className="empty">Sin refracción {eyeName}</p>}
+              </div>
+            ))}
+          </div>
+          {data?.prescription && (
+            <p className="clinical-readonly"><strong>Receta emitida:</strong> {data.prescription.folio} · {data.prescription.usage}</p>
+          )}
+        </section>
+      </div>
+
+      {data?.consultation.status === 'in_progress' && (
+        <section className="form-card tablet-capture" aria-labelledby="capture-title">
+          <div className="workspace-heading">
+            <div>
+              <h2 id="capture-title">Captura de refracción</h2>
+              <p>Campos amplios para toma táctil en tablet.</p>
+            </div>
+          </div>
+          <form onSubmit={handleAddRefraction}>
+            <div className="capture-grid">
               <label>
-                Ojo a registrar:
-                <select value={eye} onChange={(e) => setEye(e.target.value as 'OD' | 'OI')}>
-                  <option value="OD">Ojo Derecho (OD)</option>
-                  <option value="OI">Ojo Izquierdo (OI)</option>
+                Ojo a registrar
+                <select value={eye} onChange={(event) => setEye(event.target.value as 'OD' | 'OI')}>
+                  <option value="OD">Ojo derecho (OD)</option>
+                  <option value="OI">Ojo izquierdo (OI)</option>
                 </select>
               </label>
-
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-                <label>
-                  Esfera (D):
-                  <input
-                    type="number"
-                    step="0.25"
-                    value={sphere}
-                    onChange={(e) => setSphere(e.target.value)}
-                    placeholder="-20.00 a +20.00"
-                    required
-                  />
-                </label>
-
-                <label>
-                  Cilindro (conv. negativa):
-                  <input
-                    type="number"
-                    step="0.25"
-                    max="0"
-                    value={cylinder}
-                    onChange={(e) => setCylinder(e.target.value)}
-                    placeholder="-10.00 a 0.00"
-                  />
-                </label>
-              </div>
-
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-                <label>
-                  Eje (grados 1-180):
-                  <input
-                    type="number"
-                    min="1"
-                    max="180"
-                    value={axis}
-                    onChange={(e) => setAxis(e.target.value)}
-                    placeholder="Obligatorio si cil != 0"
-                    required={Number(cylinder) !== 0}
-                  />
-                </label>
-
-                <label>
-                  Adición (+0.50 a +4.00):
-                  <input
-                    type="number"
-                    step="0.25"
-                    min="0"
-                    max="4.00"
-                    value={addition}
-                    onChange={(e) => setAddition(e.target.value)}
-                    placeholder="Opcional"
-                  />
-                </label>
-              </div>
-
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-                <label>
-                  Agudeza Visual:
-                  <input
-                    value={visualAcuity}
-                    onChange={(e) => setVisualAcuity(e.target.value)}
-                    placeholder="20/20, 20/40..."
-                  />
-                </label>
-
-                <label>
-                  Distancia Pupilar (mm):
-                  <input
-                    type="number"
-                    value={pupillaryDistance}
-                    onChange={(e) => setPupillaryDistance(e.target.value)}
-                    placeholder="40 a 80"
-                  />
-                </label>
-              </div>
-
-              <button className="button primary" type="submit" style={{ marginTop: '16px' }}>
-                Guardar Refracción {eye}
-              </button>
-            </form>
-          </section>
-        )}
-      </div>
+              <label>
+                Esfera (D)
+                <input type="number" step="0.25" value={sphere} onChange={(event) => setSphere(event.target.value)} required />
+              </label>
+              <label>
+                Cilindro (conv. negativa)
+                <input type="number" step="0.25" max="0" value={cylinder} onChange={(event) => setCylinder(event.target.value)} />
+              </label>
+              <label>
+                Eje (1-180)
+                <input type="number" min="1" max="180" value={axis} onChange={(event) => setAxis(event.target.value)} required={Number(cylinder) !== 0} />
+              </label>
+              <label>
+                Adición
+                <input type="number" step="0.25" min="0" max="4" value={addition} onChange={(event) => setAddition(event.target.value)} />
+              </label>
+              <label>
+                Agudeza visual
+                <input value={visualAcuity} onChange={(event) => setVisualAcuity(event.target.value)} placeholder="20/20" />
+              </label>
+              <label>
+                Distancia pupilar (mm)
+                <input type="number" value={pupillaryDistance} onChange={(event) => setPupillaryDistance(event.target.value)} />
+              </label>
+            </div>
+            <button className="button primary" type="submit">Guardar refracción {eye}</button>
+          </form>
+        </section>
+      )}
     </main>
   );
 }

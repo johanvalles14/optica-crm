@@ -15,12 +15,14 @@ import type {
   OpenConsultationInput,
   Prescription,
   PrescriptionAmendmentInput,
+  ReceptionQueueEntry,
   Refraction,
   RefractionAmendmentInput,
   RefractionInput,
   ReleaseConsultationInput,
   SafeSummary,
   SetNonClinicalNoteInput,
+  UpdateClinicalDetailsInput,
 } from '../../../contracts/clinical.contract';
 import { authorize } from '../auth/rbac';
 import { AuditService } from '../audit/service';
@@ -31,6 +33,7 @@ import { ConsultationStateMachine } from './state-machine';
 import { clinicalRepository } from './repository';
 import { RefractionService } from './refraction.service';
 import { PrescriptionService } from './prescription.service';
+import { salesRepository } from '../sales/repository';
 
 const stateMachine = new ConsultationStateMachine();
 
@@ -228,6 +231,54 @@ export class ClinicalService implements IClinicalService {
     return updated;
   }
 
+  async updateClinicalDetails(
+    input: UpdateClinicalDetailsInput,
+    actor: ActorContext
+  ): Promise<Consultation> {
+    if (!authorize(actor.role, 'updateClinicalDetails', 'Consultation')) {
+      throw new Error('Permission denied');
+    }
+
+    const consultation = clinicalRepository.getConsultation(input.consultationId);
+    if (!consultation) throw new Error('Consultation not found');
+    if (consultation.status !== 'in_progress') {
+      throw new Error('Clinical details can only be edited while the consultation is in progress');
+    }
+    if (consultation.version !== input.expectedVersion) {
+      throw new Error('Stale version: expectedVersion does not match');
+    }
+
+    const diagnosis = input.diagnosis?.trim();
+    const clinicalNotes = input.clinicalNotes?.trim();
+    if (diagnosis && diagnosis.length > 2000) throw new Error('Diagnosis exceeds 2000 characters');
+    if (clinicalNotes && clinicalNotes.length > 4000) throw new Error('Clinical notes exceed 4000 characters');
+
+    const changes: Partial<Consultation> = {};
+    if (input.diagnosis !== undefined) changes.diagnosis = diagnosis || undefined;
+    if (input.clinicalNotes !== undefined) changes.clinicalNotes = clinicalNotes || undefined;
+
+    const updated = clinicalRepository.updateConsultation(
+      consultation,
+      input.expectedVersion,
+      changes
+    );
+
+    await this.audit.record({
+      actorId: actor.actorId,
+      role: actor.role,
+      action: 'update',
+      entity: 'Consultation',
+      entityId: updated.id,
+      requestId: actor.requestId,
+      metadata: {
+        hasDiagnosis: Boolean(updated.diagnosis),
+        hasClinicalNotes: Boolean(updated.clinicalNotes),
+      },
+    });
+
+    return updated;
+  }
+
   async addRefraction(
     input: RefractionInput,
     actor: ActorContext
@@ -354,6 +405,20 @@ export class ClinicalService implements IClinicalService {
     });
 
     return full;
+  }
+
+  async listReceptionQueue(actor: ActorContext): Promise<ReceptionQueueEntry[]> {
+    if (!authorize(actor.role, 'listConsultations', 'SafeSummary')) {
+      throw new Error('Permission denied');
+    }
+
+    return clinicalRepository.listClosedConsultations().flatMap((consultation) => {
+      const full = clinicalRepository.buildFullConsultation(consultation.id);
+      if (!full?.prescription || salesRepository.hasActiveOrderForPrescription(full.prescription.id)) {
+        return [];
+      }
+      return [{ ...full, prescription: full.prescription }];
+    });
   }
 
   async getAuditTrail(consultationId: ConsultationId): Promise<import('../audit/types').AuditEntry[]> {

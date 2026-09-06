@@ -160,6 +160,12 @@ class ClinicalRepository {
       .sort((a, b) => b.openedAt.getTime() - a.openedAt.getTime());
   }
 
+  listClosedConsultations(): Consultation[] {
+    return Array.from(this.consultations.values())
+      .filter((consultation) => consultation.status === 'closed')
+      .sort((a, b) => (b.closedAt?.getTime() ?? 0) - (a.closedAt?.getTime() ?? 0));
+  }
+
   hasInProgressConsultation(patientId: PatientId): boolean {
     return Array.from(this.consultations.values()).some(
       (c) => c.patientId === patientId && c.status === 'in_progress'
@@ -288,8 +294,11 @@ class ClinicalRepository {
   ): FullConsultation | undefined {
     const consultation = this.consultations.get(consultationId);
     if (!consultation) return undefined;
+    const patient = patientRepository.getPatient(consultation.patientId);
+    if (!patient) return undefined;
     return {
       consultation,
+      patient,
       refractions: this.getRefractionsByConsultation(consultationId),
       prescription: this.getBasePrescriptionByConsultation(consultationId),
     };

@@ -1,6 +1,6 @@
 import type { Prisma } from '@prisma/client';
 import type { ActorContext } from '../../../contracts/auth.contract';
-import type { CreateSaleOrderInput, PaymentRecord, RecordPaymentInput, SaleItem, SaleOrder } from '../../../contracts/sales.contract';
+import type { CreateSaleOrderInput, PaymentMethod, PaymentRecord, RecordPaymentInput, SaleItem, SaleOrder } from '../../../contracts/sales.contract';
 import { prisma } from '../../lib/prisma';
 import { authorize } from '../auth/rbac';
 import { AuditService } from '../audit/service';
@@ -74,6 +74,49 @@ export class PrismaSalesService {
   private readonly audit = new AuditService();
   private readonly stateMachine = new OrderStateMachine();
 
+  private async consumeInventory(
+    transaction: Prisma.TransactionClient,
+    items: Array<{ productId?: string | null; quantity: number }>,
+    branchId: string,
+    actor: ActorContext,
+    note: string
+  ): Promise<void> {
+    const quantities = new Map<string, number>();
+    for (const item of items) {
+      if (item.productId) {
+        quantities.set(item.productId, (quantities.get(item.productId) ?? 0) + item.quantity);
+      }
+    }
+
+    for (const [productId, quantity] of quantities) {
+      const product = await transaction.product.findFirst({
+        where: { id: productId, branchId, active: true },
+      });
+      if (!product) throw new Error('Producto no encontrado');
+
+      const updated = await transaction.product.updateMany({
+        where: { id: product.id, stock: { gte: quantity } },
+        data: { stock: { decrement: quantity }, version: { increment: 1 }, updatedAt: new Date() },
+      });
+      if (updated.count !== 1) throw new Error('Stock insuficiente');
+
+      const updatedProduct = await transaction.product.findUniqueOrThrow({ where: { id: product.id } });
+      await transaction.inventoryMovement.create({
+        data: {
+          productId: product.id,
+          branchId,
+          movementType: 'out',
+          quantityChange: -quantity,
+          previousStock: updatedProduct.stock + quantity,
+          newStock: updatedProduct.stock,
+          reason: 'sale',
+          notes: note,
+          actorId: actor.actorId,
+        },
+      });
+    }
+  }
+
   private async branch(branchId: string) {
     const key = branchId === 'branch-001' ? 'PT' : branchId;
     return prisma.branch.findFirstOrThrow({ where: isUuid(key) ? { OR: [{ id: key }, { code: key }] } : { code: key } });
@@ -83,9 +126,19 @@ export class PrismaSalesService {
     if (!authorize(actor.role, 'createOrder', 'SaleOrder')) throw new Error('Permission denied');
     if (!input.items?.length) throw new Error('La orden de venta debe contener al menos un producto o servicio');
     const order = await prisma.$transaction(async (transaction) => {
+      if (input.prescriptionId) {
+        const existing = await transaction.saleOrder.findFirst({
+          where: { prescriptionId: input.prescriptionId, status: { not: 'cancelled' } },
+          select: { id: true },
+        });
+        if (existing) throw new Error('La prescripción ya tiene una cotización u orden activa');
+      }
+
       const branch = await transaction.branch.update({ where: { id: (await this.branch(input.branchId)).id }, data: { nextSaleSequence: { increment: 1 } } });
       let subtotal = 0;
       const items: Array<Omit<SaleItem, 'id' | 'totalPrice'>> = [];
+      const initialPayment = input.initialPayment?.amount && input.initialPayment.amount > 0 ? input.initialPayment : undefined;
+      if (input.initialPayment && input.initialPayment.amount < 0) throw new Error('El anticipo no puede ser negativo');
       for (const item of input.items) {
         if (item.quantity <= 0 || item.unitPrice < 0) throw new Error('Cantidad y precio inválidos');
         const totalPrice = item.unitPrice * item.quantity;
@@ -93,16 +146,15 @@ export class PrismaSalesService {
         if (item.productId) {
           const product = await transaction.product.findFirst({ where: { id: item.productId, branchId: branch.id, active: true } });
           if (!product) throw new Error('Producto no encontrado');
-          const updated = await transaction.product.updateMany({ where: { id: product.id, stock: { gte: item.quantity } }, data: { stock: { decrement: item.quantity }, version: { increment: 1 }, updatedAt: new Date() } });
-          if (updated.count !== 1) throw new Error('Stock insuficiente');
-          await transaction.inventoryMovement.create({ data: { productId: product.id, branchId: branch.id, movementType: 'out', quantityChange: -item.quantity, previousStock: product.stock, newStock: product.stock - item.quantity, reason: 'sale', notes: 'Venta directa mostrador', actorId: actor.actorId } });
         }
         items.push(item);
       }
       const discount = input.discount ?? 0;
       const total = Math.max(0, subtotal - discount);
-      const initialPayment = input.initialPayment?.amount && input.initialPayment.amount > 0 ? input.initialPayment : undefined;
       const paidAmount = initialPayment?.amount ?? 0;
+      if (paidAmount > 0) {
+        await this.consumeInventory(transaction, items, branch.id, actor, 'Venta confirmada en mostrador');
+      }
       const now = new Date();
       const record = await transaction.saleOrder.create({ data: { folio: `VTA-${String(branch.nextSaleSequence - 1).padStart(4, '0')}`, branchId: branch.id, patientId: input.patientId, prescriptionId: input.prescriptionId, status: paidAmount > 0 ? 'confirmed_in_process' : 'quote', subtotal, discount, total, paidAmount, balanceDue: Math.max(0, total - paidAmount), promisedDeliveryDate: input.promisedDeliveryDate, notes: input.notes, createdAt: now, updatedAt: now, items: { create: items.map((item) => ({ productId: item.productId, itemType: item.itemType, description: item.description, lensConfig: item.lensConfig ? toJson(item.lensConfig) : undefined, quantity: item.quantity, unitPrice: item.unitPrice, totalPrice: item.unitPrice * item.quantity })) }, payments: initialPayment ? { create: { amount: initialPayment.amount, method: initialPayment.method, reference: initialPayment.reference, receivedBy: actor.actorId, paidAt: now } } : undefined }, include: orderInclude });
       return mapOrder(record);
@@ -114,17 +166,93 @@ export class PrismaSalesService {
   async recordPayment(input: RecordPaymentInput, actor: ActorContext): Promise<SaleOrder> {
     if (!authorize(actor.role, 'recordPayment', 'SaleOrder')) throw new Error('Permission denied');
     const order = await prisma.$transaction(async (transaction) => {
-      const current = await transaction.saleOrder.findUnique({ where: { id: input.orderId } });
+      const current = await transaction.saleOrder.findUnique({ where: { id: input.orderId }, include: { items: true } });
       if (!current) throw new Error('Orden no encontrada');
       if (this.stateMachine.isFinal(current.status)) throw new Error('No se pueden registrar pagos en órdenes finalizadas o canceladas');
       if (input.amount <= 0) throw new Error('El pago debe ser mayor a cero');
+      if (current.version !== input.expectedVersion) throw new Error('Stale version: expectedVersion does not match');
       const paidAmount = Number(current.paidAmount) + input.amount;
-      const result = await transaction.saleOrder.updateMany({ where: { id: current.id, version: input.expectedVersion }, data: { paidAmount, balanceDue: Math.max(0, Number(current.total) - paidAmount), status: current.status === 'pending_deposit' ? 'confirmed_in_process' : current.status, version: { increment: 1 }, updatedAt: new Date() } });
+      const confirmsOrder =
+        (current.status === 'quote' || current.status === 'pending_deposit') && paidAmount > 0;
+      if (confirmsOrder) {
+        await this.consumeInventory(
+          transaction,
+          current.items,
+          current.branchId,
+          actor,
+          `Confirmación de cotización ${current.folio}`
+        );
+      }
+      const result = await transaction.saleOrder.updateMany({ where: { id: current.id, version: input.expectedVersion }, data: { paidAmount, balanceDue: Math.max(0, Number(current.total) - paidAmount), status: confirmsOrder ? 'confirmed_in_process' : current.status, version: { increment: 1 }, updatedAt: new Date() } });
       if (result.count !== 1) throw new Error('Stale version: expectedVersion does not match');
       await transaction.payment.create({ data: { saleOrderId: current.id, amount: input.amount, method: input.method, reference: input.reference, receivedBy: actor.actorId } });
       return transaction.saleOrder.findUniqueOrThrow({ where: { id: current.id }, include: orderInclude });
     }).then(mapOrder);
     await this.audit.record({ actorId: actor.actorId, role: actor.role, action: 'update', entity: 'SaleOrder', entityId: order.id, requestId: actor.requestId, metadata: { paymentAmount: input.amount, balanceDue: order.balanceDue } });
+    return order;
+  }
+
+  async deliverAndClose(
+    orderId: string,
+    finalPayment: { amount: number; method: PaymentMethod } | undefined,
+    expectedVersion: number | undefined,
+    actor: ActorContext
+  ): Promise<SaleOrder> {
+    if (!authorize(actor.role, 'deliver', 'SaleOrder')) throw new Error('Permission denied');
+    const order = await prisma.$transaction(async (transaction) => {
+      const current = await transaction.saleOrder.findUnique({ where: { id: orderId }, include: orderInclude });
+      if (!current) throw new Error('Orden no encontrada');
+
+      const now = new Date();
+      let paidAmount = Number(current.paidAmount);
+      let balanceDue = Number(current.balanceDue);
+
+      if (finalPayment && finalPayment.amount > 0) {
+        paidAmount += finalPayment.amount;
+        balanceDue = Math.max(0, Number(current.total) - paidAmount);
+        await transaction.payment.create({
+          data: {
+            saleOrderId: current.id,
+            amount: finalPayment.amount,
+            method: finalPayment.method,
+            receivedBy: actor.actorId,
+            paidAt: now,
+          },
+        });
+      }
+
+      if (balanceDue > 0) {
+        throw new Error(
+          `No se pueden entregar los lentes con saldo pendiente ($${balanceDue} MXN). Se requiere liquidación previa.`
+        );
+      }
+
+      const updated = await transaction.saleOrder.update({
+        where: { id: current.id },
+        data: {
+          paidAmount,
+          balanceDue,
+          status: 'delivered_paid',
+          deliveredAt: now,
+          version: { increment: 1 },
+          updatedAt: now,
+        },
+        include: orderInclude,
+      });
+
+      return mapOrder(updated);
+    });
+
+    await this.audit.record({
+      actorId: actor.actorId,
+      role: actor.role,
+      action: 'update',
+      entity: 'SaleOrder',
+      entityId: order.id,
+      requestId: actor.requestId,
+      metadata: { action: 'deliver', deliveredAt: order.deliveredAt },
+    });
+
     return order;
   }
 

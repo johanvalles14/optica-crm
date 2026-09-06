@@ -15,6 +15,21 @@ const fullConsultation: FullConsultation = {
     nonClinicalNoteKey: 'follow_up',
     version: 3,
   },
+  patient: {
+    id: 'patient-001',
+    folio: 'PT000001',
+    branchId: 'branch-001',
+    firstName: 'Juan',
+    lastName: 'Pérez García',
+    birthDate: new Date('1990-01-01'),
+    sex: 'male',
+    phone: '8710000000',
+    isContactAllowed: true,
+    status: 'active',
+    version: 1,
+    createdAt: new Date('2026-09-04T10:00:00.000Z'),
+    updatedAt: new Date('2026-09-04T10:00:00.000Z'),
+  },
   refractions: [
     {
       id: 'ref-od-001',

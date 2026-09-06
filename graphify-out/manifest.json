@@ -5,18 +5,18 @@
     "semantic_hash": ""
   },
   "contracts/clinical.contract.ts": {
-    "mtime": 1788549275.2063758,
-    "ast_hash": "7093ad2ae6309b51c380812065f1e27f",
+    "mtime": 1788730307.5019596,
+    "ast_hash": "64dac5a44e6fb99b18fc3fbfeecab8d4",
     "semantic_hash": ""
   },
   "contracts/patients.contract.ts": {
-    "mtime": 1788548198.6253188,
+    "mtime": 1788731968.3559139,
     "ast_hash": "06d21580ac4ef69ab988ad566ff44a73",
     "semantic_hash": ""
   },
   "package.json": {
-    "mtime": 1788724012.4052093,
-    "ast_hash": "2e4bc3cc785f39d8d4b74b145889e7c5",
+    "mtime": 1788728833.5268803,
+    "ast_hash": "0f2d04f45ccca6db0d84600c1b14fa31",
     "semantic_hash": ""
   },
   "src/modules/audit/service.ts": {
@@ -35,8 +35,8 @@
     "semantic_hash": ""
   },
   "src/modules/auth/rbac.ts": {
-    "mtime": 1788727017.1270182,
-    "ast_hash": "881228af781753e83a204e38267cee48",
+    "mtime": 1788732108.8685553,
+    "ast_hash": "457b0d89ca04802870e91dd59385a918",
     "semantic_hash": ""
   },
   "src/modules/clinical/non-clinical-notes.ts": {
@@ -55,8 +55,8 @@
     "semantic_hash": ""
   },
   "src/modules/clinical/repository.ts": {
-    "mtime": 1788553077.6525528,
-    "ast_hash": "1e02795877087c13c54a6a7a18a84c00",
+    "mtime": 1788730307.5084798,
+    "ast_hash": "e4667f3f9024c7a86b79d0290d79a20a",
     "semantic_hash": ""
   },
   "src/modules/clinical/safe-summary.service.ts": {
@@ -65,8 +65,8 @@
     "semantic_hash": ""
   },
   "src/modules/clinical/service.ts": {
-    "mtime": 1788720021.2019079,
-    "ast_hash": "0392666fd13fdc60b5ee9a06df61507f",
+    "mtime": 1788730333.0344622,
+    "ast_hash": "ef7bb95f34e1b6b984590774eb5bc797",
     "semantic_hash": ""
   },
   "src/modules/clinical/state-machine.ts": {
@@ -90,12 +90,12 @@
     "semantic_hash": ""
   },
   "src/modules/patients/repository.ts": {
-    "mtime": 1788553019.4584198,
+    "mtime": 1788731975.0636463,
     "ast_hash": "18a9e4f1b92efe97442cb7f06ace5307",
     "semantic_hash": ""
   },
   "src/modules/patients/service.ts": {
-    "mtime": 1788552375.614316,
+    "mtime": 1788731989.8543022,
     "ast_hash": "f64278455ee895952d631766f8ce4bfb",
     "semantic_hash": ""
   },
@@ -140,7 +140,7 @@
     "semantic_hash": ""
   },
   "tests/integration/auth/permissions.test.ts": {
-    "mtime": 1788550927.9086442,
+    "mtime": 1788732156.97595,
     "ast_hash": "577e9b691098be078a2dcbd2621da352",
     "semantic_hash": ""
   },
@@ -185,7 +185,7 @@
     "semantic_hash": ""
   },
   "tests/unit/auth/rbac.test.ts": {
-    "mtime": 1788550949.1926425,
+    "mtime": 1788732150.5308185,
     "ast_hash": "89a3b3961abb4ba268ec0bfbd59fa751",
     "semantic_hash": ""
   },
@@ -200,8 +200,8 @@
     "semantic_hash": ""
   },
   "tests/unit/clinical/safe-summary.test.ts": {
-    "mtime": 1788550856.2598388,
-    "ast_hash": "4c1e22a6ac109084b452ab1cc6e366de",
+    "mtime": 1788731153.376865,
+    "ast_hash": "a07ca16a6c1ff1264911dcee343961a0",
     "semantic_hash": ""
   },
   "tests/unit/clinical/state-machine.test.ts": {
@@ -325,13 +325,13 @@
     "semantic_hash": ""
   },
   "src/app/api/consultations/[id]/route.ts": {
-    "mtime": 1788722864.0297458,
-    "ast_hash": "4457973163a7cfe66a61fa8226970503",
+    "mtime": 1788730393.5595613,
+    "ast_hash": "510a8b7c7715acb05237c62d505a6b73",
     "semantic_hash": ""
   },
   "src/app/api/consultations/route.ts": {
-    "mtime": 1788722864.0282378,
-    "ast_hash": "3b27033de18a1ac255c9513ec4352e99",
+    "mtime": 1788732033.4411206,
+    "ast_hash": "c6c43532fb284d9870798193f02f2009",
     "semantic_hash": ""
   },
   "src/app/api/frontdesk/summary/route.ts": {
@@ -340,8 +340,8 @@
     "semantic_hash": ""
   },
   "src/app/api/patients/route.ts": {
-    "mtime": 1788723475.7314236,
-    "ast_hash": "13c6c90721e9c15ade2be47a60bf1d04",
+    "mtime": 1788732423.9113142,
+    "ast_hash": "df79f7d60b6e78fa0cb343f7a8c30804",
     "semantic_hash": ""
   },
   "src/app/api/patients/search/route.ts": {
@@ -355,18 +355,18 @@
     "semantic_hash": ""
   },
   "src/app/page.tsx": {
-    "mtime": 1788721546.3791173,
-    "ast_hash": "cc5eb68d1a6bf3b3496580bcaf01a56b",
+    "mtime": 1788732581.1361365,
+    "ast_hash": "a8d18dd7e182929cb7668c3c86a38845",
     "semantic_hash": ""
   },
   "src/app/patients/new/page.tsx": {
-    "mtime": 1788719814.4602122,
-    "ast_hash": "757f37486f9bdf605f4f60f371719c4d",
+    "mtime": 1788732518.3629386,
+    "ast_hash": "01f5c0916bc4bc9ea8a7727289ccf0a9",
     "semantic_hash": ""
   },
   "src/app/patients/search/page.tsx": {
-    "mtime": 1788568536.3083465,
-    "ast_hash": "0792baa32c1b6be1d29b7fbef5eb346e",
+    "mtime": 1788732494.726728,
+    "ast_hash": "6f3c7d0762b09d815b14819ac86c9932",
     "semantic_hash": ""
   },
   "src/lib/prisma.ts": {
@@ -385,7 +385,7 @@
     "semantic_hash": ""
   },
   "src/modules/patients/prisma-repository.ts": {
-    "mtime": 1788722661.2341976,
+    "mtime": 1788731983.6329942,
     "ast_hash": "c5fba7081e2e8fbfaad9488eea78f75b",
     "semantic_hash": ""
   },
@@ -435,23 +435,23 @@
     "semantic_hash": ""
   },
   "src/app/consultations/[id]/page.tsx": {
-    "mtime": 1788719789.1282082,
-    "ast_hash": "375afd5adc6c1b7fcddce02e102c6283",
+    "mtime": 1788731137.5360518,
+    "ast_hash": "682aeb6bf8d25480c65e0da316bacac6",
     "semantic_hash": ""
   },
   "src/app/consultations/[id]/prescription/page.tsx": {
-    "mtime": 1788719798.2379544,
-    "ast_hash": "afc8342573cbffca5a0f1e81cb6c9509",
+    "mtime": 1788730691.5930586,
+    "ast_hash": "3000b4c6118a09b34c6d1796ca9c782b",
     "semantic_hash": ""
   },
   "src/app/frontdesk/summary/page.tsx": {
-    "mtime": 1788719983.5154335,
-    "ast_hash": "ee96efdbbb55080bc9a258bddd9fccbf",
+    "mtime": 1788730751.5289545,
+    "ast_hash": "0266b7ef9d105001337f74d0cf0763f4",
     "semantic_hash": ""
   },
   "src/components/layout/RoleNav.tsx": {
-    "mtime": 1788727424.7898102,
-    "ast_hash": "0d7cff5749710d34a02196860fc46a38",
+    "mtime": 1788732786.4273422,
+    "ast_hash": "62441559a2ca6b758bbd715dc8c85ff3",
     "semantic_hash": ""
   },
   "tests/integration/api/api-routes.test.ts": {
@@ -460,7 +460,7 @@
     "semantic_hash": ""
   },
   "tests/integration/clinical/e2e-workflow.test.ts": {
-    "mtime": 1788720056.3209515,
+    "mtime": 1788732177.7614222,
     "ast_hash": "f9266db1f55158c1e12e2b1e86a4a55a",
     "semantic_hash": ""
   },
@@ -565,13 +565,13 @@
     "semantic_hash": ""
   },
   "src/app/sales/orders/page.tsx": {
-    "mtime": 1788727384.3028758,
-    "ast_hash": "ee02c40d53af8b15e2657a4cb69307f3",
+    "mtime": 1788732671.1463084,
+    "ast_hash": "69f5b62bd68e285be78fbd556c318420",
     "semantic_hash": ""
   },
   "src/app/sales/pos/page.tsx": {
-    "mtime": 1788721517.544503,
-    "ast_hash": "2a51579e573751a2dea8c1b410fd7c0a",
+    "mtime": 1788732635.9027388,
+    "ast_hash": "73c34031f6e82650bb79028a1557167b",
     "semantic_hash": ""
   },
   "src/modules/inventory/code-generator.ts": {
@@ -590,13 +590,13 @@
     "semantic_hash": ""
   },
   "src/modules/sales/repository.ts": {
-    "mtime": 1788721353.7021854,
-    "ast_hash": "3b0cbdb7fa76361fa799f38d725d6221",
+    "mtime": 1788730307.5091176,
+    "ast_hash": "a406353ec5fda7cd759d795576795693",
     "semantic_hash": ""
   },
   "src/modules/sales/service.ts": {
-    "mtime": 1788721366.2060711,
-    "ast_hash": "3a647c80b6b9e777d3d0df1f2c680266",
+    "mtime": 1788732885.394677,
+    "ast_hash": "ce2672232c38ad40d1c2027f9bc19dec",
     "semantic_hash": ""
   },
   "src/modules/sales/state-machine.ts": {
@@ -635,8 +635,8 @@
     "semantic_hash": ""
   },
   "tests/unit/sales/payments.test.ts": {
-    "mtime": 1788721248.944079,
-    "ast_hash": "7d014aa678fb42e380b5ef1bf221d79a",
+    "mtime": 1788731270.8603678,
+    "ast_hash": "c1790465c206fc4310a8199852d7472a",
     "semantic_hash": ""
   },
   "prisma/migrations/20260906130000_add_inventory_sales/migration.sql": {
@@ -650,8 +650,8 @@
     "semantic_hash": ""
   },
   "src/modules/clinical/prisma-service.ts": {
-    "mtime": 1788723402.1258955,
-    "ast_hash": "9784d196cc299a7c2f6ecd78ba361179",
+    "mtime": 1788730379.0612051,
+    "ast_hash": "06f9c649a95e1de7a7b064f9adc03aa1",
     "semantic_hash": ""
   },
   "tests/integration/auth/request-context.test.ts": {
@@ -705,8 +705,8 @@
     "semantic_hash": ""
   },
   "src/app/laboratory/kanban/page.tsx": {
-    "mtime": 1788724558.2642431,
-    "ast_hash": "909a34d3bd067e621d11c0ecd25ae3a5",
+    "mtime": 1788732715.3253474,
+    "ast_hash": "ac51f969be880c5c73077ef2c51e60d1",
     "semantic_hash": ""
   },
   "src/app/laboratory/orders/[id]/slip/page.tsx": {
@@ -755,8 +755,8 @@
     "semantic_hash": ""
   },
   "src/modules/sales/prisma-service.ts": {
-    "mtime": 1788724364.7827225,
-    "ast_hash": "5ab0c1780f9edd3f27baf0e1fce521be",
+    "mtime": 1788732760.8381743,
+    "ast_hash": "0ae0e2fb73e084830c7587e768e36f6a",
     "semantic_hash": ""
   },
   "tests/integration/api/laboratory-routes.test.ts": {
@@ -1022,6 +1022,51 @@
   "specs/005-facturacion-cfdi/tasks.md": {
     "mtime": 1788726834.6316977,
     "ast_hash": "7da29cf91cfa3c2e7c2612373ecfbb24",
+    "semantic_hash": ""
+  },
+  "prisma/migrations/20260906170000_add_clinical_handoff_details/migration.sql": {
+    "mtime": 1788730307.5008924,
+    "ast_hash": "383e2059ce83ce831ab91f0741dd0329",
+    "semantic_hash": ""
+  },
+  "src/app/api/frontdesk/queue/route.ts": {
+    "mtime": 1788732112.880831,
+    "ast_hash": "d07a46925b5f379be4b81a8af71bb5d2",
+    "semantic_hash": ""
+  },
+  "src/app/consultations/page.tsx": {
+    "mtime": 1788732049.8484547,
+    "ast_hash": "858183ac3c6d4ec044261c2ed783e6cb",
+    "semantic_hash": ""
+  },
+  "tests/integration/clinical/reception-handoff.test.ts": {
+    "mtime": 1788731270.8603678,
+    "ast_hash": "f0858634f070f655ed09f34a3756daaa",
+    "semantic_hash": ""
+  },
+  "PRODUCT.md": {
+    "mtime": 1788730307.497182,
+    "ast_hash": "3cb75c9d1ecca197115826e8fa07dc7c",
+    "semantic_hash": ""
+  },
+  "src/app/api/patients/[id]/route.ts": {
+    "mtime": 1788732901.3871653,
+    "ast_hash": "8b730ff4a5df6a20b2f7f409812253c5",
+    "semantic_hash": ""
+  },
+  "src/app/api/sales/orders/[id]/deliver/route.ts": {
+    "mtime": 1788732774.2621,
+    "ast_hash": "db0c3bc9711b55147207a49f812134f5",
+    "semantic_hash": ""
+  },
+  "src/app/patients/[id]/page.tsx": {
+    "mtime": 1788732538.9726222,
+    "ast_hash": "32740e2fcafdb64c3ce6972ef37a6ff8",
+    "semantic_hash": ""
+  },
+  "tests/integration/api/patients-detail-and-delivery.test.ts": {
+    "mtime": 1788732820.5187328,
+    "ast_hash": "96dd32a7609819a7f32f81cc301f40bb",
     "semantic_hash": ""
   }
 }

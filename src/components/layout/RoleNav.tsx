@@ -1,25 +1,45 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
+import { useEffect, useState, useRef } from 'react';
+import type { FormEvent } from 'react';
 
 export const ROLES = [
-  { id: 'clinical:optometrist', label: 'Optometrista (Gabinete)' },
-  { id: 'frontdesk:receptionist', label: 'Secretaría (Mostrador)' },
-  { id: 'laboratory:technician', label: 'Técnico de Taller / Montador' },
-  { id: 'inventory:manager', label: 'Encargado de Inventario' },
-  { id: 'clinical:assistant', label: 'Asistente' },
-  { id: 'admin', label: 'Administrador' },
+  { id: 'clinical:optometrist', label: 'Optometrista', initials: 'OP' },
+  { id: 'frontdesk:receptionist', label: 'Mostrador / Recepción', initials: 'MO' },
+  { id: 'laboratory:technician', label: 'Técnico de Taller', initials: 'TL' },
+  { id: 'inventory:manager', label: 'Inventario', initials: 'IN' },
+  { id: 'clinical:assistant', label: 'Asistente Clínico', initials: 'AS' },
+  { id: 'admin', label: 'Administrador', initials: 'AD' },
 ] as const;
 
 export function RoleNav() {
   const pathname = usePathname();
+  const router = useRouter();
   const [activeRole, setActiveRole] = useState('clinical:optometrist');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [moreMenuOpen, setMoreMenuOpen] = useState(false);
+  const [profileMenuOpen, setProfileMenuOpen] = useState(false);
+
+  const moreRef = useRef<HTMLLIElement>(null);
+  const profileRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const saved = localStorage.getItem('demo-role');
     if (saved) setActiveRole(saved);
+
+    function handleClickOutside(event: MouseEvent) {
+      if (moreRef.current && !moreRef.current.contains(event.target as Node)) {
+        setMoreMenuOpen(false);
+      }
+      if (profileRef.current && !profileRef.current.contains(event.target as Node)) {
+        setProfileMenuOpen(false);
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   function handleRoleChange(newRole: string) {
@@ -28,122 +48,222 @@ export function RoleNav() {
     window.dispatchEvent(new Event('role-change'));
   }
 
+  function handleGlobalSearch(e: FormEvent) {
+    e.preventDefault();
+    const q = searchQuery.trim();
+    if (!q) return;
+
+    if (/^vta-/i.test(q)) {
+      router.push(`/sales/orders`);
+    } else {
+      router.push(`/patients/search?query=${encodeURIComponent(q)}`);
+    }
+  }
+
+  const currentRoleObj = ROLES.find((r) => r.id === activeRole) || ROLES[0];
+
+  const isMoreActive =
+    pathname?.startsWith('/consultations') ||
+    pathname?.startsWith('/inventory') ||
+    pathname?.startsWith('/laboratory') ||
+    pathname?.startsWith('/cash') ||
+    pathname?.startsWith('/billing') ||
+    pathname?.startsWith('/frontdesk');
+
   return (
     <nav className="site-nav" aria-label="Navegación principal">
       <div className="nav-container">
-        <div className="brand">
-          <Link href="/" className="logo">
-            ÓPTICA <span>CRM</span>
+        {/* Izquierda: Marca y Navegación principal */}
+        <div className="nav-left">
+          <Link href="/" className="brand">
+            <div className="brand-icon">👓</div>
+            <div>
+              <span className="logo">
+                ÓPTICA <span>CRM</span>
+              </span>
+            </div>
+            <span className="branch-badge">Matriz</span>
           </Link>
-          <span className="spec-tag">SPEC-001..005</span>
+
+          <ul className="nav-links">
+            <li>
+              <Link href="/" className={`nav-link ${pathname === '/' ? 'active' : ''}`}>
+                Inicio
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/patients/search"
+                className={`nav-link ${pathname?.startsWith('/patients') ? 'active' : ''}`}
+              >
+                Pacientes
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/sales/pos"
+                className={`nav-link ${pathname === '/sales/pos' ? 'active' : ''}`}
+              >
+                Ventas
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/sales/orders"
+                className={`nav-link ${pathname === '/sales/orders' ? 'active' : ''}`}
+              >
+                Pedidos
+              </Link>
+            </li>
+
+            {/* Menú Más */}
+            <li className="nav-dropdown" ref={moreRef}>
+              <button
+                type="button"
+                className={`nav-link ${isMoreActive ? 'active' : ''}`}
+                onClick={() => setMoreMenuOpen(!moreMenuOpen)}
+                aria-expanded={moreMenuOpen}
+                style={{ background: isMoreActive ? 'var(--accent-light)' : 'transparent', border: 0, cursor: 'pointer' }}
+              >
+                Más ▾
+              </button>
+
+              {moreMenuOpen && (
+                <div className="dropdown-menu">
+                  <Link
+                    href="/consultations"
+                    className="dropdown-item"
+                    onClick={() => setMoreMenuOpen(false)}
+                  >
+                    <span>🔬</span> Gabinete / Consultas
+                  </Link>
+                  <Link
+                    href="/frontdesk/summary"
+                    className="dropdown-item"
+                    onClick={() => setMoreMenuOpen(false)}
+                  >
+                    <span>📋</span> Mostrador Clínico
+                  </Link>
+                  <Link
+                    href="/inventory/products"
+                    className="dropdown-item"
+                    onClick={() => setMoreMenuOpen(false)}
+                  >
+                    <span>📦</span> Inventario & Stock
+                  </Link>
+                  <Link
+                    href="/inventory/intake"
+                    className="dropdown-item"
+                    onClick={() => setMoreMenuOpen(false)}
+                  >
+                    <span>🏷️</span> Alta Rápida de Lote
+                  </Link>
+                  <Link
+                    href="/laboratory/kanban"
+                    className="dropdown-item"
+                    onClick={() => setMoreMenuOpen(false)}
+                  >
+                    <span>⚙️</span> Taller de Biselado
+                  </Link>
+                  <div className="dropdown-divider" />
+                  <Link
+                    href="/cash/shift"
+                    className="dropdown-item"
+                    onClick={() => setMoreMenuOpen(false)}
+                  >
+                    <span>💵</span> Caja & Turnos
+                  </Link>
+                  <Link
+                    href="/billing/invoices"
+                    className="dropdown-item"
+                    onClick={() => setMoreMenuOpen(false)}
+                  >
+                    <span>🧾</span> Facturación SAT
+                  </Link>
+                </div>
+              )}
+            </li>
+          </ul>
         </div>
 
-        <ul className="nav-links">
-          <li>
-            <Link href="/" className={pathname === '/' ? 'active' : ''}>
-              Inicio
-            </Link>
-          </li>
-          <li>
-            <Link href="/patients/new" className={pathname === '/patients/new' ? 'active' : ''}>
-              Nuevo Paciente
-            </Link>
-          </li>
-          <li>
-            <Link href="/patients/search" className={pathname === '/patients/search' ? 'active' : ''}>
-              Buscar
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/frontdesk/summary"
-              className={pathname?.startsWith('/frontdesk') ? 'active' : ''}
-            >
-              Mostrador
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/sales/pos"
-              className={pathname === '/sales/pos' ? 'active' : ''}
-            >
-              Punto de Venta
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/sales/orders"
-              className={pathname === '/sales/orders' ? 'active' : ''}
-            >
-              Pedidos
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/billing/invoices"
-              className={pathname?.startsWith('/billing') ? 'active' : ''}
-            >
-              Facturas
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/cash/shift"
-              className={pathname?.startsWith('/cash') ? 'active' : ''}
-            >
-              Caja
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/laboratory/kanban"
-              className={pathname?.startsWith('/laboratory') ? 'active' : ''}
-            >
-              Taller
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/inventory/intake"
-              className={pathname === '/inventory/intake' ? 'active' : ''}
-            >
-              Alta Lote
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/inventory/products"
-              className={pathname === '/inventory/products' ? 'active' : ''}
-            >
-              Stock
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/consultations/consultation-001"
-              className={pathname?.startsWith('/consultations') ? 'active' : ''}
-            >
-              Gabinete
-            </Link>
-          </li>
-        </ul>
+        {/* Centro: Buscador Unificado */}
+        <div className="nav-center">
+          <form className="nav-search-form" onSubmit={handleGlobalSearch}>
+            <span className="nav-search-icon">🔍</span>
+            <input
+              type="search"
+              className="nav-search-input"
+              placeholder="Buscar paciente, teléfono o folio..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              aria-label="Buscar expediente o pedido"
+            />
+          </form>
+        </div>
 
-        <div className="role-selector">
-          <label htmlFor="role-select" className="role-label">
-            Rol actual:
-          </label>
-          <select
-            id="role-select"
-            value={activeRole}
-            onChange={(e) => handleRoleChange(e.target.value)}
-            className="role-dropdown"
-          >
-            {ROLES.map((r) => (
-              <option key={r.id} value={r.id}>
-                {r.label}
-              </option>
-            ))}
-          </select>
+        {/* Derecha: Perfil Discreto y Control de Rol */}
+        <div className="nav-right" ref={profileRef}>
+          <div className="nav-dropdown">
+            <button
+              type="button"
+              className="profile-pill"
+              onClick={() => setProfileMenuOpen(!profileMenuOpen)}
+              aria-expanded={profileMenuOpen}
+            >
+              <div className="avatar-badge">{currentRoleObj.initials}</div>
+              <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--ink)' }}>
+                {currentRoleObj.label}
+              </span>
+              <span style={{ fontSize: '11px', color: 'var(--subtle)' }}>▾</span>
+            </button>
+
+            {profileMenuOpen && (
+              <div className="dropdown-menu" style={{ width: '260px' }}>
+                <div style={{ padding: '8px 12px' }}>
+                  <span style={{ display: 'block', fontSize: '11px', color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                    Usuario en Turno
+                  </span>
+                  <strong style={{ fontSize: '14px', color: 'var(--ink)' }}>
+                    Personal Óptica
+                  </strong>
+                  <span style={{ display: 'block', fontSize: '12px', color: 'var(--muted)' }}>
+                    Sucursal PT-001 (Matriz)
+                  </span>
+                </div>
+
+                <div className="dropdown-divider" />
+
+                <div style={{ padding: '8px 12px' }}>
+                  <label htmlFor="role-select" style={{ fontSize: '11px', color: 'var(--muted)', marginBottom: '4px' }}>
+                    CAMBIAR ROL (MODO DEMO):
+                  </label>
+                  <select
+                    id="role-select"
+                    value={activeRole}
+                    onChange={(e) => handleRoleChange(e.target.value)}
+                    style={{ fontSize: '12px', padding: '6px 8px', minHeight: '34px' }}
+                  >
+                    {ROLES.map((r) => (
+                      <option key={r.id} value={r.id}>
+                        {r.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="dropdown-divider" />
+
+                <Link
+                  href="/login"
+                  className="dropdown-item"
+                  onClick={() => setProfileMenuOpen(false)}
+                  style={{ color: 'var(--danger)' }}
+                >
+                  <span>🚪</span> Cerrar sesión
+                </Link>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </nav>

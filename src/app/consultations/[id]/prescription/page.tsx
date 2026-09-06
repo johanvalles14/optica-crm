@@ -23,8 +23,28 @@ export default function IssuePrescriptionPage({
   const [usage, setUsage] = useState<string>('lejos');
   const [observations, setObservations] = useState('');
   const [loading, setLoading] = useState(false);
+  const [consultationVersion, setConsultationVersion] = useState<number | null>(null);
   const [issuedFolio, setIssuedFolio] = useState<string | null>(null);
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    async function loadConsultationVersion() {
+      try {
+        const role = localStorage.getItem('demo-role') || 'clinical:optometrist';
+        const response = await fetch(`/api/consultations/${consultationId}?view=full`, {
+          headers: { 'x-demo-role': role, 'x-actor-id': 'user-opt-001' },
+        });
+        const data = await response.json() as { consultation?: { version?: number }; error?: string };
+        if (!response.ok || !data.consultation?.version) {
+          throw new Error(data.error || 'No se pudo cargar la consulta');
+        }
+        setConsultationVersion(data.consultation.version);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'No se pudo cargar la consulta');
+      }
+    }
+    loadConsultationVersion();
+  }, [consultationId]);
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -42,7 +62,7 @@ export default function IssuePrescriptionPage({
         body: JSON.stringify({
           usage,
           observations: observations || undefined,
-          expectedVersion: 1,
+          expectedVersion: consultationVersion,
         }),
       });
 
@@ -73,14 +93,14 @@ export default function IssuePrescriptionPage({
           </span>
           <h2 style={{ margin: '20px 0 10px' }}>Folio: {issuedFolio}</h2>
           <p className="lede" style={{ margin: '0 auto 24px' }}>
-            La prescripción ha sido sellada y la consulta cerrada. El resumen ya está disponible para el mostrador de ventas.
+            La prescripción ha sido sellada y la consulta cerrada. El expediente completo ya está en la cola automática de recepción para cotizar.
           </p>
           <div className="actions" style={{ justifyContent: 'center' }}>
             <Link href={`/consultations/${consultationId}`} className="button secondary">
               Ver Consulta
             </Link>
             <Link href="/frontdesk/summary" className="button primary">
-              Ir a Mostrador
+              Ver cola de recepción
             </Link>
           </div>
         </section>
@@ -126,8 +146,8 @@ export default function IssuePrescriptionPage({
           </div>
 
           <div className="actions" style={{ marginTop: '16px' }}>
-            <button className="button primary" type="submit" disabled={loading}>
-              {loading ? 'Sellando prescripción...' : 'Emitir y Cerrar Consulta'}
+            <button className="button primary" type="submit" disabled={loading || consultationVersion === null}>
+              {loading ? 'Sellando prescripción...' : consultationVersion === null ? 'Cargando consulta...' : 'Emitir y enviar a recepción'}
             </button>
             <Link href={`/consultations/${consultationId}`} className="button secondary">
               Cancelar

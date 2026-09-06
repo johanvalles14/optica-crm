@@ -11,12 +11,14 @@ import type {
   IssuePrescriptionInput,
   Prescription,
   PrescriptionAmendmentInput,
+  ReceptionQueueEntry,
   Refraction,
   RefractionAmendmentInput,
   RefractionInput,
   ReleaseConsultationInput,
   SafeSummary,
   SetNonClinicalNoteInput,
+  UpdateClinicalDetailsInput,
 } from '../../../contracts/clinical.contract';
 import { prisma } from '../../lib/prisma';
 import { authorize } from '../auth/rbac';
@@ -53,6 +55,8 @@ function mapConsultation(record: {
   closedBy: string | null;
   abandonmentReason: string | null;
   nonClinicalNoteKey: string | null;
+  diagnosis: string | null;
+  clinicalNotes: string | null;
   version: number;
 }): Consultation {
   return {
@@ -66,6 +70,8 @@ function mapConsultation(record: {
     closedBy: record.closedBy ?? undefined,
     abandonmentReason: record.abandonmentReason ?? undefined,
     nonClinicalNoteKey: record.nonClinicalNoteKey as Consultation['nonClinicalNoteKey'],
+    diagnosis: record.diagnosis ?? undefined,
+    clinicalNotes: record.clinicalNotes ?? undefined,
     version: record.version,
   };
 }
@@ -191,9 +197,12 @@ export class PrismaClinicalService {
       },
     });
     if (!record) throw new Error('Consultation not found');
+    const patient = await this.patients.getPatient(record.patientId);
+    if (!patient) throw new Error('Patient not found');
     await this.audit.record({ actorId: actor.actorId, role: actor.role, action: 'read', entity: 'FullConsultation', entityId: id, requestId: actor.requestId });
     return {
       consultation: mapConsultation(record),
+      patient,
       refractions: record.refractions.map(mapRefraction),
       prescription: record.prescriptions[0] ? mapPrescription(record.prescriptions[0]) : undefined,
     };
@@ -254,6 +263,48 @@ export class PrismaClinicalService {
       status: record.status,
       usage: record.prescriptions[0]?.usage,
     }));
+  }
+
+  async listReceptionQueue(actor: ActorContext): Promise<ReceptionQueueEntry[]> {
+    if (!authorize(actor.role, 'listConsultations', 'SafeSummary')) throw new Error('Permission denied');
+    const records = await prisma.consultation.findMany({
+      where: {
+        status: 'closed',
+        prescriptions: {
+          some: {
+            isAmendment: false,
+            saleOrders: { none: { status: { not: 'cancelled' } } },
+          },
+        },
+      },
+      include: {
+        refractions: { orderBy: { createdAt: 'asc' } },
+        prescriptions: {
+          where: {
+            isAmendment: false,
+            saleOrders: { none: { status: { not: 'cancelled' } } },
+          },
+          orderBy: { issuedAt: 'desc' },
+          take: 1,
+        },
+      },
+      orderBy: { closedAt: 'desc' },
+      take: 50,
+    });
+
+    const entries = await Promise.all(records.map(async (record) => {
+      const prescription = record.prescriptions[0];
+      const patient = await this.patients.getPatient(record.patientId);
+      if (!prescription || !patient) return undefined;
+      return {
+        consultation: mapConsultation(record),
+        patient,
+        refractions: record.refractions.map(mapRefraction),
+        prescription: mapPrescription(prescription),
+      } satisfies ReceptionQueueEntry;
+    }));
+
+    return entries.filter((entry): entry is ReceptionQueueEntry => entry !== undefined);
   }
 
   async addRefraction(input: RefractionInput, actor: ActorContext): Promise<Refraction> {
@@ -327,6 +378,50 @@ export class PrismaClinicalService {
     const record = await prisma.consultation.findUniqueOrThrow({ where: { id: input.consultationId } });
     const consultation = mapConsultation(record);
     await this.audit.record({ actorId: actor.actorId, role: actor.role, action: 'update', entity: 'Consultation', entityId: consultation.id, requestId: actor.requestId, metadata: { noteKey: input.noteKey } });
+    return consultation;
+  }
+
+  async updateClinicalDetails(
+    input: UpdateClinicalDetailsInput,
+    actor: ActorContext
+  ): Promise<Consultation> {
+    if (!authorize(actor.role, 'updateClinicalDetails', 'Consultation')) {
+      throw new Error('Permission denied');
+    }
+
+    const diagnosis = input.diagnosis?.trim();
+    const clinicalNotes = input.clinicalNotes?.trim();
+    if (diagnosis && diagnosis.length > 2000) throw new Error('Diagnosis exceeds 2000 characters');
+    if (clinicalNotes && clinicalNotes.length > 4000) throw new Error('Clinical notes exceed 4000 characters');
+
+    const result = await prisma.consultation.updateMany({
+      where: {
+        id: input.consultationId,
+        status: 'in_progress',
+        version: input.expectedVersion,
+      },
+      data: {
+        ...(input.diagnosis !== undefined && { diagnosis: diagnosis || null }),
+        ...(input.clinicalNotes !== undefined && { clinicalNotes: clinicalNotes || null }),
+        version: { increment: 1 },
+      },
+    });
+    if (result.count !== 1) throw new Error('Stale version: expectedVersion does not match');
+
+    const record = await prisma.consultation.findUniqueOrThrow({ where: { id: input.consultationId } });
+    const consultation = mapConsultation(record);
+    await this.audit.record({
+      actorId: actor.actorId,
+      role: actor.role,
+      action: 'update',
+      entity: 'Consultation',
+      entityId: consultation.id,
+      requestId: actor.requestId,
+      metadata: {
+        hasDiagnosis: Boolean(consultation.diagnosis),
+        hasClinicalNotes: Boolean(consultation.clinicalNotes),
+      },
+    });
     return consultation;
   }
 

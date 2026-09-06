@@ -32,7 +32,13 @@ export async function GET(request: Request, context: RouteContext) {
 export async function PATCH(request: Request, context: RouteContext) {
   try {
     const { id } = await context.params;
-    const body = await request.json() as { action?: string; reason?: string; expectedVersion?: number };
+    const body = await request.json() as {
+      action?: string;
+      reason?: string;
+      diagnosis?: string;
+      clinicalNotes?: string;
+      expectedVersion?: number;
+    };
     const actor = actorFromRequest(request);
     const service = isUuid(id) ? prismaClinicalService : clinicalService;
     if (body.action === 'release') {
@@ -46,6 +52,14 @@ export async function PATCH(request: Request, context: RouteContext) {
       return NextResponse.json(await service.abandon({
         consultationId: id,
         reason: String(body.reason ?? ''),
+        expectedVersion: Number(body.expectedVersion),
+      }, actor));
+    }
+    if (body.action === 'clinical_details') {
+      return NextResponse.json(await service.updateClinicalDetails({
+        consultationId: id,
+        diagnosis: body.diagnosis,
+        clinicalNotes: body.clinicalNotes,
         expectedVersion: Number(body.expectedVersion),
       }, actor));
     }
