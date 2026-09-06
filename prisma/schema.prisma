@@ -1,0 +1,442 @@
+// Schema físico inicial de SPEC-001.
+// Las restricciones parciales de PostgreSQL se agregan en la migración inicial.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Sex {
+  male
+  female
+  other
+  not_specified
+}
+
+enum PatientStatus {
+  active
+  inactive_for_contact
+}
+
+enum ConsultationStatus {
+  in_progress
+  closed
+  abandoned
+}
+
+enum Eye {
+  OD
+  OI
+}
+
+enum LensUsage {
+  lejos
+  cerca
+  bifocal
+  progresivo
+  contacto
+}
+
+enum AuditAction {
+  create
+  read
+  update
+  amend
+  delete_attempt
+  ACCESS_DENIED
+  LOGIN
+  LOGOUT
+  SESSION_INVALIDATED
+}
+
+model User {
+  id                     String         @id @default(uuid()) @db.Uuid
+  displayName            String         @db.VarChar(160)
+  email                  String         @db.VarChar(320)
+  role                   String         @db.VarChar(64)
+  createdPatients        Patient[]      @relation("PatientCreatedBy")
+  updatedPatients        Patient[]      @relation("PatientUpdatedBy")
+  privacyNotices         PrivacyNotice[] @relation("PrivacyNoticeCreatedBy")
+  consents               Consent[]      @relation("ConsentGrantedBy")
+  openedConsultations    Consultation[] @relation("ConsultationOpenedBy")
+  closedConsultations    Consultation[] @relation("ConsultationClosedBy")
+  prescriptions          Prescription[] @relation("PrescriptionIssuedBy")
+  refractions            Refraction[]   @relation("RefractionCreatedBy")
+  auditLogs              AuditLog[]     @relation("AuditActor")
+  inventoryMovements     InventoryMovement[] @relation("MovementActor")
+  receivedPayments       Payment[]      @relation("PaymentReceivedBy")
+
+  @@index([role])
+  @@map("users")
+}
+
+model Branch {
+  id                       String         @id @default(uuid()) @db.Uuid
+  code                     String         @unique @db.VarChar(8)
+  name                     String         @db.VarChar(160)
+  nextPatientSequence      Int            @default(1)
+  nextPrescriptionSequence Int            @default(1)
+  nextProductSequence      Int            @default(1)
+  nextSaleSequence         Int            @default(1)
+  patients                 Patient[]
+  consultations            Consultation[]
+  prescriptions            Prescription[]
+  products                 Product[]
+  inventoryMovements       InventoryMovement[]
+  saleOrders               SaleOrder[]
+
+  @@map("branches")
+}
+
+model Patient {
+  id                String        @id @default(uuid()) @db.Uuid
+  folio             String        @unique @db.VarChar(8)
+  branchId          String        @db.Uuid
+  firstName         String        @db.VarChar(120)
+  lastName          String        @db.VarChar(120)
+  middleName        String?       @db.VarChar(120)
+  birthDate         DateTime      @db.Date
+  sex               Sex
+  phone             String        @db.VarChar(32)
+  email             String?       @db.VarChar(320)
+  address           String?       @db.VarChar(500)
+  allergies         String?
+  conditions        String?
+  emergencyContact  Json?
+  isContactAllowed  Boolean       @default(true)
+  status            PatientStatus @default(active)
+  version           Int           @default(1)
+  createdBy         String        @db.Uuid
+  updatedBy         String        @db.Uuid
+  createdAt         DateTime      @default(now()) @db.Timestamptz(3)
+  updatedAt         DateTime      @updatedAt @db.Timestamptz(3)
+  branch            Branch        @relation(fields: [branchId], references: [id])
+  creator           User          @relation("PatientCreatedBy", fields: [createdBy], references: [id])
+  updater           User          @relation("PatientUpdatedBy", fields: [updatedBy], references: [id])
+  consents          Consent[]
+  consultations     Consultation[]
+  prescriptions     Prescription[]
+  saleOrders        SaleOrder[]
+
+  @@index([lastName, firstName])
+  @@index([phone])
+  @@index([branchId])
+  @@map("patients")
+}
+
+model PrivacyNotice {
+  id             String    @id @default(uuid()) @db.Uuid
+  version        String    @unique @db.VarChar(32)
+  contentHash    String    @db.VarChar(128)
+  effectiveDate  DateTime  @db.Timestamptz(3)
+  createdBy      String    @db.Uuid
+  createdAt      DateTime  @default(now()) @db.Timestamptz(3)
+  creator        User      @relation("PrivacyNoticeCreatedBy", fields: [createdBy], references: [id])
+  consents       Consent[]
+
+  @@index([effectiveDate])
+  @@map("privacy_notices")
+}
+
+model Consent {
+  id          String        @id @default(uuid()) @db.Uuid
+  patientId   String        @db.Uuid
+  noticeId    String        @db.Uuid
+  grantedAt   DateTime      @default(now()) @db.Timestamptz(3)
+  grantedBy   String        @db.Uuid
+  source      String        @db.VarChar(255)
+  revokedAt   DateTime?     @db.Timestamptz(3)
+  patient     Patient       @relation(fields: [patientId], references: [id])
+  notice      PrivacyNotice @relation(fields: [noticeId], references: [id])
+  granter     User          @relation("ConsentGrantedBy", fields: [grantedBy], references: [id])
+
+  @@index([patientId, grantedAt])
+  @@index([noticeId])
+  // PostgreSQL migration: UNIQUE(patientId) WHERE revokedAt IS NULL.
+  @@map("consents")
+}
+
+model Consultation {
+  id                 String             @id @default(uuid()) @db.Uuid
+  patientId          String             @db.Uuid
+  branchId           String             @db.Uuid
+  status             ConsultationStatus @default(in_progress)
+  openedAt           DateTime           @default(now()) @db.Timestamptz(3)
+  openedBy           String             @db.Uuid
+  closedAt           DateTime?          @db.Timestamptz(3)
+  closedBy           String?            @db.Uuid
+  abandonmentReason  String?
+  nonClinicalNoteKey String?            @db.VarChar(64)
+  version            Int                @default(1)
+  createdAt          DateTime           @default(now()) @db.Timestamptz(3)
+  updatedAt          DateTime           @updatedAt @db.Timestamptz(3)
+  patient            Patient            @relation(fields: [patientId], references: [id])
+  branch             Branch             @relation(fields: [branchId], references: [id])
+  opener             User               @relation("ConsultationOpenedBy", fields: [openedBy], references: [id])
+  closer             User?              @relation("ConsultationClosedBy", fields: [closedBy], references: [id])
+  nonClinicalNote    NonClinicalNote?   @relation(fields: [nonClinicalNoteKey], references: [key])
+  refractions        Refraction[]
+  prescriptions      Prescription[]
+
+  @@index([patientId, status])
+  @@index([branchId, openedAt])
+  // PostgreSQL migration: UNIQUE(patientId) WHERE status = 'in_progress'.
+  @@map("consultations")
+}
+
+model Refraction {
+  id                 String      @id @default(uuid()) @db.Uuid
+  consultationId     String      @db.Uuid
+  eye                Eye
+  sphere             Decimal?    @db.Decimal(5, 2)
+  cylinder           Decimal?    @db.Decimal(5, 2)
+  axis               Int?
+  addition           Decimal?    @db.Decimal(5, 2)
+  visualAcuity       String?     @db.VarChar(32)
+  visualAcuityDecimal Decimal?   @db.Decimal(4, 2)
+  pupillaryDistance  Int?
+  isAmendment        Boolean     @default(false)
+  amendedFromId      String?     @db.Uuid
+  amendmentReason    String?
+  createdBy          String      @db.Uuid
+  createdAt          DateTime    @default(now()) @db.Timestamptz(3)
+  consultation       Consultation @relation(fields: [consultationId], references: [id])
+  creator            User        @relation("RefractionCreatedBy", fields: [createdBy], references: [id])
+  amendedFrom        Refraction? @relation("RefractionAmendments", fields: [amendedFromId], references: [id])
+  amendments         Refraction[] @relation("RefractionAmendments")
+
+  @@index([consultationId, eye, createdAt])
+  @@index([amendedFromId])
+  @@map("refractions")
+}
+
+model Prescription {
+  id                   String       @id @default(uuid()) @db.Uuid
+  consultationId       String       @db.Uuid
+  patientId            String       @db.Uuid
+  branchId             String       @db.Uuid
+  folio                String       @unique @db.VarChar(16)
+  issuedAt             DateTime     @default(now()) @db.Timestamptz(3)
+  issuedBy             String       @db.Uuid
+  usage                LensUsage
+  rightEyeSnapshot     Json
+  leftEyeSnapshot      Json
+  snapshotSourceIds    Json
+  snapshotTakenAt      DateTime     @db.Timestamptz(3)
+  observations         String?
+  isAmendment          Boolean      @default(false)
+  amendedFromId        String?      @db.Uuid
+  amendmentReason      String?
+  version              Int          @default(1)
+  consultation         Consultation @relation(fields: [consultationId], references: [id])
+  patient              Patient      @relation(fields: [patientId], references: [id])
+  branch               Branch       @relation(fields: [branchId], references: [id])
+  issuer               User         @relation("PrescriptionIssuedBy", fields: [issuedBy], references: [id])
+  amendedFrom          Prescription? @relation("PrescriptionAmendments", fields: [amendedFromId], references: [id])
+  amendments           Prescription[] @relation("PrescriptionAmendments")
+  saleOrders           SaleOrder[]
+
+  @@index([consultationId, isAmendment])
+  @@index([patientId, issuedAt])
+  @@index([amendedFromId])
+  // PostgreSQL migration: UNIQUE(consultationId) WHERE isAmendment = false.
+  @@map("prescriptions")
+}
+
+model NonClinicalNote {
+  id             String         @id @default(uuid()) @db.Uuid
+  key            String         @unique @db.VarChar(64)
+  label          String         @db.VarChar(255)
+  active         Boolean        @default(true)
+  displayOrder   Int            @default(0)
+  consultations  Consultation[]
+
+  @@index([active, displayOrder])
+  @@map("non_clinical_notes")
+}
+
+model AuditLog {
+  id          String      @id @default(uuid()) @db.Uuid
+  actorId     String      @db.Uuid
+  action      AuditAction
+  entity      String      @db.VarChar(80)
+  entityId    String      @db.VarChar(80)
+  requestId   String      @db.VarChar(128)
+  reason      String?
+  metadata    Json?
+  occurredAt  DateTime    @default(now()) @db.Timestamptz(3)
+  actor       User        @relation("AuditActor", fields: [actorId], references: [id])
+
+  @@index([entity, entityId, occurredAt])
+  @@index([requestId])
+  @@index([actorId, occurredAt])
+  // Application rule: AuditLog is insert-only; no update/delete service exists.
+  @@map("audit_logs")
+}
+
+enum ProductCategory {
+  frame
+  lens_blank
+  contact_lens
+  solution
+  accessory
+  lens_service
+}
+
+enum MovementType {
+  in
+  out
+  adjust
+}
+
+enum MovementReason {
+  intake_batch
+  intake_individual
+  sale
+  sale_cancelled
+  damage_breakage
+  vendor_return
+  warranty
+  physical_count
+  theft_loss
+}
+
+enum OrderStatus {
+  quote
+  pending_deposit
+  confirmed_in_process
+  ready_for_delivery
+  delivered_paid
+  cancelled
+}
+
+enum PaymentMethod {
+  cash
+  card_debit
+  card_credit
+  transfer
+}
+
+enum SaleItemType {
+  frame
+  lens_complete
+  contact_lens
+  accessory
+  service
+}
+
+model Product {
+  id                 String              @id @default(uuid()) @db.Uuid
+  internalCode       String              @unique @db.VarChar(16)
+  vendorBarcode      String?             @db.VarChar(64)
+  category           ProductCategory
+  brand              String?             @db.VarChar(100)
+  model              String?             @db.VarChar(100)
+  color              String?             @db.VarChar(60)
+  description        String?             @db.VarChar(255)
+  retailPrice        Decimal             @db.Decimal(10, 2)
+  costPrice          Decimal?            @db.Decimal(10, 2)
+  stock              Int                 @default(0)
+  minStockAlert      Int                 @default(2)
+  branchId           String              @db.Uuid
+  active             Boolean             @default(true)
+  version            Int                 @default(1)
+  createdAt          DateTime            @default(now()) @db.Timestamptz(3)
+  updatedAt          DateTime            @updatedAt @db.Timestamptz(3)
+  branch             Branch              @relation(fields: [branchId], references: [id])
+  movements          InventoryMovement[]
+  saleOrderItems     SaleOrderItem[]
+
+  @@index([branchId, category])
+  @@index([vendorBarcode])
+  @@index([internalCode])
+  @@map("products")
+}
+
+model InventoryMovement {
+  id             String         @id @default(uuid()) @db.Uuid
+  productId      String         @db.Uuid
+  branchId       String         @db.Uuid
+  movementType   MovementType
+  quantityChange Int
+  previousStock  Int
+  newStock       Int
+  reason         MovementReason
+  notes          String?        @db.VarChar(500)
+  actorId        String         @db.Uuid
+  occurredAt     DateTime       @default(now()) @db.Timestamptz(3)
+  product        Product        @relation(fields: [productId], references: [id])
+  branch         Branch         @relation(fields: [branchId], references: [id])
+  actor          User           @relation("MovementActor", fields: [actorId], references: [id])
+
+  @@index([productId, occurredAt])
+  @@index([branchId, reason])
+  @@map("inventory_movements")
+}
+
+model SaleOrder {
+  id                   String          @id @default(uuid()) @db.Uuid
+  folio                String          @unique @db.VarChar(16)
+  branchId             String          @db.Uuid
+  patientId            String?         @db.Uuid
+  prescriptionId       String?         @db.Uuid
+  status               OrderStatus     @default(quote)
+  subtotal             Decimal         @db.Decimal(10, 2)
+  discount             Decimal         @default(0.00) @db.Decimal(10, 2)
+  total                Decimal         @db.Decimal(10, 2)
+  paidAmount           Decimal         @default(0.00) @db.Decimal(10, 2)
+  balanceDue           Decimal         @db.Decimal(10, 2)
+  promisedDeliveryDate DateTime?       @db.Date
+  deliveredAt          DateTime?       @db.Timestamptz(3)
+  notes                String?         @db.VarChar(500)
+  version              Int             @default(1)
+  createdAt            DateTime        @default(now()) @db.Timestamptz(3)
+  updatedAt            DateTime        @updatedAt @db.Timestamptz(3)
+  branch               Branch          @relation(fields: [branchId], references: [id])
+  patient              Patient?        @relation(fields: [patientId], references: [id])
+  prescription         Prescription?   @relation(fields: [prescriptionId], references: [id])
+  items                SaleOrderItem[]
+  payments             Payment[]
+
+  @@index([branchId, status])
+  @@index([patientId])
+  @@index([folio])
+  @@map("sale_orders")
+}
+
+model SaleOrderItem {
+  id          String       @id @default(uuid()) @db.Uuid
+  saleOrderId String       @db.Uuid
+  productId   String?      @db.Uuid
+  itemType    SaleItemType
+  description String       @db.VarChar(255)
+  lensConfig  Json?
+  quantity    Int          @default(1)
+  unitPrice   Decimal      @db.Decimal(10, 2)
+  totalPrice  Decimal      @db.Decimal(10, 2)
+  saleOrder   SaleOrder    @relation(fields: [saleOrderId], references: [id])
+  product     Product?     @relation(fields: [productId], references: [id])
+
+  @@index([saleOrderId])
+  @@map("sale_order_items")
+}
+
+model Payment {
+  id          String        @id @default(uuid()) @db.Uuid
+  saleOrderId String        @db.Uuid
+  amount      Decimal       @db.Decimal(10, 2)
+  method      PaymentMethod
+  reference   String?       @db.VarChar(64)
+  receivedBy  String        @db.Uuid
+  paidAt      DateTime      @default(now()) @db.Timestamptz(3)
+  saleOrder   SaleOrder     @relation(fields: [saleOrderId], references: [id])
+  receiver    User          @relation("PaymentReceivedBy", fields: [receivedBy], references: [id])
+
+  @@index([saleOrderId])
+  @@index([receivedBy, paidAt])
+  @@map("payments")
+}

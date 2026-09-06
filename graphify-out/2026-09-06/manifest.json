@@ -1,0 +1,532 @@
+{
+  "contracts/auth.contract.ts": {
+    "mtime": 1788496932.8510573,
+    "ast_hash": "a4ac3a1d7391360caef263de58918e79",
+    "semantic_hash": ""
+  },
+  "contracts/clinical.contract.ts": {
+    "mtime": 1788549275.2063758,
+    "ast_hash": "7093ad2ae6309b51c380812065f1e27f",
+    "semantic_hash": ""
+  },
+  "contracts/patients.contract.ts": {
+    "mtime": 1788548198.6253188,
+    "ast_hash": "06d21580ac4ef69ab988ad566ff44a73",
+    "semantic_hash": ""
+  },
+  "package.json": {
+    "mtime": 1788719530.217358,
+    "ast_hash": "ffb0343f82e7d890a0d2fdab2aaf2e71",
+    "semantic_hash": ""
+  },
+  "src/modules/audit/service.ts": {
+    "mtime": 1788552209.6094327,
+    "ast_hash": "2d4b32fcca12a4869f8c7694221b7351",
+    "semantic_hash": ""
+  },
+  "src/modules/audit/types.ts": {
+    "mtime": 1788552185.6671112,
+    "ast_hash": "9dd9601193da141274be6bff7aafd8ae",
+    "semantic_hash": ""
+  },
+  "src/modules/auth/adapter.stub.ts": {
+    "mtime": 1788552233.7416253,
+    "ast_hash": "90456692f82c2eebc8241d08f3762aa9",
+    "semantic_hash": ""
+  },
+  "src/modules/auth/rbac.ts": {
+    "mtime": 1788552736.6799355,
+    "ast_hash": "aae5a8f91bec98fab249f741b448c58c",
+    "semantic_hash": ""
+  },
+  "src/modules/clinical/non-clinical-notes.ts": {
+    "mtime": 1788552430.2457843,
+    "ast_hash": "f63f98d5176fe6c9b63e7a3b6ada6c5f",
+    "semantic_hash": ""
+  },
+  "src/modules/clinical/prescription.service.ts": {
+    "mtime": 1788553155.5724368,
+    "ast_hash": "17ff84abd9c4a7b59d3575359dea0072",
+    "semantic_hash": ""
+  },
+  "src/modules/clinical/refraction.service.ts": {
+    "mtime": 1788552572.0335245,
+    "ast_hash": "4f67c8d5c865087afe2f8c91209f6b16",
+    "semantic_hash": ""
+  },
+  "src/modules/clinical/repository.ts": {
+    "mtime": 1788553077.6525528,
+    "ast_hash": "1e02795877087c13c54a6a7a18a84c00",
+    "semantic_hash": ""
+  },
+  "src/modules/clinical/safe-summary.service.ts": {
+    "mtime": 1788552442.5260544,
+    "ast_hash": "f4ccf20be9c54af82a4c9de121917d88",
+    "semantic_hash": ""
+  },
+  "src/modules/clinical/service.ts": {
+    "mtime": 1788720021.2019079,
+    "ast_hash": "0392666fd13fdc60b5ee9a06df61507f",
+    "semantic_hash": ""
+  },
+  "src/modules/clinical/state-machine.ts": {
+    "mtime": 1788552390.2700775,
+    "ast_hash": "776ab91b7e3fe3cf7fad674747fe19c0",
+    "semantic_hash": ""
+  },
+  "src/modules/clinical/validators.ts": {
+    "mtime": 1788552417.6404283,
+    "ast_hash": "9b9cf8bec36e8e0173633dd5b3bc6f3e",
+    "semantic_hash": ""
+  },
+  "src/modules/patients/consent.service.ts": {
+    "mtime": 1788552340.4034731,
+    "ast_hash": "5c83302c73a2812e794ddfb397dd4b6d",
+    "semantic_hash": ""
+  },
+  "src/modules/patients/folio-generator.ts": {
+    "mtime": 1788552750.2738833,
+    "ast_hash": "8d5e57aefa8a215c319b9837db18ffc2",
+    "semantic_hash": ""
+  },
+  "src/modules/patients/repository.ts": {
+    "mtime": 1788553019.4584198,
+    "ast_hash": "18a9e4f1b92efe97442cb7f06ace5307",
+    "semantic_hash": ""
+  },
+  "src/modules/patients/service.ts": {
+    "mtime": 1788552375.614316,
+    "ast_hash": "f64278455ee895952d631766f8ce4bfb",
+    "semantic_hash": ""
+  },
+  "src/modules/patients/validators.ts": {
+    "mtime": 1788552252.8168392,
+    "ast_hash": "c086c34b07ffd4af6b8c9f3b760dac21",
+    "semantic_hash": ""
+  },
+  "tests/benchmark/search-100k.benchmark.ts": {
+    "mtime": 1788550963.6744428,
+    "ast_hash": "bc72af58be6a3309bdd49c5bcdcd5d8e",
+    "semantic_hash": ""
+  },
+  "tests/fixtures/actors.ts": {
+    "mtime": 1788552907.836617,
+    "ast_hash": "50309f6cc34fafa9d820ff795b3c6047",
+    "semantic_hash": ""
+  },
+  "tests/fixtures/patients.ts": {
+    "mtime": 1788550805.7122898,
+    "ast_hash": "0b531a938cb785dc296648b5fad32ffb",
+    "semantic_hash": ""
+  },
+  "tests/fixtures/privacy-notice.ts": {
+    "mtime": 1788550802.0324285,
+    "ast_hash": "3f335fb8531e1e2255e979f79b42007c",
+    "semantic_hash": ""
+  },
+  "tests/fixtures/refractions.ts": {
+    "mtime": 1788550813.5031612,
+    "ast_hash": "b5831d187f36eaaeb9fcec022074e0d4",
+    "semantic_hash": ""
+  },
+  "tests/fixtures/synthetic-patients.ts": {
+    "mtime": 1788550818.1722772,
+    "ast_hash": "0ecfe5b66acab268f6ef23582fa0e05a",
+    "semantic_hash": ""
+  },
+  "tests/integration/audit/audit-trail.test.ts": {
+    "mtime": 1788550935.5789745,
+    "ast_hash": "4e0d9ce4213e680af1826d6816fa6576",
+    "semantic_hash": ""
+  },
+  "tests/integration/auth/permissions.test.ts": {
+    "mtime": 1788550927.9086442,
+    "ast_hash": "577e9b691098be078a2dcbd2621da352",
+    "semantic_hash": ""
+  },
+  "tests/integration/auth/session-audit.test.ts": {
+    "mtime": 1788550942.2780454,
+    "ast_hash": "70dfd5769b7281b9d37839fdb55d479b",
+    "semantic_hash": ""
+  },
+  "tests/integration/clinical/amendment.test.ts": {
+    "mtime": 1788550911.718382,
+    "ast_hash": "6df134306f20904d4442a2f2702bcd98",
+    "semantic_hash": ""
+  },
+  "tests/integration/clinical/concurrency.test.ts": {
+    "mtime": 1788550884.1894324,
+    "ast_hash": "4a42991a758aedaf605cf9d54bc3c7ef",
+    "semantic_hash": ""
+  },
+  "tests/integration/clinical/consent-gate.test.ts": {
+    "mtime": 1788550918.355709,
+    "ast_hash": "36ebaa9b85afcc2e488fb94a4e4e58d6",
+    "semantic_hash": ""
+  },
+  "tests/integration/clinical/lifecycle.test.ts": {
+    "mtime": 1788550879.8666167,
+    "ast_hash": "b388a04654eee667935642f4be5758ec",
+    "semantic_hash": ""
+  },
+  "tests/integration/clinical/prescription.test.ts": {
+    "mtime": 1788550905.8890934,
+    "ast_hash": "89584984b7d1fec331dd3dd7c1260159",
+    "semantic_hash": ""
+  },
+  "tests/integration/clinical/refraction-od-oi.test.ts": {
+    "mtime": 1788550897.6214204,
+    "ast_hash": "b36d944bb608b9894a4dc26b2be7f0cc",
+    "semantic_hash": ""
+  },
+  "tests/integration/clinical/release-consultation.test.ts": {
+    "mtime": 1788550890.8077679,
+    "ast_hash": "52f821387632277eec68c671bd526a11",
+    "semantic_hash": ""
+  },
+  "tests/unit/auth/rbac.test.ts": {
+    "mtime": 1788550949.1926425,
+    "ast_hash": "89a3b3961abb4ba268ec0bfbd59fa751",
+    "semantic_hash": ""
+  },
+  "tests/unit/bootstrap/smoke.test.ts": {
+    "mtime": 1788550171.942308,
+    "ast_hash": "1039645c2959da22dae599b5a025e903",
+    "semantic_hash": ""
+  },
+  "tests/unit/clinical/refraction-validation.test.ts": {
+    "mtime": 1788550836.2123642,
+    "ast_hash": "ea7b5081eaeae9828d3c59e62e4f8828",
+    "semantic_hash": ""
+  },
+  "tests/unit/clinical/safe-summary.test.ts": {
+    "mtime": 1788550856.2598388,
+    "ast_hash": "4c1e22a6ac109084b452ab1cc6e366de",
+    "semantic_hash": ""
+  },
+  "tests/unit/clinical/state-machine.test.ts": {
+    "mtime": 1788550840.6964028,
+    "ast_hash": "90678ed97b776086c2208f08c015cb4f",
+    "semantic_hash": ""
+  },
+  "tests/unit/patients/consent.test.ts": {
+    "mtime": 1788550845.0831265,
+    "ast_hash": "bc3d673bb5d6c7ed3cfd63157db5735d",
+    "semantic_hash": ""
+  },
+  "tests/unit/patients/folio.test.ts": {
+    "mtime": 1788550829.5490482,
+    "ast_hash": "02d900161862a817d5f27612d5d76f8e",
+    "semantic_hash": ""
+  },
+  "tests/unit/patients/search.test.ts": {
+    "mtime": 1788550862.1448903,
+    "ast_hash": "22eaf8ab8ff49b964b50f66e46a2938c",
+    "semantic_hash": ""
+  },
+  "tsconfig.json": {
+    "mtime": 1788568522.9592094,
+    "ast_hash": "575245b5b6a1a3ba406f31c855b16545",
+    "semantic_hash": ""
+  },
+  "vitest.config.ts": {
+    "mtime": 1788550970.7051854,
+    "ast_hash": "acfd64a6c880001cbd4201f5fc55de89",
+    "semantic_hash": ""
+  },
+  "constitution.md": {
+    "mtime": 1788493145.5581686,
+    "ast_hash": "5003e24f7bdb7fe95f4b3a067ac20cdc",
+    "semantic_hash": ""
+  },
+  "contracts/README.md": {
+    "mtime": 1788495871.5214016,
+    "ast_hash": "c938337a0d15302c1ce71642f72aa174",
+    "semantic_hash": ""
+  },
+  "docs/adr/001-stack-decision.md": {
+    "mtime": 1788549847.4031148,
+    "ast_hash": "682f2126696d58f2a704358432b97005",
+    "semantic_hash": ""
+  },
+  "docs/adrs/ADR-001-stack-spec-001.md": {
+    "mtime": 1788562247.1854506,
+    "ast_hash": "dcf4ff87f891ca89648351cb46a4d28c",
+    "semantic_hash": ""
+  },
+  "quickstart.md": {
+    "mtime": 1788720230.3670855,
+    "ast_hash": "c23014135bb1bb554cdbea839ea94e70",
+    "semantic_hash": ""
+  },
+  "research.md": {
+    "mtime": 1788549327.1896124,
+    "ast_hash": "36107deab1c06360877b2912e36110f9",
+    "semantic_hash": ""
+  },
+  "specs/001-pacientes-consultas/checklists/requirements.md": {
+    "mtime": 1788720181.473576,
+    "ast_hash": "24c0948ce1f6b059a87388406e6d1926",
+    "semantic_hash": ""
+  },
+  "specs/001-pacientes-consultas/data-model.md": {
+    "mtime": 1788559921.2522345,
+    "ast_hash": "fd291a9d81af53a72f7bfe4ec6ae6ec3",
+    "semantic_hash": ""
+  },
+  "specs/001-pacientes-consultas/plan.md": {
+    "mtime": 1788548743.1122954,
+    "ast_hash": "e3daf28e72ad7d9527a5ff4b9aa1b865",
+    "semantic_hash": ""
+  },
+  "specs/001-pacientes-consultas/spec.md": {
+    "mtime": 1788720203.2018592,
+    "ast_hash": "a434bdfb013b3269dc80470dd9b89e0f",
+    "semantic_hash": ""
+  },
+  "specs/001-pacientes-consultas/tasks.md": {
+    "mtime": 1788720218.366354,
+    "ast_hash": "16a13ded07216b9eb435e88f9e3d943d",
+    "semantic_hash": ""
+  },
+  "tests/fixtures/README.md": {
+    "mtime": 1788550819.8498888,
+    "ast_hash": "54a22a99d5590cf4a8ce38b410e51f45",
+    "semantic_hash": ""
+  },
+  "prisma/migrations/20260904180000_init_spec_001/migration.sql": {
+    "mtime": 1788718098.1688964,
+    "ast_hash": "68b66d70deb3c80b6e5d689df8b41436",
+    "semantic_hash": ""
+  },
+  "prisma/migrations/20260904180100_spec_001_partial_constraints/migration.sql": {
+    "mtime": 1788563163.3182838,
+    "ast_hash": "77caa9d541d4fc803f11dc2a6b6c7d6d",
+    "semantic_hash": ""
+  },
+  "prisma/seed.ts": {
+    "mtime": 1788563163.3192854,
+    "ast_hash": "54fcbffdf3d4cace27101ca891742fd4",
+    "semantic_hash": ""
+  },
+  "prisma.config.ts": {
+    "mtime": 1788563257.2617362,
+    "ast_hash": "150f73f4f011425aa6cb000282bcce3e",
+    "semantic_hash": ""
+  },
+  "next-env.d.ts": {
+    "mtime": 1788568522.9622083,
+    "ast_hash": "90426577ad8f38459f3e566411c85589",
+    "semantic_hash": ""
+  },
+  "next.config.mjs": {
+    "mtime": 1788719464.471726,
+    "ast_hash": "0607cf6bcb66963a434084f351e59c98",
+    "semantic_hash": ""
+  },
+  "src/app/api/consultations/[id]/route.ts": {
+    "mtime": 1788719656.1371384,
+    "ast_hash": "e5ebc1912b832efc095f9552c8798ee0",
+    "semantic_hash": ""
+  },
+  "src/app/api/consultations/route.ts": {
+    "mtime": 1788568601.0339158,
+    "ast_hash": "178022dc7181fe72e7e0eca564d6dab6",
+    "semantic_hash": ""
+  },
+  "src/app/api/frontdesk/summary/route.ts": {
+    "mtime": 1788568601.036914,
+    "ast_hash": "b5146a974f39ff4920ee9e9b8cd69311",
+    "semantic_hash": ""
+  },
+  "src/app/api/patients/route.ts": {
+    "mtime": 1788718166.7929053,
+    "ast_hash": "e07337a78dccbdfb8fe314dc417b4898",
+    "semantic_hash": ""
+  },
+  "src/app/api/patients/search/route.ts": {
+    "mtime": 1788719724.9108436,
+    "ast_hash": "9ee9c24c06a6ab9747c7dc1e22fcd41f",
+    "semantic_hash": ""
+  },
+  "src/app/layout.tsx": {
+    "mtime": 1788719842.0514963,
+    "ast_hash": "9dbd5f53186aef35e630bfcc194d8e82",
+    "semantic_hash": ""
+  },
+  "src/app/page.tsx": {
+    "mtime": 1788568467.7284775,
+    "ast_hash": "d24b93ea087f90bd694998bacddcf55c",
+    "semantic_hash": ""
+  },
+  "src/app/patients/new/page.tsx": {
+    "mtime": 1788719814.4602122,
+    "ast_hash": "757f37486f9bdf605f4f60f371719c4d",
+    "semantic_hash": ""
+  },
+  "src/app/patients/search/page.tsx": {
+    "mtime": 1788568536.3083465,
+    "ast_hash": "0792baa32c1b6be1d29b7fbef5eb346e",
+    "semantic_hash": ""
+  },
+  "src/lib/prisma.ts": {
+    "mtime": 1788717633.0502434,
+    "ast_hash": "6f66e73c5f1e85da896e83a0446f1bd1",
+    "semantic_hash": ""
+  },
+  "src/lib/request-context.ts": {
+    "mtime": 1788718153.5259056,
+    "ast_hash": "81bc521c7a8761e3f867479b6a34bf98",
+    "semantic_hash": ""
+  },
+  "src/lib/services.ts": {
+    "mtime": 1788718153.5274134,
+    "ast_hash": "a5e15923d0925e56cde9beaf641d342c",
+    "semantic_hash": ""
+  },
+  "src/modules/patients/prisma-repository.ts": {
+    "mtime": 1788720749.6430283,
+    "ast_hash": "b319f88a5d65769e05e66a492275b196",
+    "semantic_hash": ""
+  },
+  "docker-compose.yml": {
+    "mtime": 1788719464.48405,
+    "ast_hash": "8e12f2d63762869be9423927451f6133",
+    "semantic_hash": ""
+  },
+  "ops/backup.ps1": {
+    "mtime": 1788719464.4887774,
+    "ast_hash": "ebf1a0deefb2b4eb0ce22968dc661e7c",
+    "semantic_hash": ""
+  },
+  "ops/restore.ps1": {
+    "mtime": 1788719464.489837,
+    "ast_hash": "1aca28c6788f82d94df0ef1cef68b1b1",
+    "semantic_hash": ""
+  },
+  "src/app/api/consultations/[id]/non-clinical-note/route.ts": {
+    "mtime": 1788719752.8168516,
+    "ast_hash": "c5061cfc1ca3feb460227c8676358aa3",
+    "semantic_hash": ""
+  },
+  "src/app/api/consultations/[id]/prescription/route.ts": {
+    "mtime": 1788719887.1026323,
+    "ast_hash": "0a0680131d017f41e44d4436f19e2cd1",
+    "semantic_hash": ""
+  },
+  "src/app/api/consultations/[id]/refraction/route.ts": {
+    "mtime": 1788719752.8193533,
+    "ast_hash": "4672fa2df27f22247b082fecdeeca273",
+    "semantic_hash": ""
+  },
+  "src/app/api/health/route.ts": {
+    "mtime": 1788719464.4819298,
+    "ast_hash": "3cf8e1864a51365e95c4f9e77c026f47",
+    "semantic_hash": ""
+  },
+  "src/app/api/patients/[folio]/consent/route.ts": {
+    "mtime": 1788719635.6240053,
+    "ast_hash": "b3d36c95ca202a46c7dd5e6e9764e898",
+    "semantic_hash": ""
+  },
+  "src/app/api/privacy-notice/route.ts": {
+    "mtime": 1788719632.1829252,
+    "ast_hash": "55f5606908f46d9415e81c913a28b88a",
+    "semantic_hash": ""
+  },
+  "src/app/consultations/[id]/page.tsx": {
+    "mtime": 1788719789.1282082,
+    "ast_hash": "375afd5adc6c1b7fcddce02e102c6283",
+    "semantic_hash": ""
+  },
+  "src/app/consultations/[id]/prescription/page.tsx": {
+    "mtime": 1788719798.2379544,
+    "ast_hash": "afc8342573cbffca5a0f1e81cb6c9509",
+    "semantic_hash": ""
+  },
+  "src/app/frontdesk/summary/page.tsx": {
+    "mtime": 1788719983.5154335,
+    "ast_hash": "ee96efdbbb55080bc9a258bddd9fccbf",
+    "semantic_hash": ""
+  },
+  "src/components/layout/RoleNav.tsx": {
+    "mtime": 1788719767.4053366,
+    "ast_hash": "6a93b2ab77410d708d057cdc3c202e5c",
+    "semantic_hash": ""
+  },
+  "tests/integration/api/api-routes.test.ts": {
+    "mtime": 1788719750.212787,
+    "ast_hash": "814acf68b981794ddd218bfcaa6856c1",
+    "semantic_hash": ""
+  },
+  "tests/integration/clinical/e2e-workflow.test.ts": {
+    "mtime": 1788720056.3209515,
+    "ast_hash": "f9266db1f55158c1e12e2b1e86a4a55a",
+    "semantic_hash": ""
+  },
+  "deploy/cloud/docker-compose.yml": {
+    "mtime": 1788719464.4861538,
+    "ast_hash": "b7f7bbdf76f14b0aea6d99a6e05c820c",
+    "semantic_hash": ""
+  },
+  "docker-compose.local.yml": {
+    "mtime": 1788720146.1360314,
+    "ast_hash": "3dd2fcdcb593e39e3d5edc7a5b542126",
+    "semantic_hash": ""
+  },
+  "docs/deployment.md": {
+    "mtime": 1788720146.1370313,
+    "ast_hash": "eb212bd2bb2c2803d59aa6fc19c03768",
+    "semantic_hash": ""
+  },
+  "docs/sbom.md": {
+    "mtime": 1788720153.0472155,
+    "ast_hash": "e16eae4ef0f529bcc2a0e9f807ea0d1a",
+    "semantic_hash": ""
+  },
+  "docs/validation/spec-001-usability.md": {
+    "mtime": 1788720158.7751505,
+    "ast_hash": "4be50ab6e0471384e0daa9c0a8871850",
+    "semantic_hash": ""
+  },
+  "specs/001-pacientes-consultas/CHANGELOG.md": {
+    "mtime": 1788720164.8440847,
+    "ast_hash": "b78788801a9849672aa8c6210dc93125",
+    "semantic_hash": ""
+  },
+  "contracts/inventory.contract.ts": {
+    "mtime": 1788720756.8502307,
+    "ast_hash": "f5424209835d3b866b07d222b883f419",
+    "semantic_hash": ""
+  },
+  "contracts/sales.contract.ts": {
+    "mtime": 1788720767.066108,
+    "ast_hash": "2bb297b7d0ec55f4a4d737e6878bdf0f",
+    "semantic_hash": ""
+  },
+  "specs/002-ventas-inventario/checklists/requirements.md": {
+    "mtime": 1788720807.636062,
+    "ast_hash": "2556c76c659fc3021b4bb7723c192990",
+    "semantic_hash": ""
+  },
+  "specs/002-ventas-inventario/data-model.md": {
+    "mtime": 1788720779.9630504,
+    "ast_hash": "b345a07f486688991827df39fd251c21",
+    "semantic_hash": ""
+  },
+  "specs/002-ventas-inventario/plan.md": {
+    "mtime": 1788720790.5128222,
+    "ast_hash": "ffedef13e75d2e483cc3275ab3bf4365",
+    "semantic_hash": ""
+  },
+  "specs/002-ventas-inventario/spec.md": {
+    "mtime": 1788720744.3402846,
+    "ast_hash": "4b1a98343b7a7e0ca12fb36c49e3ce11",
+    "semantic_hash": ""
+  },
+  "specs/002-ventas-inventario/tasks.md": {
+    "mtime": 1788720800.3031952,
+    "ast_hash": "f843ea610d5bf9dd636bec2485193ace",
+    "semantic_hash": ""
+  }
+}
