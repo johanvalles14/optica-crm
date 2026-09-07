@@ -65,6 +65,47 @@ describe('T041 — API Routes & HTTP Contracts de SPEC-001', () => {
     }
   });
 
+  it('rutas de pacientes rechazan roles sin permisos antes de acceder a la base', async () => {
+    const unauthorizedHeaders = { 'x-demo-role': 'laboratory:technician' };
+
+    const searchResponse = await searchPatients(new Request(
+      'http://localhost/api/patients/search?name=Ana',
+      { headers: unauthorizedHeaders }
+    ));
+    expect(searchResponse.status).toBe(403);
+
+    const createResponse = await postPatient(new Request('http://localhost/api/patients', {
+      method: 'POST',
+      headers: { ...unauthorizedHeaders, 'content-type': 'application/json' },
+      body: JSON.stringify({}),
+    }));
+    expect(createResponse.status).toBe(403);
+
+    const updateResponse = await patchPatient(new Request('http://localhost/api/patients', {
+      method: 'PATCH',
+      headers: { ...unauthorizedHeaders, 'content-type': 'application/json' },
+      body: JSON.stringify({}),
+    }));
+    expect(updateResponse.status).toBe(403);
+
+    const consentResponse = await postConsent(new Request(
+      'http://localhost/api/patients/PT000002/consent',
+      {
+        method: 'POST',
+        headers: { ...unauthorizedHeaders, 'content-type': 'application/json' },
+        body: JSON.stringify({ source: 'web' }),
+      }
+    ), { params: Promise.resolve({ folio: 'PT000002' }) });
+    expect(consentResponse.status).toBe(403);
+  });
+
+  it('GET /api/patients/search rechaza consultas vacias', async () => {
+    const response = await searchPatients(new Request('http://localhost/api/patients/search', {
+      headers: { 'x-demo-role': 'frontdesk:receptionist' },
+    }));
+    expect(response.status).toBe(400);
+  });
+
   it('GET /api/consultations/[id] protege datos clínicos ante recepcionista (403 con view=full)', async () => {
     const req = new Request('http://localhost/api/consultations/consultation-001?view=full', {
       headers: { 'x-demo-role': 'frontdesk:receptionist' },

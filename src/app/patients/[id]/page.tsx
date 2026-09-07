@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
+import { Eye, Glasses, Microscope, Package, TriangleAlert } from 'lucide-react';
 
 type PatientData = {
   id: string;
@@ -149,7 +150,7 @@ export default function PatientDetailPage() {
     return (
       <main className="shell narrow">
         <div className="card" style={{ textAlign: 'center', padding: '40px' }}>
-          <span style={{ fontSize: '32px' }}>⚠️</span>
+          <TriangleAlert size={32} aria-hidden="true" style={{ display: 'block', margin: '0 auto' }} />
           <h2>Expediente no localizado</h2>
           <p className="lede">{error || 'El folio o ID ingresado no corresponde a ningún paciente.'}</p>
           <div className="actions" style={{ justifyContent: 'center' }}>
@@ -216,14 +217,14 @@ export default function PatientDetailPage() {
               href={`/sales/pos?patientId=${patient.id}&patientName=${encodeURIComponent(fullName)}`}
               className="button primary"
             >
-              👓 Nueva Venta / Lentes
+              <Glasses size={16} aria-hidden="true" /> Nueva Venta / Lentes
             </Link>
 
             <Link
               href={`/consultations`}
               className="button secondary"
             >
-              🔬 Iniciar Consulta
+              <Microscope size={16} aria-hidden="true" /> Iniciar Consulta
             </Link>
           </div>
         </div>
@@ -234,7 +235,9 @@ export default function PatientDetailPage() {
         {/* Tarjeta de Graduación */}
         <div className="card">
           <div className="card-header">
-            <h3>👁️ Última Graduación Registrada</h3>
+            <h3 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Eye size={18} aria-hidden="true" /> Última Graduación Registrada
+            </h3>
             {latestPrescription && (
               <span className="status-pill process" style={{ fontSize: '11px' }}>
                 Receta {latestPrescription.folio}
@@ -291,7 +294,9 @@ export default function PatientDetailPage() {
         {/* Tarjeta de Pedido en Curso */}
         <div className="card">
           <div className="card-header">
-            <h3>📦 Pedido Óptico en Mostrador</h3>
+            <h3 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Package size={18} aria-hidden="true" /> Pedido Óptico en Mostrador
+            </h3>
             {activeOrder && orderStatusBadge(activeOrder.status)}
           </div>
 

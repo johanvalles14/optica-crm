@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { FileDown, RefreshCw } from 'lucide-react';
 
 type Invoice = {
   id: string;
@@ -98,7 +99,7 @@ export default function InvoicesPage() {
             Ir a Entregas / Mostrador
           </Link>
           <button className="button primary" onClick={loadInvoices} disabled={loading}>
-            {loading ? 'Cargando...' : '🔄 Refrescar'}
+            {loading ? 'Cargando...' : <><RefreshCw size={16} aria-hidden="true" /> Refrescar</>}
           </button>
         </div>
       </header>
@@ -180,7 +181,7 @@ export default function InvoicesPage() {
                   className="button secondary"
                   style={{ padding: '6px 10px', fontSize: '11px' }}
                 >
-                  📥 Descargar XML
+                  <FileDown size={15} aria-hidden="true" /> Descargar XML
                 </a>
 
                 {inv.status === 'issued' && (

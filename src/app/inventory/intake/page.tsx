@@ -4,6 +4,7 @@ import { useState } from 'react';
 import type { FormEvent } from 'react';
 import Link from 'next/link';
 import Barcode from '../../../components/Barcode';
+import { CircleCheck, Printer } from 'lucide-react';
 
 type CreatedProduct = {
   id: string;
@@ -53,7 +54,7 @@ export default function InventoryIntakePage() {
       if (!res.ok) throw new Error(data.error || 'No se pudo generar el lote');
 
       setCreatedBatch(data.products);
-      setMessage(`✓ Se generaron exitosamente ${data.products.length} códigos listos para etiquetar.`);
+      setMessage(`Se generaron exitosamente ${data.products.length} códigos listos para etiquetar.`);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error inesperado');
     } finally {
@@ -81,14 +82,19 @@ export default function InventoryIntakePage() {
           </Link>
           {createdBatch.length > 0 && (
             <button className="button primary" onClick={handlePrint}>
-              🖨 Imprimir Etiquetas ({createdBatch.length})
+              <Printer size={16} aria-hidden="true" /> Imprimir Etiquetas ({createdBatch.length})
             </button>
           )}
         </div>
       </header>
 
       {error && <p className="error" role="alert">{error}</p>}
-      {message && <p className="form-message" role="status">{message}</p>}
+      {message && (
+        <p className="form-message" role="status" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <CircleCheck size={16} aria-hidden="true" />
+          {message}
+        </p>
+      )}
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '28px' }}>
         {/* Formulario de Alta Rápida */}

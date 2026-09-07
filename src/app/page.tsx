@@ -2,6 +2,18 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import {
+  Banknote,
+  FolderOpen,
+  Glasses,
+  Lightbulb,
+  Microscope,
+  Package,
+  ReceiptText,
+  Settings,
+  ShoppingBag,
+  Tags,
+} from 'lucide-react';
 
 export default function HomePage() {
   const [ordersCount, setOrdersCount] = useState<number | null>(null);
@@ -84,7 +96,7 @@ export default function HomePage() {
                   fontSize: '20px',
                 }}
               >
-                🗂️
+                <FolderOpen size={20} aria-hidden="true" />
               </div>
               <div>
                 <h2 style={{ fontSize: '1.25rem', margin: 0 }}>Pacientes</h2>
@@ -131,7 +143,7 @@ export default function HomePage() {
                   fontSize: '20px',
                 }}
               >
-                👓
+                <Glasses size={20} aria-hidden="true" />
               </div>
               <div>
                 <h2 style={{ fontSize: '1.25rem', margin: 0 }}>Nueva Venta</h2>
@@ -175,7 +187,7 @@ export default function HomePage() {
                   fontSize: '20px',
                 }}
               >
-                🛍️
+                <ShoppingBag size={20} aria-hidden="true" />
               </div>
               <div>
                 <h2 style={{ fontSize: '1.25rem', margin: 0 }}>Entregar Pedidos</h2>
@@ -260,7 +272,7 @@ export default function HomePage() {
               className="button secondary"
               style={{ justifyContent: 'flex-start', fontSize: '12px' }}
             >
-              <span>🔬</span> Gabinete Clínico
+              <Microscope size={16} aria-hidden="true" /> Gabinete Clínico
             </Link>
 
             <Link
@@ -268,7 +280,7 @@ export default function HomePage() {
               className="button secondary"
               style={{ justifyContent: 'flex-start', fontSize: '12px' }}
             >
-              <span>⚙️</span> Taller de Biselado
+              <Settings size={16} aria-hidden="true" /> Taller de Biselado
             </Link>
 
             <Link
@@ -276,7 +288,7 @@ export default function HomePage() {
               className="button secondary"
               style={{ justifyContent: 'flex-start', fontSize: '12px' }}
             >
-              <span>📦</span> Catálogo de Armazones
+              <Package size={16} aria-hidden="true" /> Catálogo de Armazones
             </Link>
 
             <Link
@@ -284,7 +296,7 @@ export default function HomePage() {
               className="button secondary"
               style={{ justifyContent: 'flex-start', fontSize: '12px' }}
             >
-              <span>🏷️</span> Alta Rápida de Stock
+              <Tags size={16} aria-hidden="true" /> Alta Rápida de Stock
             </Link>
 
             <Link
@@ -292,7 +304,7 @@ export default function HomePage() {
               className="button secondary"
               style={{ justifyContent: 'flex-start', fontSize: '12px' }}
             >
-              <span>💵</span> Control de Caja
+              <Banknote size={16} aria-hidden="true" /> Control de Caja
             </Link>
 
             <Link
@@ -300,7 +312,7 @@ export default function HomePage() {
               className="button secondary"
               style={{ justifyContent: 'flex-start', fontSize: '12px' }}
             >
-              <span>🧾</span> Facturas Fiscales SAT
+              <ReceiptText size={16} aria-hidden="true" /> Facturas Fiscales SAT
             </Link>
           </div>
         </section>
@@ -308,7 +320,9 @@ export default function HomePage() {
         {/* Guía Rápida para Principiantes */}
         <section className="card" style={{ background: 'var(--card-subtle)' }}>
           <div className="card-header">
-            <h3>💡 Guía Rápida para Mostrador</h3>
+            <h3 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Lightbulb size={18} aria-hidden="true" /> Guía Rápida para Mostrador
+            </h3>
           </div>
 
           <ol style={{ paddingLeft: '20px', margin: 0, fontSize: '13px', lineHeight: '1.6', color: 'var(--ink-secondary)' }}>

@@ -4,6 +4,7 @@ import { Suspense, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import type { FormEvent } from 'react';
+import { Printer, Search } from 'lucide-react';
 
 type Product = {
   id: string;
@@ -349,7 +350,7 @@ function PosContent() {
 
           <div className="actions" style={{ justifyContent: 'center', marginTop: '20px' }}>
             <button className="button primary" onClick={() => window.print()}>
-              🖨️ Imprimir Comprobante
+              <Printer size={16} aria-hidden="true" /> Imprimir Comprobante
             </button>
             <Link href="/sales/orders" className="button secondary">
               Ver en Pedidos
@@ -429,7 +430,7 @@ function PosContent() {
 
                     <div style={{ display: 'flex', gap: '10px', marginTop: '16px' }}>
                       <Link href="/patients/search" className="button secondary" style={{ fontSize: '12px' }}>
-                        🔍 Buscar en Directorio
+                        <Search size={15} aria-hidden="true" /> Buscar en Directorio
                       </Link>
                       <Link href="/patients/new" className="button secondary" style={{ fontSize: '12px' }}>
                         + Registrar Paciente Nuevo

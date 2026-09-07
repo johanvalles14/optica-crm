@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import type { FormEvent } from 'react';
 import Link from 'next/link';
+import { Circle, CircleCheck } from 'lucide-react';
 
 type Shift = {
   id: string;
@@ -73,7 +74,7 @@ export default function CashShiftPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'No se pudo abrir el turno');
 
-      setMessage('✓ Turno de caja abierto exitosamente con fondo inicial.');
+      setMessage('Turno de caja abierto exitosamente con fondo inicial.');
       setShift(data.shift);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error al abrir turno');
@@ -106,7 +107,7 @@ export default function CashShiftPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'No se pudo registrar gasto');
 
-      setMessage(`✓ Gasto menor de $${expenseAmount} MXN registrado correctamente.`);
+      setMessage(`Gasto menor de $${expenseAmount} MXN registrado correctamente.`);
       setExpenseAmount('');
       setExpenseDesc('');
       setExpenseReceipt('');
@@ -141,7 +142,12 @@ export default function CashShiftPage() {
       </header>
 
       {error && <p className="error" role="alert">{error}</p>}
-      {message && <p className="form-message" role="status">{message}</p>}
+      {message && (
+        <p className="form-message" role="status" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <CircleCheck size={16} aria-hidden="true" />
+          {message}
+        </p>
+      )}
 
       {!shift ? (
         /* Formulario para Abrir Turno */
@@ -176,7 +182,7 @@ export default function CashShiftPage() {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <h2>Estado del Turno Actual</h2>
               <span className="status-pill" style={{ background: '#eaf5ea', color: '#186a3b', fontWeight: 'bold' }}>
-                🟢 Turno Abierto
+                <Circle size={10} fill="currentColor" aria-hidden="true" /> Turno Abierto
               </span>
             </div>
 

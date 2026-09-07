@@ -1,13 +1,19 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '../../../../lib/prisma';
 import { patientRepository } from '../../../../modules/patients/repository';
+import { actorFromRequest } from '../../../../lib/request-context';
+import { authorize } from '../../../../modules/auth/rbac';
 
 export async function GET(
   request: Request,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ folio: string }> }
 ) {
   try {
-    const { id } = await params;
+    const actor = actorFromRequest(request);
+    if (!authorize(actor.role, 'read', 'FullConsultation')) {
+      return NextResponse.json({ error: 'No autorizado' }, { status: 403 });
+    }
+    const { folio: id } = await params;
     if (!id) {
       return NextResponse.json({ error: 'ID o Folio de paciente requerido' }, { status: 400 });
     }

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import type { FormEvent } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { CircleCheck } from 'lucide-react';
 
 export default function NewPatientPage() {
   const router = useRouter();
@@ -55,7 +56,7 @@ export default function NewPatientPage() {
       // 2. Registrar consentimiento si marcó la casilla
       const consentGiven = form.get('consent') === 'on';
       if (consentGiven) {
-        await fetch(`/api/patients/${folio}/consent`, {
+        const consentResponse = await fetch(`/api/patients/${folio}/consent`, {
           method: 'POST',
           headers: {
             'content-type': 'application/json',
@@ -63,6 +64,10 @@ export default function NewPatientPage() {
           },
           body: JSON.stringify({ source: 'tablet-alta-mostrador' }),
         });
+        if (!consentResponse.ok) {
+          const consentData = (await consentResponse.json().catch(() => null)) as { error?: string } | null;
+          throw new Error(consentData?.error ?? `El paciente ${folio} se creó, pero no se pudo registrar el consentimiento`);
+        }
       }
 
       // Redirección inmediata a la Ficha Central
@@ -95,10 +100,10 @@ export default function NewPatientPage() {
 
       {createdFolio ? (
         <div className="card" style={{ textAlign: 'center', padding: '36px' }}>
-          <span style={{ fontSize: '36px' }}>✅</span>
-          <h2>¡Paciente Registrado!</h2>
+          <CircleCheck size={36} aria-hidden="true" />
+          <h2>{error ? 'Paciente registrado con una acción pendiente' : '¡Paciente Registrado!'}</h2>
           <p className="lede">Folio asignado: <strong>{createdFolio}</strong></p>
-          <p>Redirigiendo a la ficha central del paciente...</p>
+          <p>{error ? 'El expediente ya existe; no vuelvas a enviarlo. Revisa el error antes de continuar.' : 'Redirigiendo a la ficha central del paciente...'}</p>
           <div className="actions" style={{ justifyContent: 'center', marginTop: '16px' }}>
             <Link href={`/patients/${createdFolio}`} className="button primary">
               Abrir Ficha Ahora →
@@ -146,7 +151,16 @@ export default function NewPatientPage() {
             <div style={{ marginTop: '14px' }}>
               <label>
                 Teléfono Celular / WhatsApp *
-                <input name="phone" inputMode="tel" required placeholder="10 dígitos (ej. 8711234567)" />
+                <input
+                  name="phone"
+                  inputMode="tel"
+                  required
+                  minLength={10}
+                  maxLength={20}
+                  pattern="[0-9+() .-]{10,20}"
+                  title="Ingresa entre 10 y 15 dígitos; puedes usar espacios, guiones o paréntesis"
+                  placeholder="10 dígitos (ej. 8711234567)"
+                />
               </label>
             </div>
           </div>

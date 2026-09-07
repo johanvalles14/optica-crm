@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import type { FormEvent } from 'react';
 import Link from 'next/link';
+import { CircleCheck, Info, Printer, TriangleAlert } from 'lucide-react';
 
 type ClosedReport = {
   id: string;
@@ -116,10 +117,10 @@ export default function CashClosePage() {
               }}
             >
               {report.cashDifference === 0
-                ? '✓ Turno Cuadrado al Centavo'
+                ? <><CircleCheck size={16} aria-hidden="true" /> Turno Cuadrado al Centavo</>
                 : report.cashDifference < 0
-                ? `⚠️ Faltante en Caja de -$${Math.abs(report.cashDifference)} MXN`
-                : `ℹ️ Sobrante en Caja de +$${report.cashDifference} MXN`}
+                ? <><TriangleAlert size={16} aria-hidden="true" /> Faltante en Caja de -${Math.abs(report.cashDifference)} MXN</>
+                : <><Info size={16} aria-hidden="true" /> Sobrante en Caja de +${report.cashDifference} MXN</>}
             </span>
             <h2 style={{ margin: '16px 0 6px' }}>Comprobante de Corte Diario</h2>
             <small style={{ color: 'var(--muted)' }}>Cerrado: {new Date(report.closedAt).toLocaleString()}</small>
@@ -179,7 +180,7 @@ export default function CashClosePage() {
 
           <div className="actions" style={{ justifyContent: 'center', marginTop: '24px' }}>
             <button className="button primary" onClick={() => window.print()}>
-              🖨 Imprimir Corte de Caja
+              <Printer size={16} aria-hidden="true" /> Imprimir Corte de Caja
             </button>
             <Link href="/cash/shift" className="button secondary">
               Listo (Volver a Caja)

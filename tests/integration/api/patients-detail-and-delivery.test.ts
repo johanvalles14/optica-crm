@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { GET as getPatientDetail } from '../../../src/app/api/patients/[id]/route';
+import { GET as getPatientDetail } from '../../../src/app/api/patients/[folio]/route';
 import { POST as postDelivery } from '../../../src/app/api/sales/orders/[id]/deliver/route';
 import { POST as postSaleOrder } from '../../../src/app/api/sales/orders/route';
 
@@ -7,7 +7,7 @@ describe('Rediseño UI & Flujos Esenciales — Endpoints de Detalle y Entrega', 
   it('GET /api/patients/[id] responde con expediente o 404', async () => {
     const req = new Request('http://localhost/api/patients/PT000001');
     const res = await getPatientDetail(req, {
-      params: Promise.resolve({ id: 'PT000001' }),
+      params: Promise.resolve({ folio: 'PT000001' }),
     });
 
     // En memoria o DB, responde con el objeto de paciente o 404 si no existe
@@ -16,6 +16,17 @@ describe('Rediseño UI & Flujos Esenciales — Endpoints de Detalle y Entrega', 
     if (res.status === 200) {
       expect(data.patient).toBeDefined();
     }
+  });
+
+  it('GET /api/patients/[id] no expone el expediente completo a recepcion', async () => {
+    const req = new Request('http://localhost/api/patients/PT000001', {
+      headers: { 'x-demo-role': 'frontdesk:receptionist' },
+    });
+    const res = await getPatientDetail(req, {
+      params: Promise.resolve({ folio: 'PT000001' }),
+    });
+
+    expect(res.status).toBe(403);
   });
 
   it('POST /api/sales/orders/[id]/deliver procesa liquidación y entrega de lentes', async () => {

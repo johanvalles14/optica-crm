@@ -2,6 +2,7 @@
 
 import { useState, useEffect, use } from 'react';
 import Link from 'next/link';
+import { Printer } from 'lucide-react';
 
 type EyeLabData = {
   sphere?: number;
@@ -65,7 +66,7 @@ export default function TraySlipPage({
           ← Volver al Tablero Kanban
         </Link>
         <button className="button primary" onClick={() => window.print()}>
-          🖨 Imprimir Boleta de Charola
+          <Printer size={16} aria-hidden="true" /> Imprimir Boleta de Charola
         </button>
       </div>
 

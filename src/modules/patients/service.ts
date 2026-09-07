@@ -18,7 +18,7 @@ import { AuditService } from '../audit/service';
 import { authorize } from '../auth/rbac';
 import { hasValidConsent } from './consent.service';
 import { patientRepository } from './repository';
-import { validatePatientInput } from './validators';
+import { validatePatientInput, validatePatientUpdate } from './validators';
 
 function toSafePatient(patient: Patient): Patient {
   return {
@@ -90,6 +90,7 @@ export class PatientService implements IPatientService {
     if (!authorize(actor.role, 'update', 'Patient')) {
       throw new Error('Permission denied');
     }
+    validatePatientUpdate(input);
     const patient = patientRepository.updatePatient(
       patientId,
       input,
@@ -153,8 +154,11 @@ export class PatientService implements IPatientService {
 
   async hasValidConsent(
     patientId: PatientId,
-    _actor: ActorContext
+    actor: ActorContext
   ): Promise<boolean> {
+    if (!authorize(actor.role, 'search', 'Patient')) {
+      throw new Error('Permission denied');
+    }
     const notice = patientRepository.getCurrentPrivacyNotice();
     return hasValidConsent(patientId, { currentNoticeId: notice.id });
   }
@@ -163,6 +167,15 @@ export class PatientService implements IPatientService {
     input: ConsentInput,
     actor: ActorContext
   ): Promise<Consent> {
+    if (!authorize(actor.role, 'update', 'Patient')) {
+      throw new Error('Permission denied');
+    }
+    if (!input.source.trim() || input.source.length > 120) {
+      throw new Error('Invalid consent source');
+    }
+    if (input.noticeId !== patientRepository.getCurrentPrivacyNotice().id) {
+      throw new Error('Privacy notice is not current');
+    }
     const consent = patientRepository.recordConsent(input, actor.actorId);
     await this.audit.record({
       actorId: actor.actorId,

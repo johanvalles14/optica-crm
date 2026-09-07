@@ -4,6 +4,18 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState, useRef } from 'react';
 import type { FormEvent } from 'react';
+import {
+  Banknote,
+  ClipboardList,
+  Glasses,
+  LogOut,
+  Microscope,
+  Package,
+  ReceiptText,
+  Search,
+  Settings,
+  Tags,
+} from 'lucide-react';
 
 export const ROLES = [
   { id: 'clinical:optometrist', label: 'Optometrista', initials: 'OP' },
@@ -76,7 +88,9 @@ export function RoleNav() {
         {/* Izquierda: Marca y Navegación principal */}
         <div className="nav-left">
           <Link href="/" className="brand">
-            <div className="brand-icon">👓</div>
+            <div className="brand-icon">
+              <Glasses size={18} aria-hidden="true" />
+            </div>
             <div>
               <span className="logo">
                 ÓPTICA <span>CRM</span>
@@ -135,35 +149,50 @@ export function RoleNav() {
                     className="dropdown-item"
                     onClick={() => setMoreMenuOpen(false)}
                   >
-                    <span>🔬</span> Gabinete / Consultas
+                    <span>
+                      <Microscope size={16} aria-hidden="true" />
+                    </span>
+                    Gabinete / Consultas
                   </Link>
                   <Link
                     href="/frontdesk/summary"
                     className="dropdown-item"
                     onClick={() => setMoreMenuOpen(false)}
                   >
-                    <span>📋</span> Mostrador Clínico
+                    <span>
+                      <ClipboardList size={16} aria-hidden="true" />
+                    </span>
+                    Mostrador Clínico
                   </Link>
                   <Link
                     href="/inventory/products"
                     className="dropdown-item"
                     onClick={() => setMoreMenuOpen(false)}
                   >
-                    <span>📦</span> Inventario & Stock
+                    <span>
+                      <Package size={16} aria-hidden="true" />
+                    </span>
+                    Inventario & Stock
                   </Link>
                   <Link
                     href="/inventory/intake"
                     className="dropdown-item"
                     onClick={() => setMoreMenuOpen(false)}
                   >
-                    <span>🏷️</span> Alta Rápida de Lote
+                    <span>
+                      <Tags size={16} aria-hidden="true" />
+                    </span>
+                    Alta Rápida de Lote
                   </Link>
                   <Link
                     href="/laboratory/kanban"
                     className="dropdown-item"
                     onClick={() => setMoreMenuOpen(false)}
                   >
-                    <span>⚙️</span> Taller de Biselado
+                    <span>
+                      <Settings size={16} aria-hidden="true" />
+                    </span>
+                    Taller de Biselado
                   </Link>
                   <div className="dropdown-divider" />
                   <Link
@@ -171,14 +200,20 @@ export function RoleNav() {
                     className="dropdown-item"
                     onClick={() => setMoreMenuOpen(false)}
                   >
-                    <span>💵</span> Caja & Turnos
+                    <span>
+                      <Banknote size={16} aria-hidden="true" />
+                    </span>
+                    Caja & Turnos
                   </Link>
                   <Link
                     href="/billing/invoices"
                     className="dropdown-item"
                     onClick={() => setMoreMenuOpen(false)}
                   >
-                    <span>🧾</span> Facturación SAT
+                    <span>
+                      <ReceiptText size={16} aria-hidden="true" />
+                    </span>
+                    Facturación SAT
                   </Link>
                 </div>
               )}
@@ -189,7 +224,9 @@ export function RoleNav() {
         {/* Centro: Buscador Unificado */}
         <div className="nav-center">
           <form className="nav-search-form" onSubmit={handleGlobalSearch}>
-            <span className="nav-search-icon">🔍</span>
+            <span className="nav-search-icon">
+              <Search size={16} aria-hidden="true" />
+            </span>
             <input
               type="search"
               className="nav-search-input"
@@ -259,7 +296,7 @@ export function RoleNav() {
                   onClick={() => setProfileMenuOpen(false)}
                   style={{ color: 'var(--danger)' }}
                 >
-                  <span>🚪</span> Cerrar sesión
+                  <span><LogOut size={16} aria-hidden="true" /></span> Cerrar sesión
                 </Link>
               </div>
             )}

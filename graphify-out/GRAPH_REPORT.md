@@ -1,16 +1,16 @@
 # Graph Report - optica-crm  (2026-09-06)
 
 ## Corpus Check
-- 213 files · ~94,461 words
+- 214 files · ~96,131 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1419 nodes · 3176 edges · 103 communities (84 shown, 19 thin omitted)
+- 1432 nodes · 3233 edges · 100 communities (84 shown, 16 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 9 edges (avg confidence: 0.5)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `c33c574a`
+- Built from commit: `d11b5080`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -19,7 +19,7 @@
 - TASKS-002 — Tareas de Implementación de SPEC-002
 - auth.contract.ts
 - SPEC-001 — Pacientes y Consultas Optométricas
-- UserId
+- patients.contract.ts
 - actors.ts
 - Research — Óptica CRM
 - compilerOptions
@@ -42,9 +42,9 @@
 - Contratos de SPEC-001
 - Fase 0 — Gobierno, ADR y decisiones
 - fixtures/README.md
-- cash/prisma-service.ts
+- billing.contract.ts
 - seed.ts
-- services.ts
+- actorFromRequest
 - search/page.tsx
 - next.config.mjs
 - next-env.d.ts
@@ -63,7 +63,7 @@
 - prescription/page.tsx
 - package.json
 - Checklist de Requisitos — SPEC-002 Ventas e Inventario Práctico
-- overrides
+- patients/route.ts
 - pos/page.tsx
 - intake/page.tsx
 - products/page.tsx
@@ -80,12 +80,11 @@
 - slip/page.tsx
 - cash-shift.contract.ts
 - authorize
-- PatientId
-- PrismaCashService
-- clinical/prisma-service.ts
-- IInventoryService
-- billing.contract.ts
+- Consultation
+- cash/prisma-service.ts
 - clinical/state-machine.ts
+- IInventoryService
+- IPatientService
 - Product
 - SPEC-004 — Caja, Arqueos Diarios y Reportes Operativos
 - clinical/service.ts
@@ -101,17 +100,15 @@
 - Checklist de Requisitos — SPEC-005 Facturación Electrónica CFDI 4.0
 - Modelo de Datos — SPEC-005 Facturación Electrónica CFDI 4.0
 - invoices/page.tsx
-- IPatientService
+- cash/service.ts
 - consultations/page.tsx
 - ICashService
-- ISalesService
 - patients/[id]/page.tsx
-- typescript
 
 ## God Nodes (most connected - your core abstractions)
 1. `ActorContext` - 188 edges
-2. `authorize()` - 104 edges
-3. `actorFromRequest()` - 70 edges
+2. `authorize()` - 116 edges
+3. `actorFromRequest()` - 72 edges
 4. `BranchId` - 50 edges
 5. `PatientId` - 35 edges
 6. `UserId` - 33 edges
@@ -135,31 +132,31 @@
 ## Import Cycles
 - None detected.
 
-## Communities (103 total, 19 thin omitted)
+## Communities (100 total, 16 thin omitted)
 
 ### Community 0 - "ActorContext"
-Cohesion: 0.11
-Nodes (4): ActorContext, IBillingService, IClinicalService, ILaboratoryService
+Cohesion: 0.09
+Nodes (5): ActorContext, IBillingService, IClinicalService, ILaboratoryService, ISalesService
 
 ### Community 1 - "TASKS-002 — Tareas de Implementación de SPEC-002"
 Cohesion: 0.07
 Nodes (28): Fase 0 — Gobierno, Contratos y Esquema, Fase 1 — Suite de Pruebas RED (TDD), Fase 2 — Implementación del Dominio de Inventario, Fase 3 — Implementación del Dominio de Ventas (POS), Fase 4 — API Routes HTTP, Fase 5 — Pantallas e Interfaces de Usuario, Fase 6 — Integración, Pruebas y Cierre, T101 — Validar y ratificar contratos `inventory` y `sales` (+20 more)
 
 ### Community 2 - "auth.contract.ts"
-Cohesion: 0.08
-Nodes (21): AuthAction, AuthAuditEntry, IAuthService, RequestId, Role, Session, SessionToken, UserIdentity (+13 more)
+Cohesion: 0.07
+Nodes (24): AuthAction, AuthAuditEntry, IAuthService, RequestId, Role, Session, SessionToken, UserIdentity (+16 more)
 
 ### Community 3 - "SPEC-001 — Pacientes y Consultas Optométricas"
 Cohesion: 0.04
 Nodes (44): 10. Estrategia de pruebas, 11. Criterios de éxito medibles, 12. Supuestos, fuera de alcance y riesgos, 13. Decisiones de reutilización y licencias, 14. Historial de cambios, 1. Resumen ejecutivo, 2. Objetivo y problema, 3. Alcance (+36 more)
 
-### Community 4 - "UserId"
-Cohesion: 0.06
-Nodes (29): UserId, Consent, ConsentInput, Patient, PatientInput, PatientSearchQuery, PatientSearchResult, PrivacyNotice (+21 more)
+### Community 4 - "patients.contract.ts"
+Cohesion: 0.08
+Nodes (27): UserId, OpenConsultationInput, Consent, ConsentId, ConsentInput, EmergencyContact, Patient, PatientId (+19 more)
 
 ### Community 5 - "actors.ts"
-Cohesion: 0.08
-Nodes (26): LensUsage, salesService, CashService, expenses, shifts, admin(), assistant(), extractUserSuffix() (+18 more)
+Cohesion: 0.10
+Nodes (24): LensUsage, admin(), assistant(), extractUserSuffix(), optometrist(), makePatientInput(), additionOutOfRange, axisOutOfRange (+16 more)
 
 ### Community 6 - "Research — Óptica CRM"
 Cohesion: 0.06
@@ -210,8 +207,8 @@ Cohesion: 0.18
 Nodes (11): Fase 3 — Tests RED, T014 — Escribir tests RED para registro de paciente y folio (RF-001, RF-002), T015 — Escribir tests RED para consentimiento, re-consentimiento y `PrivacyNotice` (RF-003), T016 — Escribir tests RED para búsqueda con lista blanca y benchmark 100k unificado (RF-004), T017 — Escribir tests RED para ciclo de vida de consulta (RF-005), T018 — Escribir tests RED para refracción OD/OI y validaciones (RF-006, RF-007), T019 — Escribir tests RED para prescripción, snapshot de refracción y enmiendas (RF-008, RF-011), T020 — Escribir tests RED para resumen seguro y `setNonClinicalNote` (RF-009) (+3 more)
 
 ### Community 18 - "devDependencies"
-Cohesion: 0.10
-Nodes (21): magicast, devDependencies, magicast, prisma, tsx, @types/jsbarcode, @types/node, @types/react (+13 more)
+Cohesion: 0.09
+Nodes (23): magicast, devDependencies, magicast, prisma, tsx, @types/jsbarcode, @types/node, @types/react (+15 more)
 
 ### Community 19 - "Fase 4 — Implementación del dominio"
 Cohesion: 0.20
@@ -241,17 +238,17 @@ Nodes (4): Archivos, Contratos de SPEC-001, Reglas, Uso previsto
 Cohesion: 0.50
 Nodes (4): Fase 0 — Gobierno, ADR y decisiones, T001 — Redactar y aprobar ADR-001 (stack de SPEC-001), T002 — Documentar revisión legal pendiente y riesgos regulatorios, T003 — Validar matriz de roles y permisos contra la Constitución
 
-### Community 29 - "cash/prisma-service.ts"
-Cohesion: 0.14
-Nodes (10): AccountsReceivableReport, PaymentBreakdown, RecordExpenseInput, dynamic, globalForPrisma, prisma, isUuid(), mapExpense() (+2 more)
+### Community 29 - "billing.contract.ts"
+Cohesion: 0.13
+Nodes (16): CancelInvoiceInput, CfdiUse, Invoice, InvoiceId, InvoiceStatus, PaymentFormSat, SatUuid, TaxProfileInput (+8 more)
 
 ### Community 30 - "seed.ts"
 Cohesion: 0.40
 Nodes (3): notes, prisma, users
 
-### Community 32 - "services.ts"
+### Community 32 - "actorFromRequest"
 Cohesion: 0.05
-Nodes (68): CancellationMotive, DELETE(), GET(), RouteContext, GET(), RouteContext, GET(), POST() (+60 more)
+Nodes (70): CancellationMotive, IssueInvoiceInput, MovementReason, LabDestination, DELETE(), GET(), RouteContext, GET() (+62 more)
 
 ### Community 33 - "search/page.tsx"
 Cohesion: 0.47
@@ -259,7 +256,7 @@ Nodes (4): calculateAge(), Result, SearchContent(), statusBadge()
 
 ### Community 38 - "sales.contract.ts"
 Cohesion: 0.09
-Nodes (25): CreateSaleOrderInput, LensConfiguration, OrderStatus, PaymentId, PaymentMethod, PaymentRecord, RecordPaymentInput, SaleItem (+17 more)
+Nodes (27): PendingBalanceItem, PrescriptionId, CreateSaleOrderInput, LensConfiguration, OrderStatus, PaymentId, PaymentMethod, PaymentRecord (+19 more)
 
 ### Community 39 - "SPEC-002 — Ventas, Inventario Práctico y Ticket Óptico"
 Cohesion: 0.12
@@ -270,8 +267,8 @@ Cohesion: 0.17
 Nodes (11): 1. Resumen, 2. Decisiones Arquitectónicas (ADR-002 propuesto), 3. Fases de Ejecución, Fase 0 — Contratos y Modelo, Fase 1 — Suite de Pruebas RED, Fase 2 — Implementación del Dominio de Inventario, Fase 3 — Implementación del Dominio de Ventas (POS), Fase 4 — API Routes HTTP (+3 more)
 
 ### Community 41 - "dependencies"
-Cohesion: 0.13
-Nodes (15): jsbarcode, next, dependencies, jsbarcode, next, @prisma/client, react, react-dom (+7 more)
+Cohesion: 0.12
+Nodes (17): jsbarcode, lucide-react, next, dependencies, jsbarcode, lucide-react, next, @prisma/client (+9 more)
 
 ### Community 42 - "Despliegue de Óptica CRM"
 Cohesion: 0.18
@@ -286,8 +283,8 @@ Cohesion: 0.33
 Nodes (5): [1.0.0] — 2026-09-04 — LÍNEA BASE DE DOMINIO Y MODELO, [1.1.0] — 2026-09-06 — CIERRE Y VERIFICACIÓN COMPLETA, Añadido, Añadido, Changelog — SPEC-001 Pacientes y Consultas Optométricas
 
 ### Community 45 - "BranchId"
-Cohesion: 0.10
-Nodes (26): InventoryAdjustmentInput, InventoryMovement, MovementId, MovementReason, Product, ProductCategory, ProductCode, ProductId (+18 more)
+Cohesion: 0.09
+Nodes (23): InventoryAdjustmentInput, InventoryMovement, MovementId, Product, ProductCategory, ProductCode, ProductId, ProductSearchQuery (+15 more)
 
 ### Community 46 - "Software Bill of Materials (SBOM) — Óptica CRM"
 Cohesion: 0.40
@@ -306,16 +303,16 @@ Cohesion: 0.43
 Nodes (6): FrontdeskSummaryPage(), fullName(), lensUsageLabel(), ReceptionQueueItem, Refraction, refractionText()
 
 ### Community 53 - "package.json"
-Cohesion: 0.25
-Nodes (7): description, engines, node, name, private, type, version
+Cohesion: 0.17
+Nodes (11): description, engines, node, name, overrides, deepmerge-ts, effect, postcss (+3 more)
 
 ### Community 54 - "Checklist de Requisitos — SPEC-002 Ventas e Inventario Práctico"
 Cohesion: 0.40
 Nodes (4): Checklist de Requisitos — SPEC-002 Ventas e Inventario Práctico, Inventario Adaptativo y Alta Rápida, Punto de Venta (POS) y Lentes, Tickets y Seguridad
 
-### Community 55 - "overrides"
-Cohesion: 0.50
-Nodes (4): overrides, deepmerge-ts, effect, postcss
+### Community 55 - "patients/route.ts"
+Cohesion: 0.25
+Nodes (15): Sex, errorStatus(), parseDate(), parseEmergencyContact(), parsePatientUpdate(), PATCH(), patientFields, POST() (+7 more)
 
 ### Community 56 - "pos/page.tsx"
 Cohesion: 0.24
@@ -331,7 +328,7 @@ Nodes (3): Order, SalesOrdersPage(), statusBadge()
 
 ### Community 61 - "laboratory/service.ts"
 Cohesion: 0.09
-Nodes (29): PendingBalanceItem, AssignLabDestinationInput, CreateLabOrderInput, EyeLabData, FrameMountingType, LabDestination, LabOrder, LabOrderFolio (+21 more)
+Nodes (28): AssignLabDestinationInput, CreateLabOrderInput, EyeLabData, FrameMountingType, LabOrder, LabOrderFolio, LabOrderId, LabOrderStatus (+20 more)
 
 ### Community 62 - "SPEC-003 — Taller de Biselado y Laboratorio Óptico"
 Cohesion: 0.22
@@ -362,28 +359,24 @@ Cohesion: 0.50
 Nodes (3): 1. Entidad `LabOrder` (Ficha de Laboratorio), 2. Relaciones con otros módulos, Modelo de Datos — SPEC-003 Taller y Laboratorio Óptico
 
 ### Community 71 - "cash-shift.contract.ts"
-Cohesion: 0.15
-Nodes (10): CashExpense, CashExpenseId, CashShift, CashShiftId, CloseShiftInput, OpenShiftInput, ShiftStatus, CashRepository (+2 more)
+Cohesion: 0.27
+Nodes (6): CashExpense, CashExpenseId, CashShift, CashShiftId, ShiftStatus, CashRepository
 
 ### Community 72 - "authorize"
-Cohesion: 0.14
-Nodes (11): ConsultationSummary, ReceptionQueueEntry, ReleaseConsultationInput, SafeSummary, UpdateClinicalDetailsInput, Folio, authorize(), mapConsultation() (+3 more)
+Cohesion: 0.11
+Nodes (16): AbandonConsultationInput, ConsultationSummary, Eye, ReceptionQueueEntry, ReleaseConsultationInput, SafeSummary, UpdateClinicalDetailsInput, Folio (+8 more)
 
-### Community 73 - "PatientId"
-Cohesion: 0.12
-Nodes (9): Consultation, ConsultationId, Eye, OpenConsultationInput, PrescriptionId, RefractionId, PatientId, ClinicalRepository (+1 more)
+### Community 73 - "Consultation"
+Cohesion: 0.15
+Nodes (6): Consultation, ConsultationId, Refraction, RefractionId, ClinicalRepository, generateFolio()
 
-### Community 75 - "clinical/prisma-service.ts"
-Cohesion: 0.22
-Nodes (10): Refraction, RefractionAmendmentInput, RefractionInput, RefractionValue, mapRefraction(), noteLabels, RefractionService, isQuarterStep() (+2 more)
+### Community 74 - "cash/prisma-service.ts"
+Cohesion: 0.17
+Nodes (9): AccountsReceivableReport, OpenShiftInput, PaymentBreakdown, isUuid(), mapExpense(), mapShift(), PaymentReader, PrismaCashService (+1 more)
 
-### Community 77 - "billing.contract.ts"
-Cohesion: 0.12
-Nodes (17): CancelInvoiceInput, CfdiUse, Invoice, InvoiceId, InvoiceStatus, IssueInvoiceInput, PaymentFormSat, SatUuid (+9 more)
-
-### Community 78 - "clinical/state-machine.ts"
-Cohesion: 0.19
-Nodes (6): AbandonConsultationInput, ConsultationStatus, ConsultationStateMachine, finalStates, TransitionAction, transitions
+### Community 75 - "clinical/state-machine.ts"
+Cohesion: 0.29
+Nodes (5): ConsultationStatus, ConsultationStateMachine, finalStates, TransitionAction, transitions
 
 ### Community 79 - "Product"
 Cohesion: 0.20
@@ -394,8 +387,8 @@ Cohesion: 0.22
 Nodes (8): 1. Resumen ejecutivo, 2. Objetivo y problema, 3. Alcance, 4. Actores y Matriz de Permisos, 5. Requisitos Funcionales Verificables, Dentro del alcance, Fuera del alcance, SPEC-004 — Caja, Arqueos Diarios y Reportes Operativos
 
 ### Community 81 - "clinical/service.ts"
-Cohesion: 0.24
-Nodes (11): FullConsultation, NonClinicalNote, NonClinicalNoteKey, SetNonClinicalNoteInput, assertNonClinicalNoteKey(), catalog, getNonClinicalNoteLabel(), isNonClinicalNoteKey() (+3 more)
+Cohesion: 0.14
+Nodes (19): FullConsultation, NonClinicalNote, NonClinicalNoteKey, PrescriptionRefractionSnapshot, RefractionAmendmentInput, RefractionInput, RefractionValue, SetNonClinicalNoteInput (+11 more)
 
 ### Community 82 - "TASKS-004 — Tareas de Implementación de SPEC-004"
 Cohesion: 0.25
@@ -414,8 +407,8 @@ Cohesion: 0.25
 Nodes (7): Fase 0 — Contratos y Esquema de Base de Datos, Fase 1 — Suite de Pruebas RED, Fase 2 — Implementación del Dominio de Facturación, Fase 3 — API Routes HTTP, Fase 4 — Interfaces de Usuario, Fase 5 — Verificación y Cierre, TASKS-005 — Tareas de Implementación de SPEC-005
 
 ### Community 90 - "prescription.service.ts"
-Cohesion: 0.19
-Nodes (10): IssuePrescriptionInput, Prescription, PrescriptionAmendmentInput, PrescriptionRefractionSnapshot, PrescriptionService, stateMachine, toSnapshot(), toJson() (+2 more)
+Cohesion: 0.21
+Nodes (8): IssuePrescriptionInput, Prescription, PrescriptionAmendmentInput, PrescriptionService, stateMachine, toSnapshot(), hasValidConsent(), HasValidConsentOptions
 
 ### Community 91 - "Checklist de Requisitos — SPEC-005 Facturación Electrónica CFDI 4.0"
 Cohesion: 0.50
@@ -425,29 +418,33 @@ Nodes (3): Checklist de Requisitos — SPEC-005 Facturación Electrónica CFDI 4
 Cohesion: 0.50
 Nodes (3): 1. Entidad `Invoice` (Factura CFDI 4.0), 2. Relaciones con otros módulos, Modelo de Datos — SPEC-005 Facturación Electrónica CFDI 4.0
 
+### Community 97 - "cash/service.ts"
+Cohesion: 0.22
+Nodes (7): CloseShiftInput, RecordExpenseInput, CashService, copyShift(), expenses, paymentBreakdown(), shifts
+
 ### Community 101 - "patients/[id]/page.tsx"
 Cohesion: 0.53
 Nodes (5): calculateAge(), orderStatusBadge(), PatientData, PatientDetailPage(), sexLabel()
 
 ## Knowledge Gaps
-- **508 isolated node(s):** `SatUuid`, `TaxSystem`, `CfdiUse`, `InvoiceStatus`, `ShiftStatus` (+503 more)
+- **511 isolated node(s):** `SatUuid`, `TaxSystem`, `CfdiUse`, `InvoiceStatus`, `ShiftStatus` (+506 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **19 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **16 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `ActorContext` connect `ActorContext` to `auth.contract.ts`, `UserId`, `actors.ts`, `cash/prisma-service.ts`, `services.ts`, `sales.contract.ts`, `BranchId`, `laboratory/service.ts`, `cash-shift.contract.ts`, `authorize`, `PatientId`, `PrismaCashService`, `clinical/prisma-service.ts`, `IInventoryService`, `billing.contract.ts`, `clinical/state-machine.ts`, `clinical/service.ts`, `prescription.service.ts`, `IPatientService`, `ICashService`, `ISalesService`?**
-  _High betweenness centrality (0.097) - this node is a cross-community bridge._
-- **Why does `BranchId` connect `BranchId` to `ActorContext`, `ICashService`, `UserId`, `sales.contract.ts`, `cash-shift.contract.ts`, `PatientId`, `IInventoryService`, `billing.contract.ts`, `clinical/service.ts`, `laboratory/service.ts`, `prescription.service.ts`, `cash/prisma-service.ts`?**
-  _High betweenness centrality (0.018) - this node is a cross-community bridge._
-- **Why does `authorize()` connect `authorize` to `auth.contract.ts`, `UserId`, `actors.ts`, `sales.contract.ts`, `cash-shift.contract.ts`, `PatientId`, `PrismaCashService`, `clinical/prisma-service.ts`, `billing.contract.ts`, `clinical/state-machine.ts`, `BranchId`, `clinical/service.ts`, `laboratory/service.ts`, `prescription.service.ts`, `cash/prisma-service.ts`?**
+- **Why does `ActorContext` connect `ActorContext` to `actorFromRequest`, `cash/service.ts`, `auth.contract.ts`, `ICashService`, `patients.contract.ts`, `actors.ts`, `sales.contract.ts`, `cash-shift.contract.ts`, `authorize`, `cash/prisma-service.ts`, `IInventoryService`, `BranchId`, `IPatientService`, `clinical/service.ts`, `laboratory/service.ts`, `prescription.service.ts`, `billing.contract.ts`?**
+  _High betweenness centrality (0.095) - this node is a cross-community bridge._
+- **Why does `authorize()` connect `authorize` to `actorFromRequest`, `cash/service.ts`, `auth.contract.ts`, `patients.contract.ts`, `sales.contract.ts`, `cash/prisma-service.ts`, `BranchId`, `clinical/service.ts`, `laboratory/service.ts`, `patients/route.ts`, `prescription.service.ts`, `billing.contract.ts`?**
+  _High betweenness centrality (0.027) - this node is a cross-community bridge._
+- **Why does `actorFromRequest()` connect `actorFromRequest` to `sales.contract.ts`, `patients/route.ts`?**
   _High betweenness centrality (0.015) - this node is a cross-community bridge._
 - **What connects `SatUuid`, `TaxSystem`, `CfdiUse` to the rest of the system?**
-  _508 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _511 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `ActorContext` be split into smaller, more focused modules?**
-  _Cohesion score 0.10984848484848485 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.08780487804878048 - nodes in this community are weakly interconnected._
 - **Should `TASKS-002 — Tareas de Implementación de SPEC-002` be split into smaller, more focused modules?**
   _Cohesion score 0.06896551724137931 - nodes in this community are weakly interconnected._
 - **Should `auth.contract.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.08140610545790934 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.07088989441930618 - nodes in this community are weakly interconnected._

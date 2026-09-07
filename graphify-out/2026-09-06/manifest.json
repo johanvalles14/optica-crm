@@ -15,8 +15,8 @@
     "semantic_hash": ""
   },
   "package.json": {
-    "mtime": 1788728833.5268803,
-    "ast_hash": "0f2d04f45ccca6db0d84600c1b14fa31",
+    "mtime": 1788737095.3579383,
+    "ast_hash": "dba119d07808042ab40c9547212b0779",
     "semantic_hash": ""
   },
   "src/modules/audit/service.ts": {
@@ -355,18 +355,18 @@
     "semantic_hash": ""
   },
   "src/app/page.tsx": {
-    "mtime": 1788732581.1361365,
-    "ast_hash": "a8d18dd7e182929cb7668c3c86a38845",
+    "mtime": 1788737200.1117923,
+    "ast_hash": "9a9fbceae5765e5c2c4734ce1ec67d37",
     "semantic_hash": ""
   },
   "src/app/patients/new/page.tsx": {
-    "mtime": 1788732518.3629386,
-    "ast_hash": "01f5c0916bc4bc9ea8a7727289ccf0a9",
+    "mtime": 1788737200.1157935,
+    "ast_hash": "8c2241f6f29781b1e5cede8eb3ac1b30",
     "semantic_hash": ""
   },
   "src/app/patients/search/page.tsx": {
-    "mtime": 1788732494.726728,
-    "ast_hash": "6f3c7d0762b09d815b14819ac86c9932",
+    "mtime": 1788737200.1137934,
+    "ast_hash": "b318e192e450186e6013c35d99da5bd0",
     "semantic_hash": ""
   },
   "src/lib/prisma.ts": {
@@ -450,8 +450,8 @@
     "semantic_hash": ""
   },
   "src/components/layout/RoleNav.tsx": {
-    "mtime": 1788732786.4273422,
-    "ast_hash": "62441559a2ca6b758bbd715dc8c85ff3",
+    "mtime": 1788737200.1092808,
+    "ast_hash": "25d722412e23c1f297a542c5ecf908ac",
     "semantic_hash": ""
   },
   "tests/integration/api/api-routes.test.ts": {
@@ -555,13 +555,13 @@
     "semantic_hash": ""
   },
   "src/app/inventory/intake/page.tsx": {
-    "mtime": 1788721476.7956767,
-    "ast_hash": "fb37fd0cb0dc6b1a19d1cb13b8c08eae",
+    "mtime": 1788737267.7163277,
+    "ast_hash": "e4ad33ac1e1b4fdcf1b6c158ddabc743",
     "semantic_hash": ""
   },
   "src/app/inventory/products/page.tsx": {
-    "mtime": 1788721484.9812899,
-    "ast_hash": "2025a33acb6abce677b49b3471a2a0b4",
+    "mtime": 1788737267.7153275,
+    "ast_hash": "2db90563ee8729b5d22f520e9986bf9f",
     "semantic_hash": ""
   },
   "src/app/sales/orders/page.tsx": {
@@ -570,8 +570,8 @@
     "semantic_hash": ""
   },
   "src/app/sales/pos/page.tsx": {
-    "mtime": 1788732635.9027388,
-    "ast_hash": "73c34031f6e82650bb79028a1557167b",
+    "mtime": 1788737200.1203074,
+    "ast_hash": "b94b9a9b4361b860103c2aea539cc623",
     "semantic_hash": ""
   },
   "src/modules/inventory/code-generator.ts": {
@@ -705,13 +705,13 @@
     "semantic_hash": ""
   },
   "src/app/laboratory/kanban/page.tsx": {
-    "mtime": 1788732715.3253474,
-    "ast_hash": "ac51f969be880c5c73077ef2c51e60d1",
+    "mtime": 1788737267.7108147,
+    "ast_hash": "8bef15c76fe4617f48bd1f8da56cfdd2",
     "semantic_hash": ""
   },
   "src/app/laboratory/orders/[id]/slip/page.tsx": {
-    "mtime": 1788724567.2945046,
-    "ast_hash": "3b8d90b4fa5cdda94a124b5613370b7b",
+    "mtime": 1788737267.7118187,
+    "ast_hash": "6995a8524bd5e03917af25fd3474b3bc",
     "semantic_hash": ""
   },
   "src/app/login/page.tsx": {
@@ -835,8 +835,8 @@
     "semantic_hash": ""
   },
   "src/app/cash/close/page.tsx": {
-    "mtime": 1788725464.5304804,
-    "ast_hash": "ac5ae4a3da5bb2d5f69f6df333de2e05",
+    "mtime": 1788737267.7143283,
+    "ast_hash": "bfc38c115347a48a46252b17efada17f",
     "semantic_hash": ""
   },
   "src/app/cash/receivables/page.tsx": {
@@ -845,8 +845,8 @@
     "semantic_hash": ""
   },
   "src/app/cash/shift/page.tsx": {
-    "mtime": 1788725453.159259,
-    "ast_hash": "bcca7c4a67462e04fdfa599e09c88ca8",
+    "mtime": 1788737267.7133262,
+    "ast_hash": "c31fd856ff49ae273eafd4410fe185e7",
     "semantic_hash": ""
   },
   "src/modules/cash/repository.ts": {
@@ -955,8 +955,8 @@
     "semantic_hash": ""
   },
   "src/app/billing/invoices/page.tsx": {
-    "mtime": 1788727412.883853,
-    "ast_hash": "fd9318f0244238609430561245b47dab",
+    "mtime": 1788737200.1167948,
+    "ast_hash": "4e5aaa1370b8b93b3c774635f161cbd8",
     "semantic_hash": ""
   },
   "src/modules/billing/pac-adapter.ts": {
@@ -1060,13 +1060,23 @@
     "semantic_hash": ""
   },
   "src/app/patients/[id]/page.tsx": {
-    "mtime": 1788732538.9726222,
-    "ast_hash": "32740e2fcafdb64c3ce6972ef37a6ff8",
+    "mtime": 1788737200.1127937,
+    "ast_hash": "01ac8a45ba6c85fdbd0bbae92c435328",
     "semantic_hash": ""
   },
   "tests/integration/api/patients-detail-and-delivery.test.ts": {
     "mtime": 1788732820.5187328,
     "ast_hash": "96dd32a7609819a7f32f81cc301f40bb",
+    "semantic_hash": ""
+  },
+  "src/components/Barcode.tsx": {
+    "mtime": 1788736741.5228312,
+    "ast_hash": "e93476dea411ed91dc107ab0d276bee1",
+    "semantic_hash": ""
+  },
+  "tests/unit/inventory/barcode.test.ts": {
+    "mtime": 1788736808.1279612,
+    "ast_hash": "93bfc82105f3a5dee6770d574cc451cf",
     "semantic_hash": ""
   }
 }

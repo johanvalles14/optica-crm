@@ -4,6 +4,7 @@ import { useState, useEffect, Suspense } from 'react';
 import type { FormEvent } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
+import { FolderOpen, Lightbulb, Search } from 'lucide-react';
 
 type Result = {
   folio: string;
@@ -52,7 +53,12 @@ function SearchContent() {
 
   async function executeSearch(searchTerm: string) {
     const val = searchTerm.trim();
-    if (!val) return;
+    if (!val) {
+      setResults([]);
+      setHasSearched(false);
+      setError('Ingresa un nombre, teléfono o folio para buscar');
+      return;
+    }
 
     setLoading(true);
     setError('');
@@ -60,13 +66,18 @@ function SearchContent() {
 
     try {
       const isFolio = /^[a-z]{2}-?\d{4,}$/i.test(val);
-      const isPhone = /^\d{4,}$/.test(val);
+      const phoneDigits = val.replace(/\D/g, '');
+      const looksLikePhone = /^[+\d\s().-]+$/.test(val);
+      if (!isFolio && looksLikePhone && phoneDigits.length < 4) {
+        throw new Error('Ingresa al menos 4 dígitos para buscar por teléfono');
+      }
+      const isPhone = looksLikePhone && phoneDigits.length >= 4;
       let parameter = '';
 
       if (isFolio) {
         parameter = `folio=${encodeURIComponent(val.toUpperCase().replace('-', ''))}`;
       } else if (isPhone) {
-        parameter = `phone=${encodeURIComponent(val)}`;
+        parameter = `phone=${encodeURIComponent(phoneDigits)}`;
       } else {
         parameter = `name=${encodeURIComponent(val)}`;
       }
@@ -141,7 +152,7 @@ function SearchContent() {
                 pointerEvents: 'none',
               }}
             >
-              🔍
+              <Search size={18} aria-hidden="true" />
             </span>
           </div>
 
@@ -150,8 +161,9 @@ function SearchContent() {
           </button>
         </form>
 
-        <p style={{ fontSize: '12px', color: 'var(--muted)', margin: '10px 0 0' }}>
-          💡 Tip: Si buscas por teléfono introduce al menos 4 números. Para buscar por folio escribe el código completo.
+        <p style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: 'var(--muted)', margin: '10px 0 0' }}>
+          <Lightbulb size={16} aria-hidden="true" />
+          Tip: Si buscas por teléfono introduce al menos 4 números. Para buscar por folio escribe el código completo.
         </p>
       </section>
 
@@ -222,7 +234,9 @@ function SearchContent() {
 
       {!hasSearched && (
         <div className="empty">
-          <span style={{ fontSize: '32px', display: 'block', marginBottom: '8px' }}>🗂️</span>
+          <span style={{ display: 'block', marginBottom: '8px' }}>
+            <FolderOpen size={32} aria-hidden="true" />
+          </span>
           <p style={{ fontSize: '15px', fontWeight: 600, color: 'var(--ink)', margin: '0 0 6px' }}>
             Búsqueda Rápida de Expedientes
           </p>

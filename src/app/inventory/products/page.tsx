@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import type { FormEvent } from 'react';
 import Link from 'next/link';
+import { CircleCheck, TriangleAlert } from 'lucide-react';
 
 type Product = {
   id: string;
@@ -84,7 +85,7 @@ export default function ProductsPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'No se pudo registrar la baja');
 
-      setMessage(`✓ Baja registrada correctamente para ${selectedProduct.internalCode}. Stock actualizado.`);
+      setMessage(`Baja registrada correctamente para ${selectedProduct.internalCode}. Stock actualizado.`);
       setSelectedProduct(null);
       setAdjustNotes('');
       loadProducts(term);
@@ -113,7 +114,12 @@ export default function ProductsPage() {
       </header>
 
       {error && <p className="error" role="alert">{error}</p>}
-      {message && <p className="form-message" role="status">{message}</p>}
+      {message && (
+        <p className="form-message" role="status" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <CircleCheck size={16} aria-hidden="true" />
+          {message}
+        </p>
+      )}
 
       <form className="search-row" onSubmit={handleSearch}>
         <input
@@ -211,7 +217,7 @@ export default function ProductsPage() {
                     setAdjustQuantity('1');
                   }}
                 >
-                  ⚠️ Baja / Merma
+                  <TriangleAlert size={15} aria-hidden="true" /> Baja / Merma
                 </button>
               )}
             </div>

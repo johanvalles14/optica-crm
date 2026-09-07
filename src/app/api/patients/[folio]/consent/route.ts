@@ -3,6 +3,7 @@ import { actorFromRequest } from '../../../../../lib/request-context';
 import { patientService, prismaPatientRepository } from '../../../../../lib/services';
 import { patientRepository } from '../../../../../modules/patients/repository';
 import { AuditService } from '../../../../../modules/audit/service';
+import { authorize } from '../../../../../modules/auth/rbac';
 
 type RouteContext = { params: Promise<{ folio: string }> };
 
@@ -10,6 +11,9 @@ export async function GET(request: Request, context: RouteContext) {
   try {
     const { folio } = await context.params;
     const actor = actorFromRequest(request);
+    if (!authorize(actor.role, 'search', 'Patient')) {
+      return NextResponse.json({ error: 'No autorizado' }, { status: 403 });
+    }
     const patient = await prismaPatientRepository.getPatientByFolio(folio).catch(() => undefined) ?? patientRepository.getPatientByFolio(folio);
     if (!patient) {
       return NextResponse.json({ error: 'Paciente no encontrado' }, { status: 404 });
@@ -32,39 +36,62 @@ export async function POST(request: Request, context: RouteContext) {
   try {
     const { folio } = await context.params;
     const actor = actorFromRequest(request);
+    if (!authorize(actor.role, 'update', 'Patient')) {
+      return NextResponse.json({ error: 'No autorizado' }, { status: 403 });
+    }
     const patient = await prismaPatientRepository.getPatientByFolio(folio).catch(() => undefined) ?? patientRepository.getPatientByFolio(folio);
     if (!patient) {
       return NextResponse.json({ error: 'Paciente no encontrado' }, { status: 404 });
     }
 
-    const body = (await request.json()) as { noticeId?: string; source?: string };
+    const payload = await request.json() as unknown;
+    if (!payload || typeof payload !== 'object' || Array.isArray(payload)) {
+      return NextResponse.json({ error: 'Solicitud inválida' }, { status: 400 });
+    }
+    const body = payload as { noticeId?: unknown; source?: unknown };
+    if (body.noticeId !== undefined && typeof body.noticeId !== 'string') {
+      return NextResponse.json({ error: 'Aviso de privacidad inválido' }, { status: 400 });
+    }
+    if (body.source !== undefined && typeof body.source !== 'string') {
+      return NextResponse.json({ error: 'Origen de consentimiento inválido' }, { status: 400 });
+    }
     const currentNotice = await prismaPatientRepository.getCurrentPrivacyNotice().catch(() => null);
+    const activeNoticeId = currentNotice?.id ?? patientRepository.getCurrentPrivacyNotice().id;
+    if (body.noticeId && body.noticeId !== activeNoticeId) {
+      return NextResponse.json({ error: 'El aviso de privacidad ya no está vigente' }, { status: 400 });
+    }
+    const source = body.source?.trim() || actor.source || 'web';
+    if (source.length > 120) {
+      return NextResponse.json({ error: 'Origen de consentimiento inválido' }, { status: 400 });
+    }
     const consent = currentNotice
       ? await prismaPatientRepository.recordConsent(
         {
           patientId: patient.id,
-          noticeId: body.noticeId ?? currentNotice.id,
-          source: body.source ?? actor.source ?? 'web',
+          noticeId: activeNoticeId,
+          source,
         },
         actor.actorId
       )
       : await patientService.recordConsent(
-      {
-        patientId: patient.id,
-        noticeId: body.noticeId ?? patientRepository.getCurrentPrivacyNotice().id,
-        source: body.source ?? actor.source ?? 'web',
-      },
-      actor
-    );
+        {
+          patientId: patient.id,
+          noticeId: activeNoticeId,
+          source,
+        },
+        actor
+      );
 
-    await new AuditService().record({
-      actorId: actor.actorId,
-      role: actor.role,
-      action: 'create',
-      entity: 'Consent',
-      entityId: consent.id,
-      requestId: actor.requestId,
-    });
+    if (currentNotice) {
+      await new AuditService().record({
+        actorId: actor.actorId,
+        role: actor.role,
+        action: 'create',
+        entity: 'Consent',
+        entityId: consent.id,
+        requestId: actor.requestId,
+      });
+    }
 
     return NextResponse.json({ consent }, { status: 201 });
   } catch (error) {

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { CircleCheck, Globe, House, Printer, RefreshCw, TriangleAlert } from 'lucide-react';
 
 type EyeData = {
   sphere?: number;
@@ -33,7 +34,7 @@ const COLUMNS = [
   { id: 'in_process', label: '2. En Biselado / Maquila', color: '#eff6ff' },
   { id: 'quality_control', label: '3. Control de Calidad', color: '#fffbeb' },
   { id: 'completed', label: '4. Terminado / Aprobado', color: '#ecfdf5' },
-  { id: 'rework_needed', label: '⚠️ Repetición / Merma', color: '#fef2f2' },
+  { id: 'rework_needed', label: 'Repetición / Merma', color: '#fef2f2' },
 ];
 
 export default function LabKanbanPage() {
@@ -41,6 +42,7 @@ export default function LabKanbanPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
+  const [messageTone, setMessageTone] = useState<'success' | 'warning'>('success');
 
   // Modal para reportar merma / rotura
   const [reworkTarget, setReworkTarget] = useState<LabOrder | null>(null);
@@ -92,7 +94,8 @@ export default function LabKanbanPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Error al aprobar calidad');
 
-      setMessage(`✓ ${order.folio} aprobado. Mostrador ya puede entregar los lentes.`);
+      setMessageTone('success');
+      setMessage(`${order.folio} aprobado. Mostrador ya puede entregar los lentes.`);
       loadOrders();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error al aprobar calidad');
@@ -122,7 +125,8 @@ export default function LabKanbanPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Error al reportar repetición');
 
-      setMessage(`⚠️ Repetición registrada para ${reworkTarget.folio}. Alerta enviada a mostrador.`);
+      setMessageTone('warning');
+      setMessage(`Repetición registrada para ${reworkTarget.folio}. Alerta enviada a mostrador.`);
       setReworkTarget(null);
       setReworkReason('');
       loadOrders();
@@ -156,7 +160,8 @@ export default function LabKanbanPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Error al asignar maquila');
 
-      setMessage(`✓ ${maquilaTarget.folio} asignado a maquila externa (${maquilaName}).`);
+      setMessageTone('success');
+      setMessage(`${maquilaTarget.folio} asignado a maquila externa (${maquilaName}).`);
       setMaquilaTarget(null);
       setMaquilaName('');
       setMaquilaGuide('');
@@ -178,13 +183,24 @@ export default function LabKanbanPage() {
         </div>
         <div className="actions">
           <button className="button secondary" onClick={loadOrders} disabled={loading}>
-            {loading ? 'Actualizando...' : '🔄 Refrescar Tablero'}
+            {loading ? 'Actualizando...' : <><RefreshCw size={16} aria-hidden="true" /> Refrescar Tablero</>}
           </button>
         </div>
       </header>
 
       {error && <p className="error" role="alert">{error}</p>}
-      {message && <p className="form-message" role="status">{message}</p>}
+      {message && (
+        <p
+          className={messageTone === 'warning' ? 'error' : 'form-message'}
+          role="status"
+          style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+        >
+          {messageTone === 'warning'
+            ? <TriangleAlert size={16} aria-hidden="true" />
+            : <CircleCheck size={16} aria-hidden="true" />}
+          {message}
+        </p>
+      )}
 
       {/* Modal Reportar Rotura / Merma */}
       {reworkTarget && (
@@ -216,7 +232,7 @@ export default function LabKanbanPage() {
             </label>
             <div className="actions">
               <button className="button primary" type="submit" disabled={reworkLoading}>
-                {reworkLoading ? 'Procesando...' : '⚠️ Confirmar Repetición y Alertar a Mostrador'}
+                {reworkLoading ? 'Procesando...' : <><TriangleAlert size={16} aria-hidden="true" /> Confirmar Repetición y Alertar a Mostrador</>}
               </button>
               <button className="button secondary" type="button" onClick={() => setReworkTarget(null)}>
                 Cancelar
@@ -250,7 +266,7 @@ export default function LabKanbanPage() {
             </label>
             <div className="actions">
               <button className="button primary" type="submit">
-                ✓ Registrar Envío a Maquila
+                <CircleCheck size={16} aria-hidden="true" /> Registrar Envío a Maquila
               </button>
               <button className="button secondary" type="button" onClick={() => setMaquilaTarget(null)}>
                 Cancelar
@@ -289,7 +305,10 @@ export default function LabKanbanPage() {
                   alignItems: 'center',
                 }}
               >
-                <span>{col.label}</span>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                  {col.id === 'rework_needed' && <TriangleAlert size={15} aria-hidden="true" />}
+                  {col.label}
+                </span>
                 <span className="status-pill" style={{ background: 'white', padding: '2px 8px' }}>
                   {colOrders.length}
                 </span>
@@ -327,12 +346,12 @@ export default function LabKanbanPage() {
                     </div>
 
                     {ord.destination === 'external_lab' ? (
-                      <span style={{ fontSize: '11px', color: '#0066cc', display: 'block', margin: '4px 0' }}>
-                        🌐 Maquila: {ord.externalLabName || 'Externa'}
+                      <span style={{ fontSize: '11px', color: '#0066cc', display: 'flex', alignItems: 'center', gap: '5px', margin: '4px 0' }}>
+                        <Globe size={14} aria-hidden="true" /> Maquila: {ord.externalLabName || 'Externa'}
                       </span>
                     ) : (
-                      <span style={{ fontSize: '11px', color: '#2e7d32', display: 'block', margin: '4px 0' }}>
-                        🏠 Taller Local
+                      <span style={{ fontSize: '11px', color: '#2e7d32', display: 'flex', alignItems: 'center', gap: '5px', margin: '4px 0' }}>
+                        <House size={14} aria-hidden="true" /> Taller Local
                       </span>
                     )}
 
@@ -350,7 +369,7 @@ export default function LabKanbanPage() {
                           style={{ padding: '6px 8px', fontSize: '11px', width: '100%' }}
                           onClick={() => handleApproveQuality(ord)}
                         >
-                          ✓ Calidad Aprobada
+                          <CircleCheck size={14} aria-hidden="true" /> Calidad Aprobada
                         </button>
                       )}
 
@@ -360,7 +379,7 @@ export default function LabKanbanPage() {
                           style={{ padding: '6px 8px', fontSize: '11px', width: '100%', color: 'var(--accent)' }}
                           onClick={() => setReworkTarget(ord)}
                         >
-                          ⚠️ Merma / Repetición
+                          <TriangleAlert size={14} aria-hidden="true" /> Merma / Repetición
                         </button>
                       )}
 
@@ -379,7 +398,7 @@ export default function LabKanbanPage() {
                         className="button secondary"
                         style={{ padding: '6px 8px', fontSize: '11px', textAlign: 'center' }}
                       >
-                        🖨 Boleta de Charola
+                        <Printer size={14} aria-hidden="true" /> Boleta de Charola
                       </Link>
                     </div>
                   </article>
